@@ -360,24 +360,30 @@ body.dark h2 {
     .elementUl li {
         margin-top: 15px;
     }
-    .tooltip {
+.tooltip {
+        font-family: 'Courier New', Courier, monospace;
+        text-shadow: none;
+        font-size: 1.0em;
         position: absolute;
         bottom: 125%;
         left: 0;
-        background-color: #a8e9a6;
-        color: #fff;
+        background-color: #f0f2a9c8;
+        color: #000000;
         padding: 6px 10px;
         border-radius: 6px;
         border: 1px solid rgb(133, 133, 133);
-        font-size: 12px;
         white-space: nowrap;
         opacity: 0;
         visibility: hidden;
         transform: translateY(5px);
         transition: all 0.2s ease;
+        max-width: 300px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     li:hover .tooltip {
-        opacity: 1;
+        opacity: 1.0;
         visibility: visible;
         transform: translateY(0);
     }
@@ -691,24 +697,30 @@ body.dark h2 {
     .elementUl li {
         margin-top: 25px;
     }
-    .tooltip {
+.tooltip {
+        font-family: 'Courier New', Courier, monospace;
+        text-shadow: none;
+        font-size: 1.0em;
         position: absolute;
         bottom: 125%;
         left: 0;
-        background-color: #a8e9a6;
-        color: #fff;
+        background-color: #f0f2a9c8;
+        color: #000000;
         padding: 6px 10px;
         border-radius: 6px;
         border: 1px solid rgb(133, 133, 133);
-        font-size: 12px;
         white-space: nowrap;
         opacity: 0;
         visibility: hidden;
         transform: translateY(5px);
         transition: all 0.2s ease;
+        max-width: 400px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     li:hover .tooltip {
-        opacity: 1;
+        opacity: 1.0;
         visibility: visible;
         transform: translateY(0);
     }
@@ -1016,23 +1028,29 @@ body.dark h2 {
         margin-top: 25px;
     }
     .tooltip {
+        font-family: 'Courier New', Courier, monospace;
+        text-shadow: none;
+        font-size: 1.3em;
         position: absolute;
         bottom: 125%;
         left: 0;
-        background-color: #a8e9a6;
-        color: #fff;
+        background-color: #f0f2a9c8;
+        color: #000000;
         padding: 6px 10px;
         border-radius: 6px;
         border: 1px solid rgb(133, 133, 133);
-        font-size: 12px;
         white-space: nowrap;
         opacity: 0;
         visibility: hidden;
         transform: translateY(5px);
         transition: all 0.2s ease;
+        max-width: 400px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     li:hover .tooltip {
-        opacity: 1;
+        opacity: 1.0;
         visibility: visible;
         transform: translateY(0);
     }
@@ -1340,23 +1358,29 @@ body.dark h2 {
         margin-top: 25px;
     }
     .tooltip {
+        font-family: 'Courier New', Courier, monospace;
+        text-shadow: none;
+        font-size: 1.3em;
         position: absolute;
         bottom: 125%;
         left: 0;
-        background-color: #a8e9a6;
-        color: #fff;
+        background-color: #f0f2a9c8;
+        color: #000000;
         padding: 6px 10px;
         border-radius: 6px;
         border: 1px solid rgb(133, 133, 133);
-        font-size: 12px;
         white-space: nowrap;
         opacity: 0;
         visibility: hidden;
         transform: translateY(5px);
         transition: all 0.2s ease;
+        max-width: 400px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     li:hover .tooltip {
-        opacity: 1;
+        opacity: 1.0;
         visibility: visible;
         transform: translateY(0);
     }
