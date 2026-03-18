@@ -691,21 +691,28 @@ body.dark h2 {
     .elementUl li {
         margin-top: 25px;
     }
-    .tooltip {
+.tooltip {
+        font-family: "Courier New", Courier, monospace;
+        text-shadow: none;
+        font-size: 1.1em;
         position: absolute;
         bottom: 125%;
-        left: 0;
-        background-color: #a8e9a6;
-        color: #fff;
-        padding: 6px 10px;
-        border-radius: 6px;
-        border: 1px solid rgb(133, 133, 133);
-        font-size: 12px;
-        white-space: nowrap;
+        left: 0px;
+        background-color: rgba(240, 242, 169, 0.784);
+        color: rgb(0, 0, 0);
         opacity: 0;
         visibility: hidden;
         transform: translateY(5px);
-        transition: all 0.2s ease;
+        max-width: 400px;
+        overflow-wrap: break-word;
+        padding: 6px 10px;
+        border-radius: 6px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: rgb(133, 133, 133);
+        border-image: initial;
+        transition: 0.2s;
+        white-space: normal;
     }
     li:hover .tooltip {
         opacity: 1;
@@ -863,7 +870,6 @@ body.dark h2 {
         display: flex;
         /*border: 2px solid black;*/
         flex-direction: column;
-        
     }
     .left_container {
         display: flex;
@@ -935,7 +941,6 @@ body.dark h2 {
         padding: 10px 10px 10px 10px;
         text-indent: 2em;
     }
-
     h2 {
         font-size: 30px;
     }
