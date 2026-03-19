@@ -18,7 +18,7 @@ find_footer_box.appendChild(footer_box_p);
 
 // Create List of Skills
 // Technical skills
-let skills = ["JavaScript", "HTML", "CSS", "Git", "GitHub", "DevTool"];
+let skills = ["JavaScript", "HTML", "CSS", "Git", "GitHub", "DevTool", "Python"];
 // SkillsSection
 const skillsSection = document.getElementById("Skills");
 // SkillsList
@@ -142,6 +142,7 @@ console.log("projectSection", projectSection);
 let projectList = projectSection.querySelector(".elementUl");
 let repositories;
 
+
 fetch('https://api.github.com/users/sejay134/repos')
     .then(respond => {
         console.log("respond", respond)
@@ -175,8 +176,14 @@ fetch('https://api.github.com/users/sejay134/repos')
             tooltip.classList.add('tooltip');
             tooltip.textContent = repositories[x].description || "No description available.";
 
+            // previw
+            let a_link_preview = document.createElement('a');
+            a_link_preview.classList.add('link_preview');
+            
+
             project.appendChild(url);
             project.appendChild(tooltip);
+            project.appendChild(a_link_preview);
             projectList.appendChild(project);
             
         }
