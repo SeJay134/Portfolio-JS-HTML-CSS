@@ -323,34 +323,38 @@ body.dark h2 {
     }
     /*---------- projects ----------------*/
     .container_projects {
+        display: flex;
         width: 100%;
         max-width: 440px;
         min-width: 200px;
         /*border: 2px solid black;*/
     }
-    /*
     #Projects {
-        border: 2px solid black;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        padding: 5px;
     }
-    */
     .elementUl {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        justify-content: center;
+        min-height: 500px;
         list-style: none;
         font-size: 18px;
-        padding-left: 0px;
-        /*border: 2px solid black;*/
-        font-family: 'Press Start 2P', cursive;
-        color: rgb(0, 85, 255);
-        text-shadow:
-        0.5px 0.5px 0 #ccc,
-        1px 1px 0 #bbb,
-        1.5px 1.5px 0 #aaa,
-        2px 2px 0 #999,
-        2.5px 2.5px 0 #888,
-        3px 3px 0 #777,
-        3.5px 3.5px 0 #666;
+        padding-left: 10px;
+        font-family: 'Barlow Condensed', sans-serif;
+        font-weight: 400;
+        line-height: 55px;
+        letter-spacing: -0.05em;
+        text-transform: none;
+        font-kerning: normal;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: auto;
+        -moz-osx-font-smoothing: grayscale;
+        max-width: 400px;
+        width: 100%;
     }
     body.dark .project_link {
         color: white;
@@ -358,21 +362,27 @@ body.dark h2 {
         font-size: 25px;
     }
     .elementUl li {
-        margin-top: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        width: 100%;
     }
 .tooltip {
         font-family: "Courier New", Courier, monospace;
         text-shadow: none;
-        font-size: 1.0em;
+        font-size: 0.6em;
         position: absolute;
         bottom: 125%;
         left: 0px;
-        background-color: rgba(240, 242, 169, 0.784);
+        line-height: 1em;
+        background-color: #ffffff;
         color: rgb(0, 0, 0);
-        opacity: 0;
         visibility: hidden;
         transform: translateY(5px);
         max-width: 300px;
+        min-width: 200px;
         overflow-wrap: break-word;
         padding: 6px 10px;
         border-radius: 6px;
@@ -384,11 +394,17 @@ body.dark h2 {
         white-space: normal;
     }
     li:hover .tooltip {
-        opacity: 1;
         visibility: visible;
         transform: translateY(0);
     }
-   
+    .link_preview {
+        display: inline-block;
+        border: 2px solid rgb(122, 122, 122);
+        width: 120px;
+        height: 70px;
+        margin-left: 10px;
+        border-radius: 7px;
+    }
     /*------------------------------------*/
     .connect_linksbox {
         display: grid;
