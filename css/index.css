@@ -1378,7 +1378,7 @@ body.dark h2 {
         padding-left: 0px;
         font-family: 'Barlow Condensed', sans-serif;
         font-weight: 400;
-        line-height: 55px;
+        line-height: 70px;
         letter-spacing: -0.02em;
         text-transform: none;
         font-kerning: normal;
@@ -1432,9 +1432,9 @@ body.dark h2 {
     .link_preview {
         display: inline-block;
         border: 2px solid rgb(122, 122, 122);
-        width: 150px;
-        height: 80px;
-        margin-left: 50px;
+        width: 140px;
+        height: 90px;
+        margin-left: 30px;
         border-radius: 7px;
     }
     /*------------------------------------*/
