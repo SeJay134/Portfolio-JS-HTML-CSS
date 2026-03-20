@@ -176,14 +176,21 @@ fetch('https://api.github.com/users/sejay134/repos')
             tooltip.classList.add('tooltip');
             tooltip.textContent = repositories[x].description || "No description available.";
 
-            // previw
+            // preview
             let a_link_preview = document.createElement('a');
             a_link_preview.classList.add('link_preview');
-            
+            a_link_preview.href = repositories[x].homepage || "No website available.";
+            let img = document.createElement('img');
+            img.alt = "picture";
+            img.src = `https://raw.githubusercontent.com/SeJay134/${repositories[x].name}/main/preview.png`;
+            // <img src="https://image.thum.io/get/width/300/crop/200/https://your-site.com"></img>
+            // const preview = `https://image.thum.io/get/width/150/crop/90/${a_link_preview.href}`;
+            // document.querySelector(".link_preview img").src = preview;
 
             project.appendChild(url);
             project.appendChild(tooltip);
             project.appendChild(a_link_preview);
+            a_link_preview.appendChild(img)
             projectList.appendChild(project);
             
         }
