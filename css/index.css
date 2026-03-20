@@ -404,6 +404,11 @@ body.dark h2 {
         height: 70px;
         margin-left: 10px;
         border-radius: 7px;
+        overflow: hidden;
+    }
+        .link_preview img {
+        width: 120px;
+        height: 70px;
     }
     /*------------------------------------*/
     .connect_linksbox {
@@ -758,6 +763,11 @@ body.dark h2 {
         height: 70px;
         margin-left: 10px;
         border-radius: 7px;
+        overflow: hidden;
+    }
+        .link_preview img {
+        width: 120px;
+        height: 70px;
     }
     /*------------------------------------*/
     .connect_linksbox {
@@ -1096,6 +1106,11 @@ body.dark h2 {
         height: 80px;
         margin-left: 23px;
         border-radius: 7px;
+        overflow: hidden;
+    }
+        .link_preview img {
+        width: 150px;
+        height: 80px;
     }
     /*------------------------------------*/
     .connect_linksbox {
