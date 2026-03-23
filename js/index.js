@@ -228,7 +228,7 @@ document.body.classList.toggle("dark"); // add the class to body body.dark
         });
     } else {
         container.load( {
-            background: { color: "#000000" }, //#f7f9fc
+            background: { color: "#f7f9fc" },
             particles: {
                 color: { value: "#4a6fa5" },
                 links: { color: "#6fa8dc" },

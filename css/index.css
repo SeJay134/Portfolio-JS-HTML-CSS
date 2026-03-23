@@ -1607,14 +1607,15 @@ body.dark h2 {
         text-align: center;
     }
 }
+/*
 #particles-js {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background: #f7f9fc;
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background: #f7f9fc;
 }
-
+*/
 /*
 .main_container {
     position: relative;
