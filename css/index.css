@@ -5,7 +5,7 @@ body {
     display: flex;
     /*color: black;*/
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    background-color: rgb(220, 245, 228);
+    /*background-color: #F0FEFF; 220, 245, 228*/
     justify-content: center;
     font-size: 18px;
 }
@@ -19,10 +19,11 @@ body.dark .input_email,
 body.dark .users_message,
 body.dark .input_text::placeholder,
 body.dark .input_email::placeholder,
-body.dark .users_message::placeholder {
+
+/*body.dark .users_message::placeholder {
     color: rgb(255, 255, 255);
     background-color: rgb(87, 87, 87);
-}
+}*/
 body.dark .button_dark_mode {
     background-color: rgb(39, 39, 39);
     color: white;
@@ -67,7 +68,11 @@ body.dark .button_submit {
 html {
     height: 100%;
 }
-
+/*
+.left_container {
+    background-color: #F0FEFF;
+}
+*/
 .navbar a {
     font-size: 22px;
     list-style: none;
@@ -86,6 +91,9 @@ body.dark .navbar a {
 .navbar_box li:hover {
     transform: scale(1.05);
     transition: 0.3s ease;
+}
+.button_dark_mode {
+    background-color: #eeeded; /*220, 245, 228*/
 }
 
 #name {
@@ -200,9 +208,7 @@ body.dark h2 {
         height: 130px;
         position: fixed;
         z-index: 1000;
-        background-color: rgb(220, 245, 228);
         top: 0;
-        
         width: 100%;
         max-width: 460px;
         min-width: 300px;
@@ -259,7 +265,7 @@ body.dark h2 {
         border-radius: 2px;
         cursor: pointer;
         border-color:rgb(230, 255, 238);
-        background-color: rgb(220, 245, 228);;
+        
         font-size: 0.5rem;
     }
     .About_text_container, .container_job_text {
@@ -569,7 +575,6 @@ body.dark h2 {
         align-items: center;
         position: fixed;
         z-index: 1000;
-        background-color: rgb(220, 245, 228);
         top: 0;
         height: 160px;
         width: 100%;
@@ -628,7 +633,7 @@ body.dark h2 {
         border-radius: 2px;
         cursor: pointer;
         border-color:rgb(230, 255, 238);
-        background-color: rgb(220, 245, 228);;
+        
         font-size: 0.8rem;
     }
     .About_text_container, .container_job_text {
@@ -930,7 +935,6 @@ body.dark h2 {
         height: 250px;
         position: fixed;
         z-index: 1000;
-        background-color: rgb(220, 245, 228);
         top: 0;
         left: 0px;
         width: 100%;
@@ -976,13 +980,13 @@ body.dark h2 {
         padding-left: 0px;
         /*border: 2px solid black;*/
     }
-        .button_dark_mode {
+    .button_dark_mode {
         width: 90px;
         height: 30px;
         border-radius: 2px;
         cursor: pointer;
         border-color:rgb(230, 255, 238);
-        background-color: rgb(220, 245, 228);;
+        
         font-size: 0.9rem;
     }
     .About_text_container, .container_job_text {
@@ -1312,7 +1316,7 @@ body.dark h2 {
         border-radius: 5px;
         cursor: pointer;
         border-color:rgb(230, 255, 238);
-        background-color: rgb(220, 245, 228);;
+        
         font-size: 0.9rem;
     }
 
@@ -1603,3 +1607,17 @@ body.dark h2 {
         text-align: center;
     }
 }
+#particles-js {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: #f7f9fc;
+}
+
+/*
+.main_container {
+    position: relative;
+    z-index: 1;
+}
+*/
