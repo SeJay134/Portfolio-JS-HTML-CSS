@@ -212,7 +212,8 @@ fetch('https://api.github.com/users/sejay134/repos')
 let d = document.querySelector(".button_dark_mode"); // get the selector of button
 d.addEventListener("click", () => { // lisen a click of button
 document.body.classList.toggle("dark"); // add the class to body body.dark
-
+})
+/*
     const container = tsParticles.domItem(0);
     if (!container) return;
 
@@ -227,7 +228,7 @@ document.body.classList.toggle("dark"); // add the class to body body.dark
         });
     } else {
         container.load( {
-            background: { color: "#f7f9fc" },
+            background: { color: "#000000" }, //#f7f9fc
             particles: {
                 color: { value: "#4a6fa5" },
                 links: { color: "#6fa8dc" },
@@ -237,5 +238,4 @@ document.body.classList.toggle("dark"); // add the class to body body.dark
     }
 
 })
-
-
+*/
