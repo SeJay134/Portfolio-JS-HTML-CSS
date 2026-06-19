@@ -362,6 +362,11 @@ body.dark h2 {
         max-width: 400px;
         width: 100%;
     }
+    .project_link {
+        overflow-wrap: break-word;
+        word-break: break-word;
+        max-width: 250px;
+    }
     body.dark .project_link {
         color: white;
         font-family: 'Great Vibes', cursive;
