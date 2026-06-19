@@ -68,11 +68,11 @@ body.dark .button_submit {
 html {
     height: 100%;
 }
-/*
+
 .left_container {
     background-color: #F0FEFF;
 }
-*/
+
 .navbar a {
     font-size: 22px;
     list-style: none;
@@ -213,6 +213,7 @@ body.dark h2 {
         max-width: 460px;
         min-width: 300px;
         left: 0px;
+        
         /*border: 2px solid black;*/
     }
     .imgPS { /**/
