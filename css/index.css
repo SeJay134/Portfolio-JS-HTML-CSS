@@ -1065,6 +1065,7 @@ body.dark h2 {
     .project_link {
         overflow-wrap: break-word;
         word-break: break-word;
+        max-width: 400px;
     }
     body.dark .project_link {
         color: white;
