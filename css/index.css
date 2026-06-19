@@ -1383,7 +1383,7 @@ body.dark h2 {
     /*---------- projects ----------------*/
     .container_projects {
         width: 100%;
-        max-width: 650px;
+        max-width: 1000px;
         min-width: 200px;
         /*border: 2px solid black;*/
     }
@@ -1404,7 +1404,7 @@ body.dark h2 {
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: auto;
         -moz-osx-font-smoothing: grayscale;
-        max-width: 650px;
+        max-width: 950px;
         width: 100%;
     }
     body.dark .project_link {
