@@ -170,7 +170,7 @@ fetch('https://api.github.com/users/sejay134/repos')
             url.href = repositories[x].html_url;
             url.target = "_blank";
             url.classList.add("project_link");
-            url.textContent = repositories[x].name;
+            url.textContent = repositories[x].name.charAt(0).toUpperCase() + repositories[x].name.slice(1);
             
             // tooltip
             let tooltip = document.createElement('span');
