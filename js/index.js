@@ -18,7 +18,8 @@ find_footer_box.appendChild(footer_box_p);
 
 // Create List of Skills
 // Technical skills
-let skills = ["JavaScript", "HTML", "CSS", "Git", "GitHub", "DevTool", "Python"];
+// let skills = ["JavaScript", "HTML", "CSS", "Git", "GitHub", "DevTool", "Python"];
+let skills = ['Python', 'SQL', 'Pandas', 'NumPy', 'Machine Learning', 'Scikit-learn', 'LLMs', 'RAG', 'AI Agents', 'ETL Pipelines', 'Azure', 'Git', "JavaScript", "HTML", "CSS"]
 // SkillsSection
 const skillsSection = document.getElementById("Skills");
 // SkillsList

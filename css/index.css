@@ -1382,10 +1382,10 @@ body.dark h2 {
     .skills_ul_box {
         display: flex;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: space-between;
         width: 100%;
-        min-width: 250px;
-        max-width: 600px;
+        min-width: 500px;
+        max-width: 800px;
         height: auto;
         list-style: none;
         font-size: 32px;
