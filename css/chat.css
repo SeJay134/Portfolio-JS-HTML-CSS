@@ -1,0 +1,26 @@
+/* css/chat.css */
+
+#chat_button {
+    position: fixed;          /* фиксируем кнопку */
+    bottom: 20px;             /* отступ от нижнего края */
+    right: 20px;               /* отступ от левого края */
+    width: 64px;              /* размер кнопки */
+    height: 64px;
+    border-radius: 50%;       /* круглая форма */
+    border: 2px solid #00aaff;
+    box-shadow: 0 0 12px #00aaff;
+    background: #6c6c6c;         /* фон (можно убрать, если canvas внутри) */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    cursor: pointer;
+    overflow: hidden;         /* canvas не вылезает за края */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;            /* всегда поверх сайта */
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+#chat_button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 18px rgba(0,0,0,0,0.35);
+}
