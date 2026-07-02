@@ -1,3 +1,5 @@
+// js/chat.js new
+
 document.addEventListener("DOMContentLoaded", () => {
     const chatButton = document.getElementById("chat_button");
 
