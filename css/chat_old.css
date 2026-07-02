@@ -1,3 +1,5 @@
+/* css/chat.css */
+
 /* === Кнопка чата === */
 #chat_button {
     position: fixed;
@@ -15,7 +17,7 @@
     align-items: center;
     justify-content: center;
     z-index: 10001;
-    transition: transform 0.35s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 #chat_button:hover {
@@ -25,24 +27,20 @@
 
 /* === Окно чата === */
 #chat_window {
-    position: fixed;
-    bottom: 18px;            /* ТОЧНО совпадает с кнопкой */
-    right: 20px;             /* ТОЧНО совпадает с кнопкой */
+    position: fixed;          /* фиксируем */
+    bottom: 20px;            /* над кнопкой */
+    right: 20px;              /* прижато к правому краю */
     width: 320px;
     height: 420px;
     background: #1a1a1a;
+    opacity: 0.9;
     border: 2px solid #00aaff;
     border-radius: 20px;
     box-shadow: 0 0 18px rgba(0, 170, 255, 0.4);
     display: flex;
     flex-direction: column;
-    z-index: 10000;
+    z-index: 10000;           /* поверх всего */
 
-    /* Анимация появления из кнопки */
-    transform: scale(0);
-    transform-origin: bottom right;
-    opacity: 0;
-    transition: transform 0.35s ease, opacity 0.35s ease;
 }
 
 /* === Когда окно открыто === */
@@ -70,11 +68,13 @@
     /* border-top: 1px solid #00aaff; */
 }
 
+
+
 /* === Поле ввода === */
 #chat_input {
     flex: 1;
     padding: 10px;
-    border-radius: 12px 0 0 12px;
+    border-radius: 8px 0 0 8px; /* скругление слева */
     border: 1px solid #00aaff;
     background: #222;
     color: #fff;
@@ -84,4 +84,9 @@
 #chat_input::placeholder {
     color: #fff;
     opacity: 0.6;
+}
+
+
+#chat_send:hover {
+    background: #33cfff;
 }
