@@ -1,5 +1,3 @@
-// js/chat.js
-
 document.addEventListener("DOMContentLoaded", () => {
     const chatButton = document.getElementById("chat_button");
 
@@ -59,7 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const chatWindow = document.createElement("div");
     chatWindow.id = "chat_window";
-    chatWindow.style.display = "none";
 
     const chatHistory = document.createElement("div");
     chatHistory.id = "chat_history";
@@ -78,27 +75,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.body.appendChild(chatWindow);
 
-    // === Toggle chat ===
     let isOpen = false;
 
+    // === Toggle chat ===
     chatButton.addEventListener("click", () => {
         isOpen = !isOpen;
-        chatWindow.style.display = isOpen ? "flex" : "none";
 
+        if (isOpen) {
+            chatWindow.classList.add("open");
+            chatButton.style.transform = "scale(0.75)";
+        } else {
+            chatWindow.classList.remove("open");
+            chatButton.style.transform = "scale(1)";
+        }
     });
 
     // === Close when clicking outside ===
     document.addEventListener("click", (e) => {
-
         if (!chatWindow.contains(e.target) && !chatButton.contains(e.target)) {
-            chatWindow.style.display = "none";
-            isOpen = false;
-        }
-            // уменьшение кнопки при открытии
-        if (isOpen) {
-            chatButton.style.transform = "scale(0.55)";
-        } else {
+            chatWindow.classList.remove("open");
             chatButton.style.transform = "scale(1)";
+            isOpen = false;
         }
     });
 });
