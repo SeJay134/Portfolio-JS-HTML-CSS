@@ -66,10 +66,41 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatInputArea = document.createElement("div");
     chatInputArea.id = "chat_input_area";
 
-    const chatInput = document.createElement("input");
+    const chatInput = document.createElement("textarea");
     chatInput.id = "chat_input";
     chatInput.placeholder = "Ask me anything...";
-    chatInput.maxLength = "190";
+    chatInput.maxLength = 300;
+    chatInput.rows = "1"
+
+    chatInput.style.resize = "none";
+    chatInput.style.overflowY = "auto";
+    chatInput.style.lineHeight = "20px"
+
+    const maxHeight = 20 * 4;
+
+    chatInput.addEventListener("input", () => {
+        chatInput.style.height = "auto";
+
+        const newHeight = Math.min(chatInput.scrollHeight, maxHeight);
+        chatInput.style.height = newHeight + "px";
+
+        chatInput.style.overflowY =
+        chatInput.scrollHeight > maxHeight ? "auto" : "hidden";
+    });
+
+    // enter/shift+enter
+    chatInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault(); // stops new line
+
+            sendMessage(chatInput.value); // your send function
+            chatInput.value = "";
+
+            // reset height after sending
+            chatInput.style.height = "auto";
+            chatInput.rows = 1;
+        }
+    });
 
     chatInputArea.appendChild(chatInput);
 
@@ -80,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let isOpen = false;
 
-        // === Toggle chat ===
+        // Toggle chat
     chatButton.addEventListener("click", () => {
         isOpen = !isOpen;
 
@@ -93,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-        // === Close when clicking outside ===
+        // Close when clicking outside
     document.addEventListener("click", (e) => {
         if (!chatWindow.contains(e.target) && !chatButton.contains(e.target)) {
             chatWindow.classList.remove("open");

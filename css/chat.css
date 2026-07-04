@@ -79,6 +79,16 @@
     background: #222;
     color: #fff;
     outline: none;
+
+    width: 100%;
+    max-width: 250px;
+    /* max-height: 180px; */
+
+    overflow-y: auto;
+    scrollbar-width: none;      /* Firefox */
+}
+#chat_input::-webkit-scrollbar {
+    display: none;              /* Chrome, Edge, Safari */
 }
 
 #chat_input::placeholder {
