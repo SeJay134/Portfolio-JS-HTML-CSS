@@ -66,7 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatHistory = document.createElement("div");
     chatHistory.id = "chat_history";
 
-
     const chatInputArea = document.createElement("div");
     chatInputArea.id = "chat_input_area";
 
