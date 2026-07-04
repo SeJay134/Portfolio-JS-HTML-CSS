@@ -1,3 +1,5 @@
+// js/chat.js
+
 document.addEventListener("DOMContentLoaded", () => {
     const chatButton = document.getElementById("chat_button");
 
@@ -67,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatInput = document.createElement("input");
     chatInput.id = "chat_input";
     chatInput.placeholder = "Ask me anything...";
+    chatInput.maxLength = "190";
 
     chatInputArea.appendChild(chatInput);
 
