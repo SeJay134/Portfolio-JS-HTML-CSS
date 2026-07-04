@@ -94,6 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault(); // stops new line
 
             sendMessage(chatInput.value); // your send function
+            function sendMessage(text) {
+                console.log('Send:', text)
+            }
             chatInput.value = "";
 
             // reset height after sending
