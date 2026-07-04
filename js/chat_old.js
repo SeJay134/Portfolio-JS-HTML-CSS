@@ -59,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const chatWindow = document.createElement("div");
     chatWindow.id = "chat_window";
-    chatWindow.style.display = "none";
 
     const chatHistory = document.createElement("div");
     chatHistory.id = "chat_history";
@@ -67,9 +66,44 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatInputArea = document.createElement("div");
     chatInputArea.id = "chat_input_area";
 
-    const chatInput = document.createElement("input");
+    const chatInput = document.createElement("textarea");
     chatInput.id = "chat_input";
     chatInput.placeholder = "Ask me anything...";
+    chatInput.maxLength = 300;
+    chatInput.rows = "1"
+
+    chatInput.style.resize = "none";
+    chatInput.style.overflowY = "auto";
+    chatInput.style.lineHeight = "20px"
+
+    const maxHeight = 20 * 4;
+
+    chatInput.addEventListener("input", () => {
+        chatInput.style.height = "auto";
+
+        const newHeight = Math.min(chatInput.scrollHeight, maxHeight);
+        chatInput.style.height = newHeight + "px";
+
+        chatInput.style.overflowY =
+        chatInput.scrollHeight > maxHeight ? "auto" : "hidden";
+    });
+
+    // enter/shift+enter
+    chatInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault(); // stops new line
+
+            sendMessage(chatInput.value); // your send function
+            function sendMessage(text) {
+                console.log('Send:', text)
+            }
+            chatInput.value = "";
+
+            // reset height after sending
+            chatInput.style.height = "auto";
+            chatInput.rows = 1;
+        }
+    });
 
     chatInputArea.appendChild(chatInput);
 
@@ -78,27 +112,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.body.appendChild(chatWindow);
 
-    // === Toggle chat ===
     let isOpen = false;
 
+        // Toggle chat
     chatButton.addEventListener("click", () => {
         isOpen = !isOpen;
-        chatWindow.style.display = isOpen ? "flex" : "none";
 
-    });
-
-    // === Close when clicking outside ===
-    document.addEventListener("click", (e) => {
-
-        if (!chatWindow.contains(e.target) && !chatButton.contains(e.target)) {
-            chatWindow.style.display = "none";
-            isOpen = false;
-        }
-            // уменьшение кнопки при открытии
         if (isOpen) {
+            chatWindow.classList.add("open");
             chatButton.style.transform = "scale(0.55)";
         } else {
+            chatWindow.classList.remove("open");
             chatButton.style.transform = "scale(1)";
         }
     });
+
+        // Close when clicking outside
+    document.addEventListener("click", (e) => {
+        if (!chatWindow.contains(e.target) && !chatButton.contains(e.target)) {
+            chatWindow.classList.remove("open");
+            chatButton.style.transform = "scale(1)";
+            isOpen = false;
+        }
+    });
+
 });

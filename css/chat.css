@@ -58,6 +58,13 @@
     padding: 12px;
     color: #fff;
     border-bottom: 1px solid #00aaff;
+    max-height: 350px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    scrollbar-width: none;      /* Firefox */
+}
+#chat_history::-webkit-scrollbar {
+    display: none;              /* Chrome, Edge, Safari */
 }
 
 /* === Нижняя панель ввода === */

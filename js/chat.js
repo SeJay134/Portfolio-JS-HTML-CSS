@@ -1,15 +1,16 @@
-// js/chat.js
-
 document.addEventListener("DOMContentLoaded", () => {
     const chatButton = document.getElementById("chat_button");
 
-    // p5.js instance mode
-    new p5((p) => {
+    // --- p5 animation ---
+    const sketch = (p) => {
         const nodes = [];
         const NODE_COUNT = 8;
 
         p.setup = () => {
-            p.createCanvas(64, 64).parent("chat_button");
+            const canvas = p.createCanvas(64, 64);
+            canvas.parent(chatButton); // keep it inside but not scaling with transform
+            canvas.style.pointerEvents = "none"; // prevent click interference
+
             for (let i = 0; i < NODE_COUNT; i++) {
                 nodes.push({
                     x: p.random(16, 48),
@@ -55,13 +56,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 p.circle(n.x, n.y, pulse);
             }
         };
-    });
+    };
+    new p5(sketch);
 
+    // --- chat window ---
     const chatWindow = document.createElement("div");
     chatWindow.id = "chat_window";
 
     const chatHistory = document.createElement("div");
     chatHistory.id = "chat_history";
+
 
     const chatInputArea = document.createElement("div");
     chatInputArea.id = "chat_input_area";
@@ -70,70 +74,63 @@ document.addEventListener("DOMContentLoaded", () => {
     chatInput.id = "chat_input";
     chatInput.placeholder = "Ask me anything...";
     chatInput.maxLength = 300;
-    chatInput.rows = "1"
-
+    chatInput.rows = 1;
     chatInput.style.resize = "none";
-    chatInput.style.overflowY = "auto";
-    chatInput.style.lineHeight = "20px"
+    chatInput.style.overflowY = "hidden";
+    chatInput.style.lineHeight = "20px";
 
     const maxHeight = 20 * 4;
 
     chatInput.addEventListener("input", () => {
         chatInput.style.height = "auto";
-
         const newHeight = Math.min(chatInput.scrollHeight, maxHeight);
         chatInput.style.height = newHeight + "px";
-
-        chatInput.style.overflowY =
-        chatInput.scrollHeight > maxHeight ? "auto" : "hidden";
+        chatInput.style.overflowY = chatInput.scrollHeight > maxHeight ? "auto" : "hidden";
     });
 
-    // enter/shift+enter
+    // --- message pipeline ---
+    function sendMessage(text) {
+        if (!text.trim()) return;
+
+        const bubble = document.createElement("div");
+        bubble.className = "user_message";
+        bubble.textContent = text;
+        chatHistory.appendChild(bubble);
+
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+        console.log("Send:", text);
+    }
+
+    // --- Enter / Shift+Enter ---
     chatInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault(); // stops new line
-
-            sendMessage(chatInput.value); // your send function
-            function sendMessage(text) {
-                console.log('Send:', text)
-            }
+            e.preventDefault();
+            sendMessage(chatInput.value);
             chatInput.value = "";
-
-            // reset height after sending
-            chatInput.style.height = "auto";
-            chatInput.rows = 1;
+            chatInput.style.height = "20px";
         }
     });
 
     chatInputArea.appendChild(chatInput);
-
     chatWindow.appendChild(chatHistory);
     chatWindow.appendChild(chatInputArea);
-
     document.body.appendChild(chatWindow);
 
+    // --- toggle ---
     let isOpen = false;
 
-        // Toggle chat
     chatButton.addEventListener("click", () => {
         isOpen = !isOpen;
-
-        if (isOpen) {
-            chatWindow.classList.add("open");
-            chatButton.style.transform = "scale(0.55)";
-        } else {
-            chatWindow.classList.remove("open");
-            chatButton.style.transform = "scale(1)";
-        }
+        chatWindow.classList.toggle("open", isOpen);
+        chatButton.style.transform = isOpen ? "scale(0.55)" : "scale(1)";
     });
 
-        // Close when clicking outside
+    // --- outside click ---
     document.addEventListener("click", (e) => {
         if (!chatWindow.contains(e.target) && !chatButton.contains(e.target)) {
+            isOpen = false;
             chatWindow.classList.remove("open");
             chatButton.style.transform = "scale(1)";
-            isOpen = false;
         }
     });
-
 });
