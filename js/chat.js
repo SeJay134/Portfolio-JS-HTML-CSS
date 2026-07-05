@@ -1,3 +1,7 @@
+// js/chat.js
+
+// logic for chat forms and buttons
+
 document.addEventListener("DOMContentLoaded", () => {
     const chatButton = document.getElementById("chat_button");
 
@@ -88,18 +92,41 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // --- message pipeline ---
-    function sendMessage(text) {
+    async function sendMessage(text) {
         if (!text.trim()) return;
 
+        // user bubble
         const bubble = document.createElement("div");
         bubble.className = "user_message";
         bubble.textContent = text;
         chatHistory.appendChild(bubble);
-
         chatHistory.scrollTop = chatHistory.scrollHeight;
         console.log("Send:", text);
-    }
 
+        // backend request
+        try {
+            const response = await fetch("https://dangle-scarecrow-baguette.ngrok-free.dev/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: text })
+            });
+
+            const data = await response.json();
+
+            // bot bubble
+            const botBubble = document.createElement("div");
+            botBubble.className = "bot_message";
+            botBubble.textContent = data.reply || "No response";
+            chatHistory.appendChild(botBubble);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        } catch (err) {
+            const errorBubble = document.createElement("div");
+            errorBubble.className = "bot_message";
+            errorBubble.textContent = "Error: cannot reach AI server.";
+            chatHistory.appendChild(errorBubble);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+    }
     // --- Enter / Shift+Enter ---
     chatInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
@@ -132,4 +159,5 @@ document.addEventListener("DOMContentLoaded", () => {
             chatButton.style.transform = "scale(1)";
         }
     });
+    
 });
