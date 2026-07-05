@@ -10,12 +10,18 @@
         <!--<meta http-equiv="refresh" content="30">-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/index.css">
+        
         <link rel="icon" type="image/png" href="img/icon.png">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+
+        <!-- p5.js instance mode support -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+        <script src="js/chat.js"></script>
+        <link rel="stylesheet" href="css/chat.css">
     </head>
     <body>
         <!--<div id="particles-js"></div>-->
@@ -143,35 +149,21 @@
                         </section>
                     </div>
 <!--leave message-->
-                    <!--Above the <footer> element, add an empty <section> element-->
                     <div class="container_leave_message">
                         <section id="leave_message">
-                            <!--Inside the new <section> element, create a level-two heading that says "Leave a Message"-->
                             <h2>Leave a Message</h2>
-                            <!--After the heading, create an HTML <form> element with a name attribute that equals "leave_message"-->
                             <form name="leave_message" class="leave_message">
-                                <!--Inside the <form> element, add the following:-->
-                                <!--<input> element with attributes: type "text", name "usersName", and required true-->
                                 <input class="input_text" type="text" name="usersName" required="true" label="text" maxlength="35" placeholder="Your name, example: Bob"  /><br />
-                                <!--<input> element with attributes: type "email", name "usersEmail", and required true-->
                                 <input class="input_email" type="email" name="usersEmail" required="true" label="email" maxlength="35" placeholder="Your email, example: name@gmail.com" style="display: none;" /><br />
-                                <!--<textarea> element with attributes: name "usersMessage" and required true-->
                                 <textarea class="users_message" name="usersMessage" required="true" label="usersMessage" maxlength="190" placeholder="190 letters" style="display: none;"></textarea><br />
-                                <!--Each form field should also have a corresponding <label> element-->
-                                <!--(Optional) Use <br> elements to stack the form fields-->
-                                <!--Add a link in your <nav> section that takes the user to the 'Leave a Message' section when clicked-->
-
-                                <!--<button> element that says "Submit" and has type attribute equal to "submit"-->
                                 <div class="buttons">
                                     <button class="button_submit" name="submit" type="submit">Submit</button>
                                 </div>
                             </form>
                         </section>
                     </div>
-                    <!--After the <section> element from the previous step, create a new <section> element with an id of "messages"-->
                     <div class="container_messages">
                         <section id="messages">
-                            <!-- Inside that element, create a level-two heading that says "Messages"-->
                             <h2>Messages</h2>
                             <div class="messages_box">
                                 <!--After the heading, add an empty unordered list (<ul>) element-->
@@ -179,6 +171,10 @@
                             </div>
                         </section>
                     </div>
+
+<!-- chatbot -->
+            <div id="chat_button"></div>
+                
 
 <!--FOOTER-->
                     <div class="container_footer">    
@@ -189,7 +185,7 @@
         
         <script src="https://kit.fontawesome.com/27841cfc7d.js" crossorigin="anonymous"></script>
         <script src="js/index.js"></script>
-
+        
         <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 
         <!-- <script src="js/tsParticles.js"></script> -->
