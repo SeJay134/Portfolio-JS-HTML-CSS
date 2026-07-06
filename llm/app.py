@@ -2,13 +2,15 @@
 
 from flask import Flask, request, jsonify
 import ollama
+from flask_cors import CORS
 import logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 )
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../", static_folder="../")
+CORS(app)
 
 MODEL_NAME = "phi3:3.8b"
 
