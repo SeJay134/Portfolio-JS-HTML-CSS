@@ -1,7 +1,5 @@
 # llm/app.py
 
-# llm/app.py
-
 from flask import Flask, request, jsonify
 import ollama
 import logging
