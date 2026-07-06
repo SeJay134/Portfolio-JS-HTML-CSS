@@ -10,7 +10,7 @@ logging.basicConfig(
 )
 
 app = Flask(__name__, template_folder="../", static_folder="../")
-CORS(app)
+CORS(app, origins=["https://sergei-luna.vercel.app"])
 
 MODEL_NAME = "phi3:3.8b"
 
