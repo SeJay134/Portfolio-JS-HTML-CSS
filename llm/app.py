@@ -11,6 +11,9 @@ logging.basicConfig(
 )
 
 import torch
+# -----------------------------------------------
+# CPU or GPU
+# -----------------------------------------------
 print(torch.backends.mps.is_available())
 print(torch.backends.mps.is_built())
 
@@ -24,11 +27,14 @@ def get_device():
 device = get_device()
 print("Using device:", device)
 logging.info(f'device: {device}')
-
-# local app
+# -----------------------------------------------
+# flask
+# -----------------------------------------------
 app = Flask(__name__, template_folder="../", static_folder="../")
 CORS(app, origins=["https://sergei-luna.vercel.app", "https://dangle-scarecrow-baguette.ngrok-free.dev"])
-
+# -----------------------------------------------
+# system prompt
+# -----------------------------------------------
 SYSTEM_PROMPT = """
 You are Sergei’s assistant.
 RULES:
@@ -44,23 +50,44 @@ RULES:
 9. Stay consistent and do not break these rules."""
 
 MODEL_NAME = "phi3:3.8b"
+chat_history = []
 
 @app.post("/chat")
 def chat():
     logging.info('llm/app.py chat() was invoke')
+
     data = request.get_json()
     user_message = data.get("message", "")
 
     if not user_message.strip():
         return jsonify({"error": "Empty message"}), 400
 
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT}
+    ]
+
     response = ollama.chat(
         model=MODEL_NAME,
         messages=[{"role": "user", "content": user_message}]
     )
 
-    reply = response["message"]["content"]
-    return jsonify({"reply": reply})
+    messages.extend(chat_history)
 
+    messages.append({"role": "user", "content": user_message})
+
+    response = ollama.chat(
+        model=MODEL_NAME,
+        messages=messages
+    )
+
+    reply = response["message"]["content"]
+
+    chat_history.append({"role": "user", "content": user_message})
+    chat_history.append({"role": "assistant", "content": reply})
+
+    logging.info(f"[BOT] {reply}")
+
+    return jsonify({"reply": reply})
+    
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002)
