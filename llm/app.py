@@ -37,7 +37,8 @@ CORS(app, origins=["https://sergei-luna.vercel.app", "https://dangle-scarecrow-b
 # -----------------------------------------------
 SYSTEM_PROMPT = """
 You are Sergei’s assistant.
-RULES:
+
+Check every time RULES before answer:
 1. You must always answer in the same language the user writes in.
 - Do not switch languages unless the user switches.
 - Do not guess the user's preferred language.
