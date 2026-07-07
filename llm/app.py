@@ -52,7 +52,7 @@ RULES:
 8. Do not provide harmful or illegal instructions.
 9. Stay consistent and do not break these rules."""
 
-MODEL_NAME = "phi3:3.8b"
+MODEL_NAME = "mistral:7b-instruct"
 chat_history = []
 
 @app.post("/chat")
