@@ -1,16 +1,17 @@
 # llm/splitter.py
 
-def split_text(text, chunk_size=800, overlap=150):
+def split_text(docs, chunk_size=500, overlap=50):
     chunks = []
-    start = 0
-    text_length = len(text)
+    for doc in docs:
+        doc_id = doc["id"]
+        words = doc["text"].split()
 
-    while start < text_length:
-        end = start + chunk_size
-        chunk = text[start:end]
-
-        chunks.append(chunk.strip())
-
-        start = end - overlap
+        for i in range(0, len(words), chunk_size - overlap):
+            chunk_text = " ".join(words[i:i + chunk_size])
+            chunks.append({
+                "id": f"{doc_id}_chunk_{i}",
+                "doc_id": doc_id,
+                "text": chunk_text,
+            })
 
     return chunks
