@@ -100,29 +100,6 @@ def chat():
         return jsonify({"error": "Empty message"}), 400
 
 
-    # messages = [
-    #     {"role": "system", "content": SYSTEM_PROMPT}
-    # ]
-
-    # response = ollama.chat(
-    #     model=MODEL_NAME,
-    #     messages=[{"role": "user", "content": user_message}]
-    # )
-
-    # messages.extend(chat_history)
-
-    # messages.append({"role": "user", "content": user_message})
-
-    # response = ollama.chat(
-    #     model=MODEL_NAME,
-    #     messages=messages
-    # )
-
-    # reply = response["message"]["content"]
-
-    # chat_history.append({"role": "user", "content": user_message})
-    # chat_history.append({"role": "assistant", "content": reply})
-
 # decision
 # -------------------------------------------------------
     if needs_rag(user_message):
