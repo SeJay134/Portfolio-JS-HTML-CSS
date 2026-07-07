@@ -2,20 +2,35 @@
 
 from llm.retriever import retrieve
 from llm.formatter import build_context
-from llm.app import chat
+import ollama
 
-def run_rag(query):
+MODEL_NAME = "qwen2.5:7b"
+
+def run_rag(query: str) -> str:
+    # 1. Retrieve relevant chunks
     chunks = retrieve(query)
+
+    # 2. Build context
     context = build_context(chunks)
 
+    # 3. If no context found → fallback
     if not chunks:
-        return chat(f"No context found. Answer directly.\n\nQuestion: {query}")
-    
+        return "Not found in base"
+
+    # 4. Build RAG system prompt
     system = (
-    "You are a helpful assistant. "
-    "Use ONLY the provided context. "
-    "If the answer is not in the context, say 'Not found in base'."
-)
+        "You are a helpful assistant. "
+        "Use ONLY the provided context. "
+        "If the answer is not in the context, say 'Not found in base'."
+    )
+
+    # 5. Final prompt
     prompt = f"{system}\n\n---\n\n{context}\n\nQuestion: {query}"
 
-    return chat(prompt)
+    # 6. Send to model directly (NO Flask call!)
+    response = ollama.chat(
+        model=MODEL_NAME,
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    return response["message"]["content"]
