@@ -23,7 +23,7 @@ def needs_rag(user_message: str) -> bool:
 
     # 3. Embedding similarity trigger
     query_emb = model.encode([user_message], convert_to_numpy=True)[0]
-    chunks = retrieve(user_message, top_k=3)
+    chunks = retrieve(user_message, top_k=1)
 
     if not chunks:
         return False
