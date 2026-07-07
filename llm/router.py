@@ -12,7 +12,7 @@ def needs_rag(user_message: str) -> bool:
         "sergei", "portfolio", "project", "experience",
         "skills", "background", "courses", "python",
         "javascript", "mentor", "code the dream",
-        "it technician", "qc technician"
+        "it technician", "qc technician", "about"
     ]
     if any(k in text for k in keywords):
         return True
