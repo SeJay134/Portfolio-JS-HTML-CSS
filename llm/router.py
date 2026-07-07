@@ -1,7 +1,7 @@
 # llm/router.py
 
-from retriever import get_relevant_chunks
-from embedder import embed_text
+from llm.retriever import retrieve
+from llm.embedder import model
 import numpy as np
 
 THRESHOLD = 0.55   # set
@@ -11,16 +11,18 @@ def needs_rag(user_message: str) -> bool:
     Semantic router: take a decision, use or no RAG.
     """
     # get embedding query
-    query_emb = embed_text(user_message)
+    query_emb = model.encode([user_message], convert_to_numpy=True)[0]
 
     # get top-1 relevant chunk
-    chunks = get_relevant_chunks(user_message, top_k=1)
+    chunks = retrieve(user_message, top_k=1)
 
     if not chunks:
         return False
+    
+    chunk_emb = model.encode([chunks[0]["text"]], convert_to_numpy=True)[0]
 
-    # take embedding chunk
-    chunk_emb = chunks[0]["embedding"]
+    
+    
 
     # how it is close
     sim = cosine_similarity(query_emb, chunk_emb)
