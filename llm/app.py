@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 import ollama
 from flask_cors import CORS
 from llm.rag_pipeline import run_rag
-from llm.validator import needs_rag
+from llm.router import needs_rag
 
 import logging
 logging.basicConfig(
