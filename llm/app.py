@@ -3,6 +3,8 @@
 from flask import Flask, request, jsonify
 import ollama
 from flask_cors import CORS
+from rag_pipeline import run_rag
+from validator import needs_rag
 
 import logging
 logging.basicConfig(
@@ -64,28 +66,15 @@ Additional restrictions:
 MODEL_NAME = "qwen2.5:7b" # qwen2.5:7b
 chat_history = []
 
-@app.post("/chat")
-def chat():
-    logging.info('llm/app.py chat() was invoke')
-
-    data = request.get_json()
-    user_message = data.get("message", "")
-
-    if not user_message.strip():
-        return jsonify({"error": "Empty message"}), 400
-
+# router between chat and rag
+# ----------------------------------------------
+def run_chat_model(user_message):
+    """chat without RAG."""
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT}
+        {"role": "system", "content": SYSTEM_PROMPT},
+        *chat_history,
+        {"role": "user", "content": user_message}
     ]
-
-    response = ollama.chat(
-        model=MODEL_NAME,
-        messages=[{"role": "user", "content": user_message}]
-    )
-
-    messages.extend(chat_history)
-
-    messages.append({"role": "user", "content": user_message})
 
     response = ollama.chat(
         model=MODEL_NAME,
@@ -96,6 +85,53 @@ def chat():
 
     chat_history.append({"role": "user", "content": user_message})
     chat_history.append({"role": "assistant", "content": reply})
+
+    return reply
+# ----------------------------------------------
+
+@app.post("/chat")
+def chat():
+    logging.info('llm/app.py chat() was invoke')
+
+    data = request.get_json()
+    user_message = data.get("message", "")
+
+    if not user_message.strip():
+        return jsonify({"error": "Empty message"}), 400
+
+
+    # messages = [
+    #     {"role": "system", "content": SYSTEM_PROMPT}
+    # ]
+
+    # response = ollama.chat(
+    #     model=MODEL_NAME,
+    #     messages=[{"role": "user", "content": user_message}]
+    # )
+
+    # messages.extend(chat_history)
+
+    # messages.append({"role": "user", "content": user_message})
+
+    # response = ollama.chat(
+    #     model=MODEL_NAME,
+    #     messages=messages
+    # )
+
+    # reply = response["message"]["content"]
+
+    # chat_history.append({"role": "user", "content": user_message})
+    # chat_history.append({"role": "assistant", "content": reply})
+
+# decision
+# -------------------------------------------------------
+    if needs_rag(user_message):
+        logging.info("Router: RAG mode activated")
+        reply = run_rag(user_message)
+    else:
+        logging.info("Router: Chat mode activated")
+        reply = run_chat_model(user_message)
+# --------------------------------------------------------
 
     logging.info(f"[BOT] {reply}")
 
