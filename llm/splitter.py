@@ -1,6 +1,6 @@
 # llm/splitter.py
 
-def split_text(docs, chunk_size=100, overlap=30):
+def split_text(docs, chunk_size=50, overlap=20):
     chunks = []
 
     for doc in docs:
