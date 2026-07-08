@@ -108,4 +108,12 @@
         bottom: 10px;
         border-radius: 16px;
     }
+        #chat_button {
+        right: 5vw;
+        bottom: 10px;
+    }
+
+    #chat_input_area {
+        width: 300px;
+    }
 }
