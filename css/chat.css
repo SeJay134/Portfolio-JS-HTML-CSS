@@ -112,7 +112,9 @@
         right: 5vw;
         bottom: 10px;
     }
-
+    #chat_input_area {
+        width: 300px;
+    }
     #chat_input {
         width: 100%;
         max-width: 300px;
