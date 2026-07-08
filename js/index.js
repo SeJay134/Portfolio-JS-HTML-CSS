@@ -211,22 +211,22 @@ document.body.classList.toggle("dark"); // add the class to body body.dark
 })
 
 window.addEventListener("load", () => {
-    // Сброс скролла
+    // reset scroll
     window.scrollTo(0, 0);
 
-    // Сброс zoom
+    // reset zoom
     document.body.style.zoom = "1";
     document.documentElement.style.zoom = "1";
 
-    // Сброс transform
+    // reset transform
     document.body.style.transform = "none";
     document.documentElement.style.transform = "none";
 
-    // Сброс overflow
+    // reset overflow
     document.body.style.overflowX = "hidden";
     document.documentElement.style.overflowX = "hidden";
 
-    // Сброс позиции чата (если открыт)
+    // reset chat window
     const chatWindow = document.getElementById("chat_window");
     if (chatWindow) chatWindow.classList.remove("open");
 });
