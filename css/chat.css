@@ -113,7 +113,8 @@
         bottom: 10px;
     }
 
-    #chat_input_area {
+    #chat_input {
         width: 100%;
+        max-width: 300px;
     }
 }
