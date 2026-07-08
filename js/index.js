@@ -210,10 +210,26 @@ d.addEventListener("click", () => { // lisen a click of button
 document.body.classList.toggle("dark"); // add the class to body body.dark
 })
 
-window.onload = () => {
+window.addEventListener("load", () => {
+    // Сброс скролла
+    window.scrollTo(0, 0);
+
+    // Сброс zoom
     document.body.style.zoom = "1";
     document.documentElement.style.zoom = "1";
-};
+
+    // Сброс transform
+    document.body.style.transform = "none";
+    document.documentElement.style.transform = "none";
+
+    // Сброс overflow
+    document.body.style.overflowX = "hidden";
+    document.documentElement.style.overflowX = "hidden";
+
+    // Сброс позиции чата (если открыт)
+    const chatWindow = document.getElementById("chat_window");
+    if (chatWindow) chatWindow.classList.remove("open");
+});
 /*
     const container = tsParticles.domItem(0);
     if (!container) return;
