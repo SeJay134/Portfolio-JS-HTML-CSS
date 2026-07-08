@@ -16,9 +16,7 @@ footer_box_p.classList.add("footer_box_p");
 footer_box_p.textContent = copyright + " " + "©" + " " + today;
 find_footer_box.appendChild(footer_box_p);
 
-// Create List of Skills
 // Technical skills
-// let skills = ["JavaScript", "HTML", "CSS", "Git", "GitHub", "DevTool", "Python"];
 let skills = ['Python', 'SQL', 'Pandas', 'NumPy', 'Machine Learning', 'Scikit-learn', 'LLMs', 'RAG', 'AI Agents', 'ETL Pipelines', 'Azure', 'Git', "JavaScript", "HTML", "CSS"]
 // SkillsSection
 const skillsSection = document.getElementById("Skills");
@@ -184,9 +182,6 @@ fetch('https://api.github.com/users/sejay134/repos')
             let img = document.createElement('img');
             img.alt = "picture";
             img.src = `https://raw.githubusercontent.com/SeJay134/${repositories[x].name}/main/preview.png`;
-            // <img src="https://image.thum.io/get/width/300/crop/200/https://your-site.com"></img>
-            // const preview = `https://image.thum.io/get/width/150/crop/90/${a_link_preview.href}`;
-            // document.querySelector(".link_preview img").src = preview;
 
             project.appendChild(url);
             project.appendChild(tooltip);
@@ -214,6 +209,11 @@ let d = document.querySelector(".button_dark_mode"); // get the selector of butt
 d.addEventListener("click", () => { // lisen a click of button
 document.body.classList.toggle("dark"); // add the class to body body.dark
 })
+
+window.onload = () => {
+    document.body.style.zoom = "1";
+    document.documentElement.style.zoom = "1";
+};
 /*
     const container = tsParticles.domItem(0);
     if (!container) return;
