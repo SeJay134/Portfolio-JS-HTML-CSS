@@ -230,6 +230,15 @@ window.addEventListener("load", () => {
     const chatWindow = document.getElementById("chat_window");
     if (chatWindow) chatWindow.classList.remove("open");
 });
+// iPhone Safari fixes
+window.addEventListener("focusin", () => {
+    window.scrollTo(0, 0);
+});
+
+window.addEventListener("focusout", () => {
+    document.body.style.zoom = "1";
+    document.documentElement.style.zoom = "1";
+});
 /*
     const container = tsParticles.domItem(0);
     if (!container) return;
