@@ -114,6 +114,6 @@
     }
 
     #chat_input_area {
-        width: 350px;
+        width: 100%;
     }
 }
