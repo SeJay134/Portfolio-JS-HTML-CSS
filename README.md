@@ -2,7 +2,7 @@
 Portfolio project
 Sergei Patrushev
 
-A lightweight local LLM chatbot powered by Phi‑3 3.8B and a minimal RAG pipeline, designed to answer questions about me and my projects.
+A lightweight local LLM chatbot powered by qwen2.5:7b and a minimal RAG pipeline, designed to answer questions about me and my projects.
 Frontend runs on Vercel, backend runs locally or on a private server.
 
 structure of chat bot
