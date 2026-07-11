@@ -20,7 +20,7 @@ class FileWatcher:
         self._last_snapshot = self._snapshot()
 
     def _snapshot(self):
-        """Снимает снимок структуры файлов: {path: mtime}"""
+        """takes structure of files: {path: mtime}"""
         snapshot = {}
         for root, _, files in os.walk(WATCH_PATH):
             for f in files:
