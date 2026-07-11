@@ -9,10 +9,10 @@ def needs_rag(user_message: str) -> bool:
 
     # 1. Keyword trigger
     keywords = [
-        "sergei", "portfolio", "project", "experience",
-        "skills", "background", "courses", "python",
-        "javascript", "mentor", "code the dream",
-        "it technician", "qc technician", "about"
+        "sergei projects", "Sergei project", "Sergei experience",
+        "Sergei skills", "Sergei background", "Sergei courses",
+        "Sergei javascript", "Sergei mentor", "Sergei code the dream",
+        "Sergei position It technician", "Sergei position qc technician", "about Sergei"
     ]
     if any(k in text for k in keywords):
         return True
