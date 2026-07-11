@@ -9,10 +9,20 @@ def needs_rag(user_message: str) -> bool:
 
     # 1. Keyword trigger
     keywords = [
-        "sergei projects", "Sergei project", "Sergei experience",
-        "Sergei skills", "Sergei background", "Sergei courses",
-        "Sergei javascript", "Sergei mentor", "Sergei code the dream",
-        "Sergei position It technician", "Sergei position qc technician", "about Sergei"
+    "sergei",
+    "resume",
+    "cv",
+    "portfolio",
+    "experience",
+    "project",
+    "projects",
+    "skills",
+    "education",
+    "work history",
+    "employment",
+    "code the dream",
+    "javascript",
+    "react",
     ]
     if any(k in text for k in keywords):
         return True
@@ -33,7 +43,7 @@ def needs_rag(user_message: str) -> bool:
 
     print("SIM:", sim)
 
-    return sim > 0.35
+    return sim > 0.65
 
 def cosine_similarity(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
