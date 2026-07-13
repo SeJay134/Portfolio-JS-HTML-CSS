@@ -19,7 +19,7 @@ js/
  - chat.js                # Chat widget logic (UI + fetch to Flask)
 
 llm/
- - app.py                 # Main LLM server (Phi-3 + RAG)
+ - app.py                 # Main LLM server (Model + RAG + router)
  - rag_pipeline.py        # Orchestrates RAG steps
  - loader.py              # Loads rag_text.txt
  - splitter.py            # Splits text into chunks

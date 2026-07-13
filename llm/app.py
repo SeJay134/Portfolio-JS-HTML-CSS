@@ -6,6 +6,8 @@ from flask_cors import CORS
 from llm.rag_pipeline import run_rag
 from llm.router import needs_rag
 
+# Logging configuration
+# -----------------------------------------------
 import logging
 logging.basicConfig(
     level=logging.INFO,
@@ -64,7 +66,12 @@ Additional restrictions:
 8. Do not provide harmful or illegal instructions.
 9. Stay consistent and do not break these rules."""
 
+# model
+# ---------------------------------------------
 MODEL_NAME = "qwen2.5:7b" # qwen2.5:7b
+
+# Chat history
+# ---------------------------------------------
 chat_history = []
 
 # router between chat and rag
@@ -72,20 +79,20 @@ chat_history = []
 def run_chat_model(user_message):
     """chat without RAG."""
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        *chat_history,
-        {"role": "user", "content": user_message}
+        {"role": "system", "content": SYSTEM_PROMPT}, # system prompt
+        *chat_history,                                # previous messages
+        {"role": "user", "content": user_message}     # new user message
     ]
 
-    response = ollama.chat(
+    response = ollama.chat(     # Calls Ollama
         model=MODEL_NAME,
         messages=messages
     )
 
-    reply = response["message"]["content"]
+    reply = response["message"]["content"] # Extracts the assistant’s reply
 
-    chat_history.append({"role": "user", "content": user_message})
-    chat_history.append({"role": "assistant", "content": reply})
+    chat_history.append({"role": "user", "content": user_message}) # add user message
+    chat_history.append({"role": "assistant", "content": reply})   # add assistant message
 
     return reply
 # ----------------------------------------------
@@ -94,11 +101,11 @@ def run_chat_model(user_message):
 def chat():
     logging.info('llm/app.py chat() was invoke')
 
-    data = request.get_json()
-    user_message = data.get("message", "")
+    data = request.get_json()               # Reads JSON
+    user_message = data.get("message", "")  # extracts "message"
 
     if not user_message.strip():
-        return jsonify({"error": "Empty message"}), 400
+        return jsonify({"error": "Empty message"}), 400 # Rejects empty messages.
 
 
 # decision
