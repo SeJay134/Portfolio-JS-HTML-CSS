@@ -23,7 +23,7 @@ def run_rag(query: str, retriever) -> str:
     
     # 2. Build context
     context = build_context(chunks)
-    logging.info(f"RAG context:\n{context}")
+    # logging.info(f"RAG context:\n{context}")
 
     # 4. Build RAG system prompt
     system = (
