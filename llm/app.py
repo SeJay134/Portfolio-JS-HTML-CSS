@@ -79,7 +79,9 @@ chat_history = []
 # router
 # ---------------------------------------------
 retriever = Retriever()
+logging.info(f'app.py retriever: {retriever}')
 router = Router(retriever)
+logging.info(f'app.py router: {router}')
 
 
 # router between chat and rag
