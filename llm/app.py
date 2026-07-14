@@ -114,7 +114,7 @@ def run_chat_model(user_message):
 
 @app.post("/chat")
 def chat():
-    logging.info('llm/app.py chat() was invoke')
+    logging.info('llm/app.py chat() was invoked')
 
     data = request.get_json()               # Reads JSON
     user_message = data.get("message", "")  # extracts "message"

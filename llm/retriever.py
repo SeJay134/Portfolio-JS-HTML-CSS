@@ -35,7 +35,7 @@ class Retriever:
         self.index, self.chunks = load_index()
 
     def retrieve(self, query, top_k=1):
-        logging.info('retrive was invoked')
+        logging.info('retriever retrieve was invoked')
         q_emb = model.encode([query], convert_to_numpy=True) # Кодирует запрос
         distances, ids = self.index.search(q_emb, top_k) # Ищет похожие embeddings
 
@@ -49,7 +49,7 @@ class Retriever:
                 "score": float(dist),
         })
             
-        logging.info(f"Retriever score: {results[0]['score']}")
+        # logging.info(f"Retriever score: {results[0]['score']}")
 
         return results # возвращает список:
 # [
