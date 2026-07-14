@@ -4,7 +4,8 @@ from flask import Flask, request, jsonify
 import ollama
 from flask_cors import CORS
 from llm.rag_pipeline import run_rag
-from llm.router import needs_rag
+# from llm.router import needs_rag
+from llm.router import Router
 
 # Logging configuration
 # -----------------------------------------------
@@ -35,7 +36,7 @@ logging.info(f'device: {device}')
 # flask
 # -----------------------------------------------
 app = Flask(__name__, template_folder="../", static_folder="../")
-CORS(app, origins=["https://sergei-luna.vercel.app", "https://dangle-scarecrow-baguette.ngrok-free.dev"])
+CORS(app, origins=["https://sergei-luna.vercel.app", "https://dangle-scarecrow-baguette.ngrok-free.dev", "http://127.0.0.1:5002", "http://172.16.12.213:5002"])
 # -----------------------------------------------
 # system prompt
 # -----------------------------------------------
@@ -110,12 +111,20 @@ def chat():
 
 # decision
 # -------------------------------------------------------
-    if needs_rag(user_message):
-        logging.info("Router: RAG mode activated")
+    # if needs_rag(user_message):
+    #     logging.info("Router: RAG mode activated")
+    #     reply = run_rag(user_message)
+    # else:
+    #     logging.info("Router: Chat mode activated")
+    #     reply = run_chat_model(user_message)
+
+    router = Router()
+
+    if router.needs_rag(user_message):
         reply = run_rag(user_message)
     else:
-        logging.info("Router: Chat mode activated")
         reply = run_chat_model(user_message)
+
 # --------------------------------------------------------
 
     logging.info(f"[BOT] {reply}")
