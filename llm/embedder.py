@@ -2,7 +2,7 @@
 
 from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer("all-MiniLM-L6-v2", show_progress_bar=False)
+model = SentenceTransformer("all-MiniLM-L6-v2"s)
 
 def embed_chunks(chunks):
     texts = [c["text"] for c in chunks]
