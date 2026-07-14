@@ -6,6 +6,7 @@ from flask_cors import CORS
 from llm.rag_pipeline import run_rag
 # from llm.router import needs_rag
 from llm.router import Router
+from llm.retriever import Retriever
 
 # Logging configuration
 # -----------------------------------------------
@@ -75,6 +76,12 @@ MODEL_NAME = "qwen2.5:7b" # qwen2.5:7b
 # ---------------------------------------------
 chat_history = []
 
+# router
+# ---------------------------------------------
+retriever = Retriever()
+router = Router(retriever)
+
+
 # router between chat and rag
 # ----------------------------------------------
 def run_chat_model(user_message):
@@ -118,7 +125,7 @@ def chat():
     #     logging.info("Router: Chat mode activated")
     #     reply = run_chat_model(user_message)
 
-    router = Router()
+    
 
     if router.needs_rag(user_message):
         reply = run_rag(user_message)
