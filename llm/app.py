@@ -118,7 +118,8 @@ def chat():
 
     data = request.get_json()               # Reads JSON
     user_message = data.get("message", "")  # extracts "message"
-
+    logging.info(f"[USER] {user_message}")
+    
     if not user_message.strip():
         return jsonify({"error": "Empty message"}), 400 # Rejects empty messages.
 

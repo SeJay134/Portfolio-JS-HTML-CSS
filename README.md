@@ -26,7 +26,7 @@ llm/
  - embedder.py            # Embeddings (sentence-transformers or Ollama)
  - vector_store.py        # FAISS vector storage
  - retriever.py           # Retrieves relevant chunks
- - formatter.py           # Builds final prompt for Phi-3
+ - formatter.py           # Builds final prompt for model
  - validator.py           # Validates user input
  - indexer.py             # Builds FAISS index
  - watcher.py             # Auto-reloads index on rag_text.txt change
