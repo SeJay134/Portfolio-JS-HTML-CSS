@@ -128,7 +128,7 @@ def chat():
     
 
     if router.needs_rag(user_message):
-        reply = run_rag(user_message)
+        reply = run_rag(user_message, retriever)
     else:
         reply = run_chat_model(user_message)
 

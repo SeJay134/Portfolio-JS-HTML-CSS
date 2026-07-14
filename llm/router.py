@@ -50,7 +50,7 @@
 
 
 # llm/router.py
-from llm.retriever import retrieve
+
 class Router:
     def __init__(self, retriever):
         self.keywords = [
@@ -62,7 +62,7 @@ class Router:
 
     def needs_rag(self, message):
         text = message.lower().strip()
-        
+
         # 1. Ключевые слова → RAG
         if any(k in text for k in self.keywords):
             return True

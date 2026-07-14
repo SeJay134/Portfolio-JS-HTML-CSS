@@ -1,26 +1,27 @@
 # llm/rag_pipeline.py
 
-from llm.retriever import retrieve
 from llm.formatter import build_context
 import ollama
 
 MODEL_NAME = "qwen2.5:7b"
 
-def run_rag(query: str) -> str:
+def run_rag(query: str, retriever) -> str:
     # 1. Retrieve relevant chunks
-    chunks = retrieve(query)
+    chunks = retriever.retrieve(query, top_k=3)
 
-    # 2. Build context
-    context = build_context(chunks)
+
 
     # 3. If no context found → fallback
     if not chunks:
         return "Not found in base"
+    
+    # 2. Build context
+    context = build_context(chunks)
 
     # 4. Build RAG system prompt
     system = (
         "You are a helpful assistant. "
-        "Use ONLY the provided context. "
+        "Use the provided context. "
         "If the answer is not in the context, say 'Not found in base'."
     )
 
