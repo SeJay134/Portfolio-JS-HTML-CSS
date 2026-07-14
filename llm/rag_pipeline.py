@@ -3,10 +3,7 @@
 from llm.formatter import build_context
 import ollama
 import logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
-)
+logger = logging.getLogger(__name__)
 
 MODEL_NAME = "qwen2.5:7b"
 

@@ -26,10 +26,7 @@ import numpy as np
 from llm.vector_store import load_index
 from llm.embedder import model
 import logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
-)
+logger = logging.getLogger(__name__)
 class Retriever:
     def __init__(self):
         self.index, self.chunks = load_index()
