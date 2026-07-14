@@ -36,7 +36,7 @@ logging.info(f'device: {device}')
 # flask
 # -----------------------------------------------
 app = Flask(__name__, template_folder="../", static_folder="../")
-CORS(app, origins=["https://sergei-luna.vercel.app", "https://dangle-scarecrow-baguette.ngrok-free.dev", "http://127.0.0.1:5002", "http://172.16.12.213:5002"])
+CORS(app, origins=["https://sergei-luna.vercel.app", "https://dangle-scarecrow-baguette.ngrok-free.dev"])
 # -----------------------------------------------
 # system prompt
 # -----------------------------------------------
