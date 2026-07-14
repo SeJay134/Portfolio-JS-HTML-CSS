@@ -25,11 +25,17 @@
 import numpy as np
 from llm.vector_store import load_index
 from llm.embedder import model
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+)
 class Retriever:
     def __init__(self):
         self.index, self.chunks = load_index()
 
     def retrieve(self, query, top_k=1):
+        logging.info('retrive was invoked')
         q_emb = model.encode([query], convert_to_numpy=True) # Кодирует запрос
         distances, ids = self.index.search(q_emb, top_k) # Ищет похожие embeddings
 
@@ -42,6 +48,8 @@ class Retriever:
                 "text": chunk["text"],
                 "score": float(dist),
         })
+            
+        logging.info(f"Retriever score: {results[0]['score']}")
 
         return results # возвращает список:
 # [

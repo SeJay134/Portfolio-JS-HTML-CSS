@@ -2,10 +2,16 @@
 
 from llm.formatter import build_context
 import ollama
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+)
 
 MODEL_NAME = "qwen2.5:7b"
 
 def run_rag(query: str, retriever) -> str:
+    logging.info('rag_pipeline run_rug was invoked')
     # 1. Retrieve relevant chunks
     chunks = retriever.retrieve(query, top_k=3)
 
@@ -17,6 +23,7 @@ def run_rag(query: str, retriever) -> str:
     
     # 2. Build context
     context = build_context(chunks)
+    logging.info(f"RAG context:\n{context}")
 
     # 4. Build RAG system prompt
     system = (

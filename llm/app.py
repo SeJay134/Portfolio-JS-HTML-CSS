@@ -79,14 +79,12 @@ chat_history = []
 # router
 # ---------------------------------------------
 retriever = Retriever()
-logging.info(f'app.py retriever: {retriever}')
 router = Router(retriever)
-logging.info(f'app.py router: {router}')
-
 
 # router between chat and rag
 # ----------------------------------------------
 def run_chat_model(user_message):
+    logging.info('app.py run_chat_model was invoked')
     """chat without RAG."""
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT}, # system prompt
@@ -120,18 +118,11 @@ def chat():
 
 # decision
 # -------------------------------------------------------
-    # if needs_rag(user_message):
-    #     logging.info("Router: RAG mode activated")
-    #     reply = run_rag(user_message)
-    # else:
-    #     logging.info("Router: Chat mode activated")
-    #     reply = run_chat_model(user_message)
-
-    
-
     if router.needs_rag(user_message):
+        logging.info("Router: RAG mode activated")
         reply = run_rag(user_message, retriever)
     else:
+        logging.info("Router: Chat mode activated")
         reply = run_chat_model(user_message)
 
 # --------------------------------------------------------
