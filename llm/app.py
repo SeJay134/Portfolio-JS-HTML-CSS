@@ -96,8 +96,9 @@ router = Router(retriever)
 
 # router between chat and rag
 # ----------------------------------------------
+@logger
 def run_chat_model(user_message):
-    logging.info('app.py run_chat_model was invoked')
+    # logging.info('app.py run_chat_model was invoked')
     """chat without RAG."""
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT}, # system prompt
