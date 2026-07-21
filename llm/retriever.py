@@ -1,38 +1,17 @@
 # llm/retriever.py
 
-# import numpy as np
-# from llm.vector_store import load_index
-# from llm.embedder import model
-
-# def retrieve(query, top_k=3):
-#     index, chunks = load_index()  # load fresh index
-#     q_emb = model.encode([query], convert_to_numpy=True)
-#     distances, ids = index.search(q_emb, top_k)
-
-#     results = []
-#     for i, dist in zip(ids[0], distances[0]):
-#         results.append({
-#             "id": chunks[i]["id"],
-#             "doc_id": chunks[i]["doc_id"],
-#             "text": chunks[i]["text"],
-#             "score": float(dist),
-#         })
-
-#     return results
-
-
-# llm/retriever.py
 import numpy as np
 from llm.vector_store import load_index
 from llm.embedder import model
 import logging
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
+from llm.dec_logging import logger
 class Retriever:
     def __init__(self):
         self.index, self.chunks = load_index()
-
+    @logger
     def retrieve(self, query, top_k=1):
-        logging.info('retriever retrieve was invoked')
+        # logging.info('retriever retrieve was invoked')
         q_emb = model.encode([query], convert_to_numpy=True) # Кодирует запрос
         distances, ids = self.index.search(q_emb, top_k) # Ищет похожие embeddings
 
@@ -51,7 +30,8 @@ class Retriever:
                 "score": float(dist),
         })
             
-        # logging.info(f"Retriever score: {results[0]['score']}")
+        for r in results:
+            logging.info("Chunk:\n%s", r["text"])
 
         return results # возвращает список:
 # [
