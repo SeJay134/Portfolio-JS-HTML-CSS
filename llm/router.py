@@ -50,6 +50,7 @@
 
 
 # llm/router.py
+import logging
 
 class Router:
     def __init__(self, retriever):
@@ -72,6 +73,14 @@ class Router:
 
         if not chunks:
             return False
+        
+        score = chunks[0]["score"]
 
-        return chunks[0]["score"] < self.threshold
+        logging.info(
+            "Router score=%s threshold=%s",
+            score,
+            self.threshold
+        )
+
+        return score < self.threshold
 
