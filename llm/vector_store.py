@@ -5,6 +5,7 @@ import numpy as np
 import os
 import pickle
 from llm.dec_logging import logger
+import logging
 
 INDEX_PATH = "data/embeddings/index.faiss"
 META_PATH = "data/embeddings/meta.pkl"
@@ -14,8 +15,15 @@ def save_index(chunks, embeddings):
     os.makedirs("data/embeddings/", exist_ok=True)
 
     dim = embeddings.shape[1]
-    index = faiss.IndexFlatL2(dim) # L2 distance, "score": float(dist), расстояние меньше = лучше; больше = хуже.
+    index = faiss.IndexFlatL2(dim) # L2 distance, "score": float(dist), расстояние less = better; больше = хуже.
     index.add(embeddings)
+
+    logging.info(
+        "FAISS index created: %s | dimension=%s | vectors=%s",
+        type(index).__name__,
+        index.d,
+        index.ntotal
+    )
 
     if index.d != embeddings.shape[1]:
         raise ValueError("Dimension mismatch")

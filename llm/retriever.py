@@ -36,6 +36,11 @@ class Retriever:
         q_emb = model.encode([query], convert_to_numpy=True) # Кодирует запрос
         distances, ids = self.index.search(q_emb, top_k) # Ищет похожие embeddings
 
+        logging.info(
+            "Retriever distance=%s",
+            distances[0][0]
+        )
+
         results = []
         for i, dist in zip(ids[0], distances[0]):
             chunk = self.chunks[i] # Собирает результаты
