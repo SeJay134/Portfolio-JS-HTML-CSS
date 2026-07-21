@@ -60,7 +60,7 @@ class Router:
             "sergei", "resume", "cv", "portfolio", "experience", "project", "projects", "skills", "education",
             "work history", "employment", "code the dream", "javascript", "react",
         ]
-        self.threshold = 0.55
+        self.threshold = 1.2 # 0.55
         self.retriever = retriever
     @logger
     def needs_rag(self, message):
