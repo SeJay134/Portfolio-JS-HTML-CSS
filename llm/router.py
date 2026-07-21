@@ -51,8 +51,10 @@
 
 # llm/router.py
 import logging
+from llm.dec_logging import logger
 
 class Router:
+
     def __init__(self, retriever):
         self.keywords = [
             "sergei", "resume", "cv", "portfolio", "experience", "project", "projects", "skills", "education",
@@ -60,12 +62,13 @@ class Router:
         ]
         self.threshold = 0.55
         self.retriever = retriever
-
+    @logger
     def needs_rag(self, message):
         text = message.lower().strip()
 
         # 1. Ключевые слова → RAG
         if any(k in text for k in self.keywords):
+            logging.info("Router: keyword match -> RAG")
             return True
         
         # 2. Retriever score → RAG
