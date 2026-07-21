@@ -24,9 +24,10 @@ def run_rag(query: str, retriever) -> str:
 
     # 4. Build RAG system prompt
     system = (
-        "You are a helpful assistant. "
-        "Use the provided context. "
-        "If the answer is not in the context, say 'Not found in base'."
+        "You are a helpful assistant.\n"
+        "Answer only using the provided context.\n"
+        "If the context partially answers the question, provide the partial answer.\n"
+        "Only reply 'Not found in base' if the context contains no relevant information."
     )
 
     # 5. Final prompt
