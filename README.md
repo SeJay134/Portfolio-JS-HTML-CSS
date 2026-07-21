@@ -31,6 +31,7 @@ llm/
  - indexer.py             # Builds FAISS index
  - watcher.py             # Auto-reloads index on rag_text.txt change
  - rag_text.txt           # Your biography + project descriptions
+ - dec_logging.py         # decorator for logging
 
 data/
  - base             # data for embbedings
