@@ -38,3 +38,29 @@ data/
  - embeddings       # embedded data
 
 README.md
+
+
+
+workflow without RAG
+- user
+- app.py            # get request
+- validator.py      # checking user's message
+- router.py         # RAG or Chat, desiscion
+- app.py            # run_chat_model
+- ollama model      # recievs SYSTEM_PROMPT, chat_history, user_message
+- app.py            # add answer to chat_history, JSON
+- user
+
+
+workflow with RAG
+1. app.py
+2. validator.py
+3. router.py
+4. rag_pipeline.py
+5. retriever.py
+6. vector_store.py (FAISS)
+7. formatter.py
+8. Ollama
+9. rag_pipeline.py
+10. app.py
+11. Ответ пользователю

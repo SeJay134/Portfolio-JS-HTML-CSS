@@ -73,5 +73,5 @@ class Router:
         if not chunks:
             return False
 
-        return chunks[0]["score"] > self.threshold
+        return chunks[0]["score"] < self.threshold
 

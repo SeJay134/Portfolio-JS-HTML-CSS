@@ -4,15 +4,17 @@ import faiss # pip install faiss-cpu
 import numpy as np
 import os
 import pickle
+from llm.dec_logging import logger
 
 INDEX_PATH = "data/embeddings/index.faiss"
 META_PATH = "data/embeddings/meta.pkl"
 
+@logger
 def save_index(chunks, embeddings):
     os.makedirs("data/embeddings/", exist_ok=True)
 
     dim = embeddings.shape[1]
-    index = faiss.IndexFlatL2(dim)
+    index = faiss.IndexFlatL2(dim) # L2 distance, "score": float(dist), расстояние меньше = лучше; больше = хуже.
     index.add(embeddings)
 
     if index.d != embeddings.shape[1]:
@@ -25,6 +27,7 @@ def save_index(chunks, embeddings):
 
     print(f"[VECTOR_STORE] Saved {len(chunks)} chunks, dim={dim}")
 
+@logger
 def load_index():
     index = faiss.read_index(INDEX_PATH)
     with open(META_PATH, "rb") as f:
