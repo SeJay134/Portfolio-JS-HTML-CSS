@@ -10,17 +10,19 @@ from llm.retriever import Retriever
 
 # Logging configuration
 # -----------------------------------------------
+from llm.dec_logging import logger
 import logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
-)
 
-def logger(func):
-    def wrapper(*args, **qwargs):
-        logging.info(f'{func.__name__} was invoked')
-        return func(*args, **qwargs)
-    return wrapper
+# logging.basicConfig(
+#     level=logging.INFO,
+#     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+# )
+
+# def logger(func):
+#     def wrapper(*args, **qwargs):
+#         logging.info(f'{func.__name__} was invoked')
+#         return func(*args, **qwargs)
+#     return wrapper
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("huggingface_hub").setLevel(logging.WARNING)
