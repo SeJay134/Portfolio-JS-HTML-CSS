@@ -125,6 +125,7 @@ def chat():
         return jsonify({"error": "Empty message"}), 400 # Rejects empty messages.
 
     if len(user_message) > max_message_length:
+        logging.info("Message rejected: too long")
         return jsonify({"error": "Message is too long"}), 400
 
 # decision
