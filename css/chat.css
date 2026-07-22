@@ -103,6 +103,9 @@
     color:#00aaff;
     margin-bottom: 5px;
 }
+.bot_message {
+    margin-bottom: 5px;
+}
 
 /*480*/
 @media screen and (max-width: 480px) {
