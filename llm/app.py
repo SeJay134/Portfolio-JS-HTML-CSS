@@ -8,6 +8,9 @@ from llm.rag_pipeline import run_rag
 from llm.router import Router
 from llm.retriever import Retriever
 
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 # Logging configuration
 # -----------------------------------------------
 from llm.dec_logging import logger
@@ -42,6 +45,12 @@ logging.info(f'device: {device}')
 # -----------------------------------------------
 app = Flask(__name__, template_folder="../", static_folder="../")
 CORS(app, origins=["https://sergei-luna.vercel.app", "https://dangle-scarecrow-baguette.ngrok-free.dev"])
+# -----------------------------------------------
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["30 per minute"]
+)
 # -----------------------------------------------
 # system prompt
 # -----------------------------------------------
@@ -112,6 +121,7 @@ def run_chat_model(user_message):
 
 @app.post("/chat")
 @logger
+@limiter.limit("10/minute")
 def chat():
     # logging.info('llm/app.py chat() was invoked')
 
