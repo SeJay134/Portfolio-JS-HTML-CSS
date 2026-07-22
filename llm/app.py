@@ -13,17 +13,6 @@ from llm.retriever import Retriever
 from llm.dec_logging import logger
 import logging
 
-# logging.basicConfig(
-#     level=logging.INFO,
-#     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
-# )
-
-# def logger(func):
-#     def wrapper(*args, **qwargs):
-#         logging.info(f'{func.__name__} was invoked')
-#         return func(*args, **qwargs)
-#     return wrapper
-
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("huggingface_hub").setLevel(logging.WARNING)
 logging.getLogger("sentence_transformers").setLevel(logging.WARNING)
@@ -129,10 +118,14 @@ def chat():
     data = request.get_json()               # Reads JSON
     user_message = data.get("message", "")  # extracts "message"
     logging.info(f"[USER] {user_message}")
-    
+
+    max_message_length = 300
+
     if not user_message.strip():
         return jsonify({"error": "Empty message"}), 400 # Rejects empty messages.
 
+    if len(user_message) > max_message_length:
+        return jsonify({"error": "Message is too long"}), 400
 
 # decision
 # -------------------------------------------------------
