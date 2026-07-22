@@ -121,6 +121,8 @@ def chat():
 
     max_message_length = 300
 
+    logging.info(f"Message length: {len(user_message)}")
+    
     if not user_message.strip():
         return jsonify({"error": "Empty message"}), 400 # Rejects empty messages.
 
