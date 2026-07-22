@@ -99,6 +99,10 @@
     opacity: 0.6;
 }
 
+.user_message {
+    color:#00aaff;
+}
+
 /*480*/
 @media screen and (max-width: 480px) {
         #chat_window {
