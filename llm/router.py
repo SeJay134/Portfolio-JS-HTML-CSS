@@ -12,11 +12,12 @@ class Router:
         ]
         self.threshold = 1.5 # 0.55
         self.retriever = retriever
+
     @logger
     def needs_rag(self, message):
         text = message.lower().strip()
 
-        # 1. Ключевые слова → RAG
+        # 1. keys word → RAG
         if any(k in text for k in self.keywords):
             logging.info("Router: keyword match -> RAG")
             return True
@@ -35,5 +36,7 @@ class Router:
             self.threshold
         )
 
-        return score < self.threshold
+        x = score < self.threshold
+
+        return x
 
