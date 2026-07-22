@@ -6,3 +6,4 @@ data/
 .venv/
 old/
 .vscode/
+embeddings/
