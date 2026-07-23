@@ -84,7 +84,7 @@ Additional restrictions:
 
 # model
 # ---------------------------------------------
-MODEL_NAME = "qwen2.5:7b" # qwen2.5:7b
+MODEL_NAME = "qwen2.5:14b" # qwen2.5:7b
 
 # Chat history
 # ---------------------------------------------
