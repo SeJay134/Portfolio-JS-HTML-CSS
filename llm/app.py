@@ -45,7 +45,7 @@ logging.info(f'device: {device}')
 # -----------------------------------------------
 app = Flask(__name__, template_folder="../", static_folder="../")
 app.config["MAX_CONTENT_LENGTH"] = 1024 * 16   # 16 KB
-CORS(app, origins=["https://sergei-luna.vercel.app", "https://dangle-scarecrow-baguette.ngrok-free.dev"])
+CORS(app, origins=["https://sergei-luna.vercel.app", "https://dangle-scarecrow-baguette.ngrok-free.dev", "http://localhost:5500"])
 # -----------------------------------------------
 limiter = Limiter(
     get_remote_address,
@@ -170,3 +170,4 @@ if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002)
 
 # python -m llm.app
+# python -m http.server 5500
