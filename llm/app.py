@@ -147,6 +147,9 @@ def chat():
     if len(user_message) > max_message_length:
         logging.info("Message rejected: too long")
         return jsonify({"error": "Message is too long"}), 400
+    
+    if not isinstance(user_message, str):
+        return jsonify({"error": "Invalid message"}), 400
 
 # decision
 # -------------------------------------------------------
