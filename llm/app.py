@@ -89,7 +89,7 @@ MODEL_NAME = "qwen2.5:7b" # qwen2.5:7b
 # Chat history
 # ---------------------------------------------
 chat_history = []
-
+max_history = 10
 # router
 # ---------------------------------------------
 retriever = Retriever()
@@ -116,6 +116,8 @@ def run_chat_model(user_message):
 
     chat_history.append({"role": "user", "content": user_message}) # add user message
     chat_history.append({"role": "assistant", "content": reply})   # add assistant message
+
+    chat_history[:] = chat_history[-max_history:] # limit chat
 
     return reply
 # ----------------------------------------------
