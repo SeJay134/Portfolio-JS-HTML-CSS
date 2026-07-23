@@ -125,8 +125,12 @@ def run_chat_model(user_message):
 def chat():
     # logging.info('llm/app.py chat() was invoked')
 
-    data = request.get_json()               # Reads JSON
-    user_message = data.get("message", "")  # extracts "message"
+    data = request.get_json(silent=True)               # Reads JSON
+    if not data:
+        return jsonify({"error": "Invalid JSON"}), 400
+    
+    user_message = str(data.get("message", ""))  # extracts "message"
+
     logging.info(f"[USER] {user_message}")
 
     max_message_length = 300
