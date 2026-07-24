@@ -105,10 +105,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // backend request
         try {
-            const response = await fetch("https://dangle-scarecrow-baguette.ngrok-free.dev/chat", {
+            const response = await fetch(API_URL, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: text })
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                    body: JSON.stringify({ message: text })
             });
 
             const data = await response.json();
