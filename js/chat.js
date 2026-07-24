@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (err) {
             const errorBubble = document.createElement("div");
             errorBubble.className = "bot_message";
-            errorBubble.textContent = "Error: cannot reach AI server.";
+            errorBubble.textContent = "Error: cannot reach AI server, or service is not available (mon-fr, 9-6pm)";
             chatHistory.appendChild(errorBubble);
             chatHistory.scrollTop = chatHistory.scrollHeight;
         }
