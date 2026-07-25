@@ -10,7 +10,7 @@ class Router:
             "sergei", "resume", "cv", "portfolio", "experience", "project", "projects", "skills", "education",
             "work history", "employment", "code the dream", "javascript", "react",
         ]
-        self.threshold = 1.5 # 0.55
+        self.threshold = 1.4 # 0.55
         self.retriever = retriever
 
     @logger
