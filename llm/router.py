@@ -8,7 +8,7 @@ class Router:
     def __init__(self, retriever):
         self.keywords = [
             "sergei", "resume", "cv", "portfolio", "experience", "project", "projects", "skills", "education",
-            "work history", "employment", "code the dream", "javascript", "react",
+            "work history", "code the dream",
         ]
         self.threshold = 1.4 # 0.55
         self.retriever = retriever
