@@ -1,68 +1,68 @@
-# llm/watcher.py
+# # llm/watcher.py
 
-import os
-import time
-import threading
-from pathlib import Path
+# import os
+# import time
+# import threading
+# from pathlib import Path
 
-from .indexer import rebuild_index
-from .validator import validate_index
-from .vector_store import load_vector_store
-
-
-WATCH_PATH = Path("data/base")
-POLL_INTERVAL = 2  # seconds
+# from .indexer import rebuild_index
+# from .validator import validate_index
+# from .vector_store import load_vector_store
 
 
-class FileWatcher:
-    def __init__(self):
-        self._stop_flag = False
-        self._last_snapshot = self._snapshot()
+# WATCH_PATH = Path("data/base")
+# POLL_INTERVAL = 2  # seconds
 
-    def _snapshot(self):
-        """takes structure of files: {path: mtime}"""
-        snapshot = {}
-        for root, _, files in os.walk(WATCH_PATH):
-            for f in files:
-                full = Path(root) / f
-                snapshot[str(full)] = full.stat().st_mtime
-        return snapshot
 
-    def _has_changes(self):
-        """Checking, files were changed"""
-        new_snapshot = self._snapshot()
+# class FileWatcher:
+#     def __init__(self):
+#         self._stop_flag = False
+#         self._last_snapshot = self._snapshot()
 
-        if new_snapshot != self._last_snapshot:
-            self._last_snapshot = new_snapshot
-            return True
+#     def _snapshot(self):
+#         """takes structure of files: {path: mtime}"""
+#         snapshot = {}
+#         for root, _, files in os.walk(WATCH_PATH):
+#             for f in files:
+#                 full = Path(root) / f
+#                 snapshot[str(full)] = full.stat().st_mtime
+#         return snapshot
 
-        return False
+#     def _has_changes(self):
+#         """Checking, files were changed"""
+#         new_snapshot = self._snapshot()
 
-    def start(self):
-        """run to watching in another stream"""
-        thread = threading.Thread(target=self._run, daemon=True)
-        thread.start()
-        print("[Watcher] Started watching:", WATCH_PATH)
+#         if new_snapshot != self._last_snapshot:
+#             self._last_snapshot = new_snapshot
+#             return True
 
-    def stop(self):
-        self._stop_flag = True
+#         return False
 
-    def _run(self):
-        while not self._stop_flag:
-            if self._has_changes():
-                print("[Watcher] Change detected → rebuilding index...")
+#     def start(self):
+#         """run to watching in another stream"""
+#         thread = threading.Thread(target=self._run, daemon=True)
+#         thread.start()
+#         print("[Watcher] Started watching:", WATCH_PATH)
 
-                try:
-                    rebuild_index()
-                    print("[Watcher] Index rebuilt")
+#     def stop(self):
+#         self._stop_flag = True
 
-                    validate_index()
-                    print("[Watcher] Index validated")
+#     def _run(self):
+#         while not self._stop_flag:
+#             if self._has_changes():
+#                 print("[Watcher] Change detected → rebuilding index...")
 
-                    load_vector_store()
-                    print("[Watcher] Vector store updated")
+#                 try:
+#                     rebuild_index()
+#                     print("[Watcher] Index rebuilt")
 
-                except Exception as e:
-                    print("[Watcher] ERROR:", e)
+#                     validate_index()
+#                     print("[Watcher] Index validated")
 
-            time.sleep(POLL_INTERVAL)
+#                     load_vector_store()
+#                     print("[Watcher] Vector store updated")
+
+#                 except Exception as e:
+#                     print("[Watcher] ERROR:", e)
+
+#             time.sleep(POLL_INTERVAL)
