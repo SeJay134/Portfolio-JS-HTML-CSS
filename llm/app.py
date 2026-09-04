@@ -180,6 +180,11 @@ def chat():
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002)
 
+# Flask backend:
 # python -m llm.app
-# python -m http.server 5002
-# ngrok http 5000
+
+# Frontend local:
+# python -m http.server 5001
+
+# Public tunnel to Flask:
+# ngrok http 5002
