@@ -182,3 +182,4 @@ if __name__ == "__main__":
 
 # python -m llm.app
 # python -m http.server 5002
+# ngrok http 5000
