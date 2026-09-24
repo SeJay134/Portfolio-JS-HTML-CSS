@@ -1,0 +1,480 @@
+SERGEI PATRUSHEV PORTFOLIO MODERNIZATION PLAN
+Date: September 24, 2026
+Repository: https://github.com/SeJay134/Portfolio-JS-HTML-CSS
+Reviewed branch: main
+Baseline commit: 7c03e1eee59ab21351b89be5a5baa376b45ab164
+Status: proposals and acceptance criteria; implementation is outside this plan.
+
+1. SOURCES, REVIEW LIMITATIONS, AND RECOMMENDED DIRECTION
+
+Both attached files were read. www.sergei-luna.vercel.app.txt contains only
+"website"; github-portfolio-website.txt contains the repository URL.
+The review covered index.html, active JavaScript/CSS, README, the Flask server
+and RAG modules, repository structure, and the saved preview.png image.
+https://sergei-luna.vercel.app returned HTTP 200; the downloaded HTML matched
+index.html at the reviewed commit byte for byte. The www address returned 502
+in this environment. This observation does not establish a persistent outage
+for all visitors. Verify the canonical URL and www behavior separately.
+preview.png is a saved reference image, not a current browser screenshot.
+A full interactive browser audit, Lighthouse measurements, live LLM requests,
+and load testing were not performed. Tests below are planned checks, not results.
+
+Recommended concept: a compact header, a left drawer that overlays the page,
+a strong hero followed immediately by selected projects, and a bottom-right chat.
+Visual direction: a restrained developer/AI portfolio, a graphite dark theme,
+a light alternative, one blue accent, and subtle neural-network graphics.
+Introduce React component by component. Add Three.js, presumably the intended
+meaning of "tree.js," later and only for a genuinely three-dimensional scene.
+
+Priorities:
+P0: correctness, visitor isolation, safe rendering, and working contact behavior.
+P1: left navigation, responsive layout, projects, accessibility, reliable chat.
+P2: React/TypeScript, search/filtering, RAG improvements, and operations.
+P3: Three.js, advanced transitions, and optional features.
+
+2. FINDINGS IN THE CURRENT PROJECT
+
+F01 [P1, UI] index.html/css/index.css: the portrait and navigation occupy a
+    permanent area. On small screens, this becomes a fixed top panel with a
+    height of 130/160px. There is no hamburger button or controlled drawer.
+F02 [P1, UI] Styles contain repeated media-query blocks, fixed dimensions,
+    min-width rules, and large offsets. Examples include margin-left:418px
+    for message actions and negative footer offsets. These create risks at
+    intermediate widths; confirm specific overflow cases in a browser.
+F03 [P1, UI] Multiple font families, decorative shadows, and translucent headings
+    weaken the hierarchy. Confirm contrast concerns with actual measurements.
+F04 [P1, projects] js/index.js requests /users/sejay134/repos in the browser.
+    There is no curated selection of featured work or API pagination.
+    Every preview assumes main/preview.png. Missing homepage values become
+    href="No website available.". Descriptions depend on hover tooltips,
+    which are inconvenient on touch devices.
+F05 [P0, contact] Leave a Message only creates a DOM entry and logs to console.
+    It does not send or persist a message. Name/email/message values are inserted
+    through innerHTML, an unsafe HTML-injection path even with local-only input.
+F06 [P1, accessibility] #chat_button is a clickable div without native button
+    behavior. Chat lacks a dedicated Send button and complete focus handling.
+    Form inputs lack real label elements; a label attribute is not a substitute.
+    Social links reuse id="link" and contain icons without accessible names.
+F07 [P1, chat] fetch does not check response.ok; 400/429/500 responses can appear
+    as "No response". There is no timeout, stop/retry, pending guard, or response
+    ordering protection. Submission requires Enter. Error text hardcodes hours.
+F08 [P0, backend] llm/app.py stores chat_history globally within the process.
+    The regular chat path can use another visitor's messages. This is a verified
+    storage-design issue, not evidence of a specific observed data leak.
+F09 [P0, API] str(data.get(...)) runs before type validation, converting numbers
+    and objects to strings. A nonempty JSON array has no .get and can cause 500.
+    The 300-character limit, MAX_CONTENT_LENGTH, and rate limit already exist;
+    preserve these protections.
+F10 [P1, configuration] js/config.js hardcodes an ngrok URL. It recognizes
+    localhost but not 127.0.0.1. Flask currently uses port 5002. Separate
+    environment URLs from source code and document local/public workflows.
+F11 [P1, RAG] Regular chat and run_rag use different instructions. RAG does not
+    receive SYSTEM_PROMPT or history and combines instructions/context into a
+    user message. Router uses English keywords and a fixed L2 threshold of 1.4.
+    Retriever does not discard FAISS sentinel id=-1 when too few results exist.
+F12 [P1, startup] Retriever loads its index during app.py import, requiring
+    index/metadata files beforehand. README describes rag_text.txt, whereas
+    indexer reads data/base/. watcher.py is entirely commented out.
+    The repository has no tracked requirements/pyproject, package.json,
+    automated tests, or CI configuration.
+F13 [P1, behavior] js/index.js forces scrollTo(0,0) on load and focusin and changes
+    zoom/overflow. This can interfere with deep links and mobile input.
+F14 [P2, payload] p5.js is loaded for a 64x64 button animation. The tsParticles
+    bundle is also loaded although initialization is disabled. Review and remove
+    legacy chat JS/CSS variants after regression checks.
+F15 [P1, SEO] Current index.html lacks a standard meta description, OG card,
+    and canonical URL. A page title already exists and should be preserved.
+
+3. LAYOUT OPTIONS AND COMPONENT PLACEMENT
+
+Option A: recommended left drawer overlay.
+  Header, 64-72px: a Menu button and name/monogram on the left; theme and Contact
+  on the right. Center the main area within approximately 1120-1200px.
+  Navigation starts closed on every screen and opens from the left on click.
+  Benefits: more room for projects, consistent desktop/mobile behavior, and no
+  text-width jump. Tradeoff: sections are hidden. Compensate with Projects and
+  Contact hero actions and a visible "Menu" label next to the icon.
+
+Option B: a 64-72px desktop rail that expands to 280-320px.
+  The collapsed rail shows section icons with accessible names. The expanded
+  panel overlays content. Mobile uses Option A. This creates a stronger app-like
+  appearance but permanently occupies some horizontal space.
+
+Option C: a desktop push-menu that shifts the main area.
+  Use only on wide screens with a deliberately allocated grid column.
+  Drawbacks: more responsive complexity, changing line lengths, possible jumps.
+  Do not choose this for the first release; evaluate Option A with real visitors.
+
+Recommended page order:
+  1) Hero: name, concise specialization, 1-2 sentences about the value of the
+     work, View projects and Contact actions, and Resume if a file is available.
+     Desktop: roughly 60% text and 40% portrait/small scene. Mobile: text and
+     actions first, followed by a compact portrait.
+  2) Featured Projects: 3-4 selected case studies, followed by All projects.
+  3) Skills: Web / Python & Data / AI & RAG / Tools, linked to examples.
+  4) Experience: a compact timeline with 2-3 meaningful points per role.
+  5) About: brief personal context and working approach.
+  6) Contact: email/LinkedIn/GitHub and a working form if a backend is available.
+  7) Footer: copyright, contacts, and a back-to-top action.
+  Keep chat accessible at bottom-right without covering Contact or safe areas.
+  Avoid a public Messages list for private inquiries.
+
+Project card:
+  16:10 preview -> title -> problem/result in 2-3 lines -> 3-5 technology tags
+  -> Live demo when available + Code + Details. Details explain personal role,
+  solution, limitations, and a verifiable outcome. Do not invent impact metrics.
+  Desktop: 2-3 columns; tablet: 2; mobile: 1. A portfolio should curate GitHub work.
+  Present the AI/RAG assistant's architecture as an engineering case study.
+
+4. PHASE 0: BASELINE AND REPRODUCIBLE SETUP
+Categories: audit, environment, QA. Priority: P0/P1. Estimate: 0.5-1.5 days.
+
+Tasks:
+[ ] Record the baseline commit and use a separate implementation branch. Capture
+    desktop/mobile screenshots, JS/image sizes, Lighthouse, and network errors.
+[ ] Check www/non-www, the actual deployment branch, contacts, demo/GitHub links.
+[ ] Document development commands: frontend 5001, Flask 5002, ngrok for development;
+    explain index generation before startup, the model, and data/base structure.
+[ ] Add pyproject/requirements with pinned dependencies and secret-free example
+    configuration. Check Python/Node compatibility before choosing versions.
+[ ] Create a concise UI/API map and preserve existing anchors when moving sections.
+
+Tests and acceptance:
+  A clean checkout starts using README instructions. Missing-index failures are
+  understandable. Record checks at 360/390/768/1024/1440px and baseline metrics.
+  Do not classify unavailable local Ollama as a UI defect without a separate check.
+
+5. PHASE 1: FIX LOGIC BEFORE REDESIGN
+Categories: API, security, contact, reliability. P0. Estimate: 2-4 days.
+Dependency: Phase 0.
+
+Tasks:
+[ ] Remove global history. The first safe version can be stateless. Then introduce
+    server-side sessions with unpredictable identifiers, TTL, bounded history,
+    and clearing. Multiple workers require shared storage. Do not expose another
+    session's history through an arbitrary client-supplied identifier.
+[ ] Validate JSON as an object and message as a string before conversion. Apply
+    trimming, length limits, and consistent JSON errors for 400/413/429/503.
+[ ] Add model timeouts, generation concurrency limits, a central error handler,
+    and request_id. Do not report success when model execution fails.
+[ ] Configure trusted origins and correct client IP handling behind the proxy.
+    CORS is not authentication. Production rate-limit storage must work across
+    workers. Reduce logging of conversation contents.
+[ ] Replace user-controlled innerHTML with textContent and safe URLs.
+    If Markdown is added later, sanitize its rendered output.
+[ ] Contact: provide mailto immediately. Connect a real form to a chosen delivery
+    backend with validation, limits, and spam protection. Until then, remove any
+    false impression that a message was sent. Do not publish visitor emails or
+    messages. Show success only after API confirmation.
+[ ] Fix invalid homepage links, image fallbacks, and project error handling.
+
+Tests and acceptance:
+  pytest with mocked Ollama: empty input, number/null/array/object message values,
+  oversized requests, 429, timeout, and model failure return expected JSON/status.
+  Independent sessions A/B: an A-only marker never reaches B's model request.
+  Test clearing, TTL, concurrency, and multiple workers for history isolation.
+  Malicious HTML displays as text without executing.
+  Contact: successful delivery to a test receiver, delivery failure, repeated submit.
+
+6. PHASE 2: DESIGN SYSTEM AND LEFT HAMBURGER MENU
+Categories: UI, navigation, responsive design, accessibility. P1.
+Estimate: 2-4 days.
+Dependency: Phase 0; complete P0 fixes before public release.
+
+Design:
+[ ] Introduce CSS tokens for background, surface, text, muted text, border, accent,
+    spacing, radius, shadow, z-index, and duration. Apply themes through tokens.
+[ ] Use one readable sans-serif family, optionally a monospace face for small
+    technical labels. Body: 16-18px, line-height 1.5-1.65, text width 60-75ch.
+    Use clamp() for H1 and clear headings instead of heavy shadows/cursive titles.
+[ ] Suggested light palette: #F8FAFC / #FFFFFF / #0F172A; dark palette:
+    #0B1120 / #111827 / #E5E7EB. Select blue accents per background and test contrast.
+[ ] Spacing: 8/16/24/32/48/64px; radii: 12-16px; restrained borders/shadows.
+    Left-align paragraphs rather than justifying them on narrow screens.
+[ ] Remove fixed offsets and excessive min-width. Use mobile-first grid, max-width,
+    gap, and minmax(0,1fr). Check intermediate widths continuously.
+
+Drawer specification: the user's primary priority.
+[ ] Use a native top-left button with a minimum 44x44px target, aria-expanded,
+    and aria-controls. The hamburger icon changes to a close icon.
+[ ] Desktop width: 280-320px; mobile: min(86vw, 320px). Use 100dvh, internal
+    scrolling, and safe-area padding. Keep the internal Close button visible.
+[ ] Top: mini portrait/name. Navigation: Home, Projects, Skills, Experience,
+    About, Contact. Bottom: Theme, Resume if available, GitHub/LinkedIn.
+[ ] Open with click/touch/Enter/Space. Close with Close, Escape, backdrop, or
+    section selection. Opening must not depend on hover.
+[ ] Animate translateX(-100%) to 0 and backdrop opacity over 200-260ms.
+    Avoid width/left/layout animation. Respect prefers-reduced-motion.
+[ ] Option A is a modal dialog containing normal nav links, not role=menu.
+    On open, move focus inside, contain Tab, make background content inert,
+    and lock background scrolling. On dismiss, restore scroll and trigger focus.
+    After section selection, close and focus that section's heading.
+[ ] Closed navigation must be unavailable to Tab and screen readers; translate
+    alone is insufficient. Coordinate hidden/inert with transition completion.
+[ ] Highlight the active section using IntersectionObserver and aria-current.
+    Preserve href anchors, header-aware scroll-margin-top, and Back/Forward.
+[ ] Use a single overlay owner: opening modal navigation minimizes/closes chat
+    while preserving its draft. Avoid competing focus traps.
+[ ] Provide System/Light/Dark theme selection, persistence, and a correct first frame.
+
+Tests and acceptance:
+  Playwright: all open/close methods, rapid clicks, resizing while open, anchors,
+  scroll restoration, and no stuck scroll lock.
+  Keyboard and VoiceOver: accessible names, Tab order, Escape, and focus return.
+  Hidden links cannot receive focus. Combine automated axe with manual checks.
+  320-1440px, landscape, 200% zoom: no lost content or horizontal scrolling.
+  Reduced motion: fully functional without movement. Both themes remain readable.
+
+7. PHASE 3: CONTENT, PROJECT CARDS, AND CONTACT FORM
+Categories: UI, content, data, SEO. P1. Estimate: 2-4 days.
+Dependency: Phase 2.
+
+Tasks:
+[ ] Reorder sections as proposed in Section 3 and shorten About. Proofread English,
+    for example "Januar" to "January". Confirm experience facts with the owner;
+    do not infer qualifications or achievements from titles alone.
+[ ] Select 3-4 strongest projects. Create content/projects.json or a typed module
+    with id, title, summary, tags, image, repoUrl, optional demoUrl, featured,
+    and order. Core content must not depend on GitHub availability.
+[ ] Fetch live stars/updatedAt separately if useful, with caching and timeouts.
+    Never expose a GitHub token in the browser. Keep saved cards during outages.
+[ ] Control preview assets; reserve width/height or aspect-ratio. Use WebP/AVIF
+    with fallbacks, below-the-fold lazy loading, and meaningful alt text.
+[ ] Add All / Web / Data / AI filters only when the project count justifies them.
+    Persist filter state in the URL if useful and provide an empty state.
+[ ] Use an experience timeline and connect skills to case studies without invented
+    proficiency percentages. Combine Connect and Leave a Message into Contact.
+[ ] Use visible labels, helper/error text, reasonable email length limits,
+    focus-visible, and pending/success/error states. Avoid progressively hiding
+    required form fields.
+[ ] Preserve existing hashes or compatible anchors. Remove global scroll/zoom
+    resets and fix the underlying mobile issue instead.
+[ ] Add description, a verified non-www canonical, OG/Twitter preview, and correct
+    headings/landmarks. Add Resume/case studies when content is ready; individual
+    pages need metadata and directly accessible URLs.
+
+Tests and acceptance:
+  GitHub failure/429 does not hide primary projects.
+  Missing image/demo/description values produce neither broken links nor empty cards.
+  Filters work with a keyboard; descriptions are available without hover.
+  #Projects deep links and reload retain expected navigation behavior.
+  The mobile keyboard does not cover the form; visitor email is not published.
+
+8. PHASE 4: MODERN CHAT INTERFACE AND RAG QUALITY
+Categories: chat UX, API, AI, operations. P1/P2. Estimate: 3-6 days.
+Dependency: Phase 1 and Phase 2 visual tokens.
+
+UI:
+[ ] Desktop: approximately 380-420px wide, bounded by viewport dimensions, with
+    "Ask about Sergei," a purpose statement, Close, and New conversation.
+    Mobile: nearly full-screen with 100dvh, safe areas, and keyboard handling.
+[ ] Add a clear touch-friendly Send button. Enter submits; Shift+Enter inserts
+    a newline. Handle composition events. Match the server's 300-character limit.
+[ ] Model idle/sending/receiving/success/error/offline states. Add waiting feedback,
+    retry that retains text, timeouts, and duplicate-submit protection.
+[ ] Offer prompts such as "What projects has Sergei built?", "Python experience?",
+    and "How can I get in touch?". Avoid "Ask me anything" for a scoped assistant.
+[ ] Autoscroll only when the visitor is already near the bottom; otherwise show
+    a New response indicator. Use role=log/aria-live for completed new answers
+    without announcing every streamed token.
+[ ] Obtain availability from health/readiness with cache/backoff rather than
+    hardcoded operating hours. Offer projects/contact when the server is offline.
+[ ] Desktop non-modal chat permits normal Tab exit. Mobile modal chat follows
+    dialog rules. Minimization preserves drafts; clearing removes server history.
+[ ] Add streaming after the JSON API is reliable. For POST, use fetch ReadableStream
+    with a defined event protocol; native EventSource does not directly POST a body.
+    Stop aborts the client request. Implement server generation cancellation
+    separately; AbortController alone does not guarantee Ollama stops computing.
+
+RAG and backend:
+[ ] Unify chat/RAG answer policies and use a separate system role. Treat retrieved
+    context as data, not instructions. Answer in the current message's language.
+[ ] Follow-up questions use only the current session's history. Missing knowledge
+    produces an honest fallback and contact link, not invented skills/employers.
+[ ] Validate FAISS ids >=0 and <len(chunks), empty indexes, ntotal, and metadata
+    compatibility. Resolve data paths from the project root; replace indexes atomically.
+[ ] Establish one knowledge source consistent with public projects and the resume.
+    Return a clear failing exit code when rebuilding the index fails.
+[ ] Calibrate threshold/top_k against labeled English/Russian questions.
+    IndexFlatL2 returns squared L2 distance, not confidence percentages.
+    Rebuild indexes and recalibrate after changing embeddings or normalization.
+[ ] Evaluate all-MiniLM-L6-v2 on Russian questions. Choose a multilingual alternative
+    based on evaluation results rather than popularity.
+[ ] Return verifiable project/section links from metadata. Do not expose internal
+    paths, system instructions, or raw similarity scores.
+[ ] Provide stable production HTTPS hosting, WSGI/process supervision, model/index
+    readiness, queues/limits, and minimal operational logs without conversations.
+    Portfolio content and contact must remain usable independently of AI uptime.
+
+Tests and acceptance:
+  Mock API: 200, 400, 413, 429 with Retry-After, 500, invalid JSON, offline, timeout,
+  slow/interrupted streams, and out-of-order responses. Drafts are retained.
+  Maintain 30-50 English/Russian regression questions covering biography, projects,
+  contacts, paraphrases, follow-ups, unknown facts, unrelated requests, instructions
+  embedded in context, and attempts to retrieve another session's history.
+  Measure retrieval recall against labeled sources separately from answer accuracy.
+  Release target: >=90% correct answers on supported evaluation questions and
+  zero invented facts in unknown-information tests. These are acceptance criteria,
+  not guarantees of error-free answers for every possible query.
+  Record p50/p95 time to first output and full response on target hardware.
+  Choose load limits after measurement; do not promise unmeasured fixed latency.
+
+9. PHASE 5: INCREMENTAL REACT + TYPESCRIPT MIGRATION
+Categories: architecture, tooling, testing. P2. Estimate: 3-6 days.
+Dependency: stable UX/API from previous phases.
+
+Technology choice:
+  React + TypeScript + Vite is the recommended moderate foundation while keeping
+  Flask/Ollama. React does not automatically fix security issues.
+  CSS Modules plus tokens are sufficient. Tailwind is optional; do not introduce
+  both styling approaches without a reason. Redux is unnecessary for this scale.
+  If SEO-driven case-study pages/blogging become central, separately compare
+  Next.js static generation and Astro with React components. A basic SPA does not
+  automatically deliver server-rendered content. Avoid simultaneous migrations
+  across multiple frameworks.
+
+Sequence:
+[ ] Add build scripts and pinned versions/lockfile; configure ESLint, TypeScript,
+    and formatting. Choose and verify exact versions during implementation.
+[ ] Define Project, Message, ChatResponse/ChatError, and environment configuration
+    types. VITE_* variables are public: never put model/email/GitHub secrets there.
+[ ] Migrate ChatWidget or NavigationDrawer as the first isolated React root.
+    Disable the old DOM owner for that region to avoid duplicate listeners.
+[ ] Migrate AppShell/Header/Drawer/ThemeToggle, Hero, ProjectGrid/ProjectCard,
+    ExperienceTimeline, SkillsGroups, ContactForm, and Footer.
+[ ] Extract the API client, useChat, useTheme, useActiveSection/useReducedMotion.
+    Keep panel visibility with a common owner rather than unrelated flags.
+[ ] Clean up requests, listeners, observers, timers, and WebGL on unmount.
+    StrictMode must not cause duplicate submissions or animation loops.
+[ ] Lazy-load chat and future 3D. Add ErrorBoundary for optional widgets.
+    Anchor navigation does not require a router; introduce one for separate pages.
+[ ] After parity checks, remove chat_old.js/chat_old.css/chat_new.css, duplicate
+    DOM scripts, and unused dependencies. Keep the Flask backend separate.
+[ ] Verify Vercel build/output, API routing, and deep links. Preserve working URLs.
+    Release the frontend through a preview and retain a rollback deployment.
+
+Tests and acceptance:
+  Vitest + Testing Library: drawer, theme, form, chat, and filter interactions.
+  MSW or equivalent API mocks for edge cases; pytest preserves backend contracts.
+  Playwright: navigation -> project -> chat -> contact, both themes, mobile/desktop.
+  Compare pre/post-migration capabilities; direct-page reloads and anchors work.
+  React must not exceed the agreed initial JS budget without justification.
+
+10. PHASE 6: ANIMATION, THREE.JS, AND MODERN DETAILS
+Categories: motion, graphics, performance. P3. Estimate: 2-5 days.
+Dependency: Phase 5 and passing performance/accessibility gates.
+
+Level 1: implement first.
+[ ] CSS transitions for navigation, buttons, and cards: 120-220ms, transform/opacity.
+[ ] Subtle section reveals with IntersectionObserver. Content remains visible by
+    default if JavaScript/observers fail. Do not hijack scrolling.
+[ ] Card lift of 2-4px and restrained focus/hover treatments. Touch must not depend
+    on hover. Smooth theme colors; reduced-motion mode avoids movement.
+[ ] Replace the p5 chat-button animation with compact SVG/CSS if its effect does
+    not justify the dependency. Avoid retaining three separate effects libraries.
+
+Level 2: choose one distinctive Three.js scene.
+  A. Neural constellation: a small cluster of nodes/links beside the hero, slow
+     rotation, and slight pointer response. Recommended: relevant to AI projects
+     while keeping text calm and readable.
+  B. Geometric SL monogram: a simple 3D object without heavy textures in a dedicated
+     hero region rather than behind the entire page.
+  C. Interactive RAG architecture graph inside its case study, accompanied by an
+     accessible HTML explanation. More useful than decorative 3D on every block.
+  D. Full-page particle background: experimental only, with greater distraction
+     and rendering costs. Prefer a CSS gradient for the first release.
+
+Technical requirements:
+[ ] Dynamically import after primary content; show a static poster/gradient first.
+    With React, React Three Fiber is an option; direct Three.js is also valid.
+    Introduce R3F only for the chosen scene, not for basic CSS transitions.
+[ ] Use one canvas, an initial DPR cap around 1-1.5, adaptive particle counts,
+    and no heavy postprocessing/shadows by default.
+[ ] Pause the loop in hidden tabs or when the hero leaves the viewport. On unmount,
+    cancel RAF and dispose of geometries/materials/textures/renderer resources.
+[ ] Reduced motion, an economy mode, and a manual Effects off setting use a static
+    background. WebGL failure/context loss must not break navigation or chat.
+[ ] Decorative canvas: aria-hidden and pointer-events:none. Interactive scenes
+    need a dedicated area, HTML alternative, and keyboard controls.
+[ ] Disable effects after sustained poor performance on weaker devices.
+    60fps desktop/30fps mobile are measurement targets, not advance promises.
+
+Other modern features, ordered by value:
+  P2: case studies with direct URLs, polished OG preview, accessible resume,
+      remembered theme, and skeletons only for data that is actually loading.
+  P3: View Transitions for filters/pages with fallbacks and reduced-motion support;
+      English/Russian UI when translations and correct lang attributes are ready;
+      Cmd/Ctrl+K navigation if the site grows, while retaining standard navigation.
+  Defer PWA/service workers, visitor accounts, a CMS, and a heavy animation stack
+  until a concrete use case exists. They add maintenance to a small portfolio.
+
+Tests and acceptance:
+  Disabled WebGL, context loss, reduced motion, hidden tabs, resize/orientation,
+  and repeated mount/unmount preserve content and do not accumulate resources.
+  3D stays within LCP/INP budgets; measure on a real midrange phone.
+  Scrolling and chat typing remain responsive with effects enabled.
+
+11. PHASE 7: FINAL ACCEPTANCE, CI, AND RELEASE
+Categories: QA, performance, accessibility, deployment. P1. Estimate: 1-2 days.
+Build automation starting in Phase 1; this phase is the final release check.
+
+[ ] CI: lint/typecheck/build, component tests, backend tests, and critical E2E.
+    Avoid meaningless snapshots for every static element.
+[ ] Browsers: Chromium/Firefox/WebKit in CI, plus manual iPhone Safari keyboard
+    and Android Chrome checks. Emulation does not replace real-device testing.
+[ ] State matrix: light/dark/system, menu open/closed, chat open/closed,
+    320/360/390/768/1024/1440px, landscape, 200% zoom, keyboard, offline,
+    slow network, API 429/503, reduced motion, and disabled WebGL.
+[ ] Accessibility target: WCAG 2.2 AA, normal-text contrast >=4.5:1, large-text
+    contrast >=3:1, visible focus, skip link, accessible names, no overlapping
+    controls. Automated axe checks do not replace manual assessment.
+[ ] Performance targets: LCP <=2.5s, INP <=200ms, CLS <=0.1 at the 75th percentile
+    of field data when sufficient traffic exists. Until then use reproducible
+    lab checks; Lighthouse is not a direct measurement of field INP.
+    Preliminary budgets: initial JS <=150KB gzip excluding deferred chat/3D;
+    hero asset <=200KB; lazy-load below-the-fold images. Refine after baseline.
+[ ] Check external links, console errors, metadata, and secrets in build output.
+    Content and contact stay usable when AI fails.
+[ ] Preview deployment -> scenario checks -> production -> smoke test.
+    Retain the previous release for rollback. Keep API changes compatible during
+    frontend switching. Roll back broken navigation/contact, session mixing,
+    or substantial performance regression.
+
+12. RECOMMENDED WORK PACKAGES AND TIMELINE
+
+Release A: Phases 0-3. Safe logic, working contact, left drawer, design system,
+hero, and projects. Main visible improvement: approximately 7-14 working days.
+Release B: Phases 4-5. Reliable chat/RAG and incremental React: about 6-12 days.
+Release C: Phase 6 plus Phase 7 acceptance. Budgeted 3D: approximately 3-7 days.
+Estimates assume one developer and exclude waiting for content/infrastructure.
+The total sequential range is approximately 16-33 working days; refine after
+Phase 0. With limited time, ship A and reliable JSON chat without streaming/3D.
+
+Within each phase:
+  Concrete scenario -> small implementation -> focused tests -> preview ->
+  critical user journey check -> next phase.
+
+First practical backlog:
+  1) Isolate chat history and enforce strict API validation.
+  2) Fix misleading contact submission and unsafe innerHTML.
+  3) Choose Option A and design tokens, then implement the accessible left drawer.
+  4) Build the hero, curated project cards, and responsive layout.
+  5) Add chat Send/pending/errors, then React, and only afterward Three.js.
+
+13. OFFICIAL IMPLEMENTATION REFERENCES
+
+Checked through web search on September 24, 2026. Verify package versions before
+installation.
+React: adding React to an existing project:
+https://react.dev/learn/add-react-to-an-existing-project
+React: choosing how to create an application:
+https://react.dev/learn/creating-a-react-app
+React: building with Vite or another build tool:
+https://react.dev/learn/build-a-react-app-from-scratch
+W3C APG: modal dialogs, keyboard interaction, and focus:
+https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/
+Three.js: responsive renderer sizing and pixel density:
+https://threejs.org/manual/pages/responsive.html
+
+These references support the technical approaches. Layout, palette, dimensions,
+priorities, and budgets above are proposals specific to this portfolio.
