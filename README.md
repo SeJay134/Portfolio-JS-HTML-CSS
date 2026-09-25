@@ -1,76 +1,147 @@
 # Sergei Patrushev — Portfolio
 
-Portfolio modernization is being completed in separately reviewed stages.
-Progress: [ROADMAP.md](ROADMAP.md). Proposal: [improvements.txt](improvements.txt).
+A React/TypeScript portfolio with a left navigation drawer, curated projects,
+light/dark themes, an optional Three.js scene, and a separate Flask/Ollama RAG API.
+Public portfolio content is prerendered at build time. Chat and 3D are lazy-loaded.
 
-The current frontend in this backend checkpoint remains the original static site.
-The React redesign is a separate work-in-progress checkpoint, not a production release.
+Progress: [ROADMAP.md](ROADMAP.md). Full proposal: [improvements.txt](improvements.txt).
+Validation and outstanding release gates: [docs/VALIDATION.md](docs/VALIDATION.md).
 
-## Backend checkpoint
+## Frontend
 
-Flask now uses independent chat requests instead of shared visitor history.
-Requests have strict JSON/type/size validation, JSON errors, request identifiers,
-rate limits, and a per-process generation concurrency limit. Importing the API
-never loads the model or index. `/health` works before the model is configured.
+Use Node 22.12+ (Node 24 is also supported).
 
-Use Python 3.11 or 3.12:
+```bash
+npm ci
+cp .env.example .env
+npm run dev
+```
+
+Open `http://localhost:5001`. Vite proxies `/api` to Flask at `127.0.0.1:5002`.
+Both localhost and 127.0.0.1 work. Do not use `python -m http.server` for the React
+source tree. For a production build:
+
+```bash
+npm run build
+npm run preview
+```
+
+The preview runs on port 4173 and does not include the development API proxy.
+Set `VITE_API_BASE_URL` before building to connect preview/production chat to a
+backend. Without a configured production backend, portfolio content and contact
+still work and chat displays an unavailable state. `VITE_*` values are public.
+
+## Backend
+
+Use Python 3.11 or 3.12. The application can start without model dependencies or
+an index; `/health` remains available and `/ready` reports unavailable until the
+model and evidence index are configured.
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements-rag.txt
-cp .env.example .env
 ollama pull qwen2.5:7b
 python -m llm.indexer
 python -m llm.app
 ```
 
-On Windows, activate with `.venv\Scripts\activate`. Ollama must be running.
-The API listens at `http://127.0.0.1:5002`. Development tunneling uses
-`ngrok http 5002`. The legacy frontend can use `python -m http.server 5001`;
-its existing `js/config.js` controls its API URL until the frontend migration.
+On Windows activate with `.venv\Scripts\activate`. Ollama must be running.
+Indexing downloads the embedding model on first use. The generated FAISS index
+and JSON metadata live in `data/embeddings`, outside the frontend public tree.
+`content/knowledge.json` is the versioned knowledge source. After editing it,
+rebuild the index and restart backend workers to load the new version. Publication
+uses a manifest pointing to a complete index/metadata pair. Old generations are
+retained so active readers are not broken; clean them during maintenance after
+workers have restarted. The indexer returns a nonzero exit code on failure.
 
-`content/knowledge.json` is the versioned evidence source. Indexing downloads
-all-MiniLM-L6-v2 on first use and writes a versioned FAISS index plus JSON metadata
-into `data/embeddings`. After editing evidence, rebuild the index and restart
-workers. A manifest atomically publishes the complete pair. Previous generations
-remain available to existing readers; remove them during planned maintenance.
-
-## API
-
-- `GET /health`: liveness without model loading.
-- `GET /ready`: index/model readiness; unavailable returns 503.
-- `POST /chat`: JSON `{ "message": "What projects has Sergei built?" }`.
-- Success: `reply`, `sources`, and `request_id`.
-- Errors: JSON `error` and `request_id`, with 400/413/429/503 status.
-- Limit: 300 Unicode code points after trimming, 16 KiB request body.
-- No server-side conversation history or visitor sessions are stored.
-- Browser cancellation does not guarantee cancellation of model computation.
-
-Configure origins with `FRONTEND_URLS`, model timeout with `MODEL_TIMEOUT`, and
-concurrent generations with `MAX_GENERATIONS`. The generation gate is per worker.
-Use Redis via `RATELIMIT_STORAGE_URI` for production/shared rate limits. Keep
-Ollama private and configure trusted proxy/client-IP handling at the hosting layer.
-The inherited RAG distance threshold is provisional until live evaluation.
-
-## Validation
+Development tunneling, when needed:
 
 ```bash
+ngrok http 5002
+```
+
+Set `VITE_API_BASE_URL` to the tunnel's HTTPS base URL, without `/chat`, and rebuild.
+Use `FRONTEND_URLS` for the actual frontend origins. A tunnel is not production
+hosting. The Flask development server listens on loopback by default.
+
+## API contract
+
+- `GET /health`: process liveness; no model loading.
+- `GET /ready`: model/index availability; short cached Ollama check.
+- `POST /chat`: `{ "message": "What projects has Sergei built?" }`.
+- Success: `{ "reply": "...", "sources": [], "request_id": "..." }`.
+- Failure: JSON `error` and `request_id`, with 400/413/429/503 status.
+- Maximum message: 300 Unicode code points after trimming. Maximum body: 16 KiB.
+- Every request is independent. No history, visitor session, or transcript is
+  stored by the server. UI history exists only in the current page's memory.
+- Stop cancels the browser request, not necessarily backend generation. The
+  backend timeout/concurrency limit bounds remaining work.
+- The assistant always uses the same grounding policy. The inherited retrieval
+  distance threshold is provisional until the live evaluation set is reviewed.
+
+## Contact and content
+
+Contact prepares a `mailto:` draft. It never claims a message has been delivered.
+The visitor opens their email app and sends it themselves; a Copy draft fallback
+is available. No visitor messages are displayed publicly or posted to this server.
+A direct email-delivery service is a future integration requiring provider setup.
+
+Project content: `src/data/projects.ts`. Project screenshots are local assets
+from the linked repositories; the portrait is from this repository. Do not invent
+outcome metrics or skills. Keep `content/knowledge.json` consistent with public
+content. No resume is linked until a reviewed resume file exists.
+
+## Tests
+
+```bash
+npm run typecheck
+npm run lint
+npm test
+npm run build
+npx playwright install --with-deps chromium firefox webkit
+npm run test:e2e
 pip install -r requirements-dev.txt
 python -m pytest -q
 ```
 
-27 tests passed on September 25, 2026: input validation, independent visitors,
-request IDs, model failures, generation concurrency, rate limiting, CORS, retrieval
-sentinels, grounded model requests, and real FAISS index publication/validation.
-Model calls are mocked; these tests do not certify live answer quality or latency.
+Browser tests cover desktop Chromium/Firefox/WebKit and an emulated iPhone,
+including drawer focus, themes, contact, chat errors/retries, responsive overflow,
+and automated axe checks. Emulation is not a physical-device certification.
+API tests inject a fake model; they do not download or execute Ollama.
 
-The live evaluation set contains 35 English/Russian questions. With the configured
-backend running:
+Optional real-index tests require `faiss-cpu` and NumPy. Live RAG evaluation:
 
 ```bash
 python scripts/evaluate_chat.py --base-url http://127.0.0.1:5002 --output /tmp/rag-evaluation.json
 ```
 
-The runner respects the default rate limit and records answers for manual review.
-Live Ollama evaluation, production configuration, and rollout remain pending.
+The runner waits between questions to respect the default rate limit and records
+latency/answers for manual factual review. It does not automatically certify
+accuracy. Inspect the evidence record IDs and expected behaviors in the dataset.
+
+## Deployment and rollback
+
+Vercel uses `vercel.json`, `npm run build`, and `dist`. Configure the stable HTTPS
+`VITE_API_BASE_URL` in the deployment environment. The frontend does not host
+Ollama or proxy production traffic by default.
+
+On a trusted backend host, set production origins and Redis rate-limit storage:
+
+```bash
+export RATELIMIT_STORAGE_URI=redis://localhost:6379/0
+export FRONTEND_URLS=https://sergei-luna.vercel.app
+.venv/bin/gunicorn --workers 1 --threads 4 --timeout 90 --bind 127.0.0.1:5002 llm.app:app
+```
+
+Terminate HTTPS at a reverse proxy and keep Ollama private. The generation gate
+is per worker; start with one worker to cap local model concurrency. Redis shares
+rate limits, not the generation gate. Configure trusted proxy/IP handling at the
+hosting layer; do not blindly trust forwarded headers from public clients.
+Readiness verifies an index and installed model, not successful inference on every
+request. Cold embedding initialization can take longer than warm inference.
+
+Deploy a preview and run smoke checks before merging to the production branch.
+The earlier site is preserved in git at `bcc8afbc1c4e2ecbe4bacde8084beeba981bc172`.
+Roll back by restoring the prior deployment; keep API compatibility during a
+frontend transition. This implementation intentionally does not publish production.
