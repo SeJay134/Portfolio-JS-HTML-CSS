@@ -2,65 +2,64 @@ export type Category = "All" | "Web" | "Data" | "AI";
 
 export type Project = {
   id: "chocolate" | "gdp" | "api" | "portfolio";
-  category: Exclude<Category, "All">;
   title: string;
   summary: string;
-  tags: readonly string[];
-  image?: string;
-  demo?: string;
-  repository: string;
   detail: string;
+  category: Exclude<Category, "All">;
+  tags: readonly string[];
+  repository: string;
+  demo?: string;
+  image?: string;
 };
 
 export const projects: readonly Project[] = [
   {
     id: "chocolate",
-    category: "Data",
     title: "Chocolate sales dashboard",
     summary:
-      "Interactive Streamlit dashboard for analyzing chocolate sales by country, product, and salesperson.",
-    tags: ["Python", "Streamlit", "Pandas", "Plotly"],
-    image: "/images/chocolate.webp",
-    demo: "https://sergei-chocolate-sales-dashboard.streamlit.app/",
-    repository: "https://github.com/SeJay134/Chocolate-Sales-Dashboard-Python",
+      "Interactive Python and Streamlit dashboard for analyzing sales by country, product, and salesperson.",
     detail:
-      "Loads chocolate-sales CSV data, removes missing and duplicate rows, normalizes amount and date fields, and provides filters with line, bar, pie, and table views.",
+      "The project presents chocolate sales data through an interactive Streamlit dashboard.",
+    category: "Data",
+    tags: ["Python", "Streamlit"],
+    repository: "https://github.com/SeJay134/Chocolate-Sales-Dashboard-Python",
+    demo: "https://sergei-chocolate-sales-dashboard.streamlit.app/",
+    image: "/images/chocolate.webp",
   },
   {
     id: "gdp",
-    category: "Data",
     title: "GDP dashboard",
     summary:
-      "Streamlit dashboard for browsing GDP data for countries around the world over time.",
-    tags: ["Python", "Streamlit", "Pandas"],
-    image: "/images/gdp.webp",
-    demo: "https://gdp-dashboard-99adkaf6mof.streamlit.app/",
-    repository: "https://github.com/SeJay134/GDP-Dashboard-Python",
+      "Python Streamlit application showing GDP data for countries around the world.",
     detail:
-      "Loads World Bank GDP data from CSV, reshapes yearly columns into year/value records, filters countries and years, and presents time-series charts and country metrics.",
+      "The project uses Streamlit to present country GDP data in an interactive application.",
+    category: "Data",
+    tags: ["Python", "Streamlit"],
+    repository: "https://github.com/SeJay134/GDP-Dashboard-Python",
+    demo: "https://gdp-dashboard-99adkaf6mof.streamlit.app/",
+    image: "/images/gdp.webp",
   },
   {
     id: "api",
-    category: "Web",
-    title: "Open API weather explorer",
+    title: "Open API explorer",
     summary:
-      "HTML, CSS, and JavaScript weather app that uses Open-Meteo geocoding and forecast APIs.",
-    tags: ["HTML", "CSS", "JavaScript", "Open-Meteo API"],
-    demo: "https://open-api-project-vert.vercel.app",
-    repository: "https://github.com/SeJay134/Open-API-Project-JS",
+      "Website built with HTML, CSS, and JavaScript that fetches and displays data from an open-source API.",
     detail:
-      "Accepts a city, resolves its coordinates through Open-Meteo geocoding, requests current weather, displays Fahrenheit temperature, and maps weather codes to visual conditions.",
+      "The project demonstrates browser-side API consumption using HTML, CSS, and JavaScript.",
+    category: "Web",
+    tags: ["HTML", "CSS", "JavaScript", "API"],
+    repository: "https://github.com/SeJay134/Open-API-Project-JS",
+    demo: "https://open-api-project-vert.vercel.app",
   },
   {
     id: "portfolio",
-    category: "AI",
     title: "Portfolio & AI assistant",
     summary:
-      "React and TypeScript portfolio with a separate Flask/Ollama RAG assistant grounded in reviewed portfolio evidence.",
-    tags: ["React", "TypeScript", "Flask", "FAISS", "Ollama"],
-    demo: "https://sergei-luna.vercel.app",
-    repository: "https://github.com/SeJay134/Portfolio-JS-HTML-CSS",
+      "Portfolio assistant using Flask, Ollama, FAISS retrieval, and sentence-transformer embeddings.",
     detail:
-      "The assistant accepts independent questions, retrieves portfolio evidence with FAISS and all-MiniLM-L6-v2 embeddings, and generates grounded answers with qwen2.5:7b while the portfolio remains usable if the AI backend is offline.",
+      "The assistant accepts independent questions and grounds answers in reviewed portfolio evidence while the portfolio remains usable when the backend is offline.",
+    category: "AI",
+    tags: ["Flask", "Ollama", "FAISS", "RAG"],
+    repository: "https://github.com/SeJay134/Portfolio-JS-HTML-CSS",
   },
-];
+] as const;

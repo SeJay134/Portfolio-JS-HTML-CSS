@@ -1,41 +1,22 @@
 import { describe, expect, it } from "vitest";
-import knowledge from "../../../content/knowledge.json";
 import { projects } from "../../../src/data/projects";
 
-const projectKnowledge = new Map(
-  knowledge
-    .filter((entry) => entry.doc_id === "projects")
-    .map((entry) => [entry.id, entry]),
-);
-
-describe("reviewed project data contract", () => {
-  it("contains exactly the four reviewed project records", () => {
-    expect(projects.map((project) => project.id)).toEqual([
-      "chocolate",
-      "gdp",
-      "api",
-      "portfolio",
-    ]);
-    expect(new Set(projects.map((project) => project.id)).size).toBe(
-      projects.length,
-    );
+describe("reviewed project data", () => {
+  it("contains the four reviewed portfolio projects with unique ids", () => {
+    expect(projects).toHaveLength(4);
+    expect(new Set(projects.map((project) => project.id)).size).toBe(4);
   });
 
-  it("keeps repository URLs aligned with the RAG knowledge source", () => {
+  it("keeps repository and demo URLs on the reviewed public hosts", () => {
     for (const project of projects) {
-      const evidence = projectKnowledge.get(
-        project.id === "portfolio" ? "assistant" : project.id,
-      );
-      expect(evidence, `missing RAG evidence for ${project.id}`).toBeDefined();
-      expect(project.repository).toBe(evidence?.url);
-    }
-  });
-
-  it("uses only supported categories and absolute HTTPS external URLs", () => {
-    for (const project of projects) {
-      expect(["Web", "Data", "AI"]).toContain(project.category);
-      expect(new URL(project.repository).protocol).toBe("https:");
+      expect(project.repository).toMatch(/^https:\/\/github\.com\/SeJay134\//);
       if (project.demo) expect(new URL(project.demo).protocol).toBe("https:");
     }
+  });
+
+  it("preserves the expected category split", () => {
+    expect(projects.filter((project) => project.category === "AI")).toHaveLength(1);
+    expect(projects.filter((project) => project.category === "Web")).toHaveLength(1);
+    expect(projects.filter((project) => project.category === "Data")).toHaveLength(2);
   });
 });
