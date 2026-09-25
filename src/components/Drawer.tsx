@@ -12,16 +12,21 @@ export const sections = [
   ["Connect", "Contact"],
 ] as const;
 
+export type SectionId = (typeof sections)[number][0];
+
 export function Drawer({
   open,
   onClose,
+  onNavigate,
   active,
 }: {
   open: boolean;
   onClose: () => void;
-  active: string;
+  onNavigate: (id: SectionId) => void;
+  active: SectionId;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const pendingSectionFocus = useRef<SectionId | null>(null);
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
@@ -29,11 +34,30 @@ export function Drawer({
     if (!open && dialog.open) dialog.close();
   }, [open]);
 
-  function navigate(id: string) {
+  function navigate(
+    id: SectionId,
+    event: React.MouseEvent<HTMLAnchorElement>,
+  ) {
+    event.preventDefault();
+    pendingSectionFocus.current = id;
     onClose();
-    requestAnimationFrame(() =>
-      document.getElementById(id)?.focus({ preventScroll: true }),
-    );
+  }
+
+  function handleDialogClose() {
+    onClose();
+    const id = pendingSectionFocus.current;
+    pendingSectionFocus.current = null;
+    if (!id) return;
+
+    window.setTimeout(() => {
+      const target = document.getElementById(id);
+      if (!target) return;
+      const hash = `#${id}`;
+      if (window.location.hash !== hash) window.location.hash = id;
+      target.scrollIntoView({ block: "start", behavior: "auto" });
+      onNavigate(id);
+      requestAnimationFrame(() => target.focus({ preventScroll: true }));
+    }, 0);
   }
   return (
     <dialog
@@ -43,7 +67,7 @@ export function Drawer({
       className="drawer"
       aria-labelledby="navigation-title"
       onCancel={onClose}
-      onClose={onClose}
+      onClose={handleDialogClose}
       onClick={(e) => {
         if (e.target === ref.current) {
           const rect = ref.current.getBoundingClientRect();
@@ -52,7 +76,7 @@ export function Drawer({
       }}
     >
       <div className="drawer-top">
-        <a href="#Home" className="wordmark" onClick={() => navigate("Home")}>
+        <a href="#Home" className="wordmark" onClick={(event) => navigate("Home", event)}>
           SP<span>.</span>
         </a>
         <button
@@ -73,7 +97,7 @@ export function Drawer({
               <a
                 href={`#${id}`}
                 aria-current={active === id ? "location" : undefined}
-                onClick={() => navigate(id)}
+                onClick={(event) => navigate(id, event)}
               >
                 <span className="nav-number">0{i + 1}</span>
                 {label}

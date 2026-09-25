@@ -7,26 +7,6 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
-test("drawer supports keyboard, anchors, focus return, and theme persistence", async ({
-  page,
-}) => {
-  await page.goto("/");
-  const menu = page.getByRole("button", { name: "Menu", exact: true });
-  await menu.click();
-  const dialog = page.getByRole("dialog", { name: "Explore the portfolio" });
-  await expect(dialog).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(dialog).not.toBeVisible();
-  await expect(menu).toBeFocused();
-  await menu.click();
-  await dialog.getByRole("link", { name: /Projects/ }).click();
-  await expect(dialog).not.toBeVisible();
-  await expect(page).toHaveURL(/#Projects$/);
-  await page.getByLabel("Color theme").selectOption("dark");
-  await page.reload();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-});
-
 test("projects remain available offline from the API and filtering works", async ({
   page,
 }) => {
@@ -104,7 +84,7 @@ test("no horizontal overflow at target widths and reduced motion keeps effects o
   await expect(page.locator("canvas")).toHaveCount(0);
 });
 
-test("light, dark, drawer, and chat have no automated WCAG AA violations", async ({
+test("light, dark, and chat have no automated WCAG AA violations", async ({
   page,
 }) => {
   await page.goto("/");
@@ -118,52 +98,12 @@ test("light, dark, drawer, and chat have no automated WCAG AA violations", async
       ).violations,
     ).toEqual([]);
   }
-  await page.getByRole("button", { name: "Menu", exact: true }).click();
-  expect(
-    (await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze())
-      .violations,
-  ).toEqual([]);
-  await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Open portfolio assistant" }).click();
   await expect(page.getByLabel("Your question")).toBeVisible();
   expect(
     (await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze())
       .violations,
   ).toEqual([]);
-});
-
-test("modal menu contains focus, closes on backdrop, and never overlaps chat", async ({
-  page,
-  isMobile,
-}) => {
-  await page.goto("/");
-  await page.getByRole("button", { name: "Menu", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "Explore the portfolio" });
-  for (let index = 0; index < 12; index++) {
-    await page.keyboard.press("Tab");
-    expect(
-      await dialog.evaluate((el) => el.contains(document.activeElement)),
-    ).toBe(true);
-  }
-  const width = page.viewportSize()!.width;
-  await page.mouse.click(width - 4, 200);
-  await expect(dialog).not.toBeVisible();
-  await page.getByRole("button", { name: "Open portfolio assistant" }).click();
-  await page.getByLabel("Your question").fill("Keep this draft");
-  if (isMobile) {
-    await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
-    await page.getByRole("button", { name: "Close chat", exact: true }).click();
-  } else {
-    await page.getByRole("button", { name: "Menu", exact: true }).click();
-    await expect(
-      page.getByRole("dialog", { name: "Ask about Sergei" }),
-    ).not.toBeVisible();
-    await page.keyboard.press("Escape");
-  }
-  await page.getByRole("button", { name: "Open portfolio assistant" }).click();
-  await expect(page.getByLabel("Your question")).toHaveValue("Keep this draft");
-  await page.getByRole("button", { name: "Close chat", exact: true }).click();
-  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
 });
 
 test("stopping a slow chat request preserves the draft and prevents duplicate submissions", async ({

@@ -43,7 +43,7 @@ export default function App() {
   const { theme, selectTheme } = useTheme();
   const [effects, setEffects] = useState(false),
     [reduced, setReduced] = useState(true);
-  const [active, setActive] = useState("Home");
+  const [active, setActive] = useState<(typeof sections)[number][0]>("Home");
   const menuButton = useRef<HTMLButtonElement>(null),
     chatButton = useRef<HTMLButtonElement>(null);
   const disableEffects = useCallback(() => setEffects(false), []);
@@ -57,18 +57,65 @@ export default function App() {
     return () => mq.removeEventListener("change", sync);
   }, []);
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries)
-          if (entry.isIntersecting) setActive(entry.target.id);
-      },
-      { rootMargin: "-15% 0px -60% 0px" },
-    );
-    sections.forEach(([id]) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
+    let frame = 0;
+    const syncActiveSection = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const headerBottom =
+          document
+            .querySelector<HTMLElement>(".site-header")
+            ?.getBoundingClientRect().bottom ?? 0;
+        const marker = headerBottom + 32;
+        let current: (typeof sections)[number][0] = sections[0][0];
+        let nearestBelow:
+          | { id: (typeof sections)[number][0]; top: number }
+          | undefined;
+
+        for (const [id] of sections) {
+          const section = document.getElementById(id);
+          if (!section) continue;
+          const rect = section.getBoundingClientRect();
+
+          if (rect.top <= marker && rect.bottom > marker) {
+            current = id;
+            nearestBelow = undefined;
+            break;
+          }
+
+          if (
+            rect.top > marker &&
+            rect.top < window.innerHeight &&
+            (!nearestBelow || rect.top < nearestBelow.top)
+          ) {
+            nearestBelow = { id, top: rect.top };
+          }
+
+          if (rect.top <= marker) current = id;
+        }
+
+        if (nearestBelow) current = nearestBelow.id;
+
+        const atDocumentEnd =
+          Math.ceil(window.scrollY + window.innerHeight) >=
+          document.documentElement.scrollHeight - 2;
+        if (atDocumentEnd) current = sections[sections.length - 1][0];
+
+        setActive((previous) => (previous === current ? previous : current));
+      });
+    };
+
+    syncActiveSection();
+    window.addEventListener("scroll", syncActiveSection, { passive: true });
+    window.addEventListener("resize", syncActiveSection);
+    window.addEventListener("hashchange", syncActiveSection);
+    window.addEventListener("popstate", syncActiveSection);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", syncActiveSection);
+      window.removeEventListener("resize", syncActiveSection);
+      window.removeEventListener("hashchange", syncActiveSection);
+      window.removeEventListener("popstate", syncActiveSection);
+    };
   }, []);
   useEffect(() => {
     const mq = matchMedia("(max-width: 600px)");
@@ -142,7 +189,12 @@ export default function App() {
           </div>
         </div>
       </header>
-      <Drawer open={menu} onClose={closeMenu} active={active} />
+      <Drawer
+        open={menu}
+        onClose={closeMenu}
+        onNavigate={setActive}
+        active={active}
+      />
       <main id="main" tabIndex={-1}>
         <section id="Home" tabIndex={-1} className="hero section">
           <div className="hero-copy">
