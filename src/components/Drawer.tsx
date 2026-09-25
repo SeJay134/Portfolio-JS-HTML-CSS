@@ -53,7 +53,11 @@ export function Drawer({
       const target = document.getElementById(id);
       if (!target) return;
       const hash = `#${id}`;
-      if (window.location.hash !== hash) window.location.hash = id;
+      if (window.location.hash !== hash) {
+        const url = new URL(window.location.href);
+        url.hash = id;
+        window.history.pushState(null, "", url);
+      }
       target.scrollIntoView({ block: "start", behavior: "auto" });
       onNavigate(id);
       requestAnimationFrame(() => target.focus({ preventScroll: true }));
