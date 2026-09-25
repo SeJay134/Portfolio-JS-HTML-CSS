@@ -14,7 +14,7 @@ export default defineConfig({
   build: { target: ["es2022", "safari16"], chunkSizeWarningLimit: 600 },
   test: {
     environment: "jsdom",
-    setupFiles: ["./src/test-setup.ts"],
-    include: ["src/**/*.test.{ts,tsx}"],
+    setupFiles: ["./tests/setup/frontend.ts"],
+    include: ["tests/unit/frontend/**/*.test.{ts,tsx}"],
   },
 });

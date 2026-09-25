@@ -8,14 +8,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--base-url', default='http://127.0.0.1:5002')
     parser.add_argument('--output', required=True)
     parser.add_argument('--interval', type=float, default=7)
     args = parser.parse_args()
-    cases = json.loads((ROOT / 'tests' / 'rag_cases.json').read_text())
+    cases = json.loads((ROOT / 'tests' / 'fixtures' / 'rag_cases.json').read_text())
     results = []
     for index, case in enumerate(cases):
         if index:
@@ -30,7 +29,6 @@ def main():
         results.append({**case, 'status': status, 'seconds': round(time.monotonic() - start, 3), 'response': body, 'manual_pass': None})
         Path(args.output).write_text(json.dumps(results, indent=2, ensure_ascii=True) + '\n')
         print(f"{case['id']}: HTTP {status}")
-
 
 if __name__ == '__main__':
     main()

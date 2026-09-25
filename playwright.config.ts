@@ -1,7 +1,10 @@
 import { defineConfig, devices } from "@playwright/test";
-const chromiumLaunch = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE, args: ["--no-sandbox", "--disable-dev-shm-usage", "--use-gl=angle", "--use-angle=swiftshader"] } : {};
+const chromiumLaunch = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
+  ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE, args: ["--no-sandbox", "--disable-dev-shm-usage", "--use-gl=angle", "--use-angle=swiftshader"] }
+  : {};
 export default defineConfig({
-  testDir: "./e2e",
+  testDir: "./tests",
+  testMatch: ["e2e/**/*.spec.ts", "smoke/**/*.spec.ts", "regression/**/*.spec.ts"],
   fullyParallel: true,
   retries: process.env.CI ? 1 : 0,
   reporter: [["list"], ["html", { open: "never" }]],
@@ -16,6 +19,6 @@ export default defineConfig({
     { name: "firefox", use: { ...devices["Desktop Firefox"] } },
     { name: "webkit", use: { ...devices["Desktop Safari"] } },
     { name: "mobile", use: { ...devices["iPhone 13"] } },
-    { name: "mobile-chromium", use: { ...devices["Pixel 7"], launchOptions: chromiumLaunch } },
+    { name: "mobile-chromium", use: { ...devices["Pixel 7"], launchOptions: chromiumLaunch } }
   ],
 });

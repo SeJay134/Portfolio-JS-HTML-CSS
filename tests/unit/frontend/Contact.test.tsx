@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Contact } from "./Contact";
+import { Contact } from "../../../src/components/Contact";
 import { it, expect, vi } from "vitest";
 
 async function prepare(message = "Hello about a project & an opportunity") {

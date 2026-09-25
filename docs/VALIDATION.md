@@ -14,6 +14,38 @@ Nothing on this draft branch is a production release.
 - Local single-run Lighthouse measurements and screenshots are in this directory.
   They precede the final edits and are not final release measurements.
 
+## Current merge policy and transition gate
+
+The repository now uses: small scoped branch -> focused tests -> required
+regression -> merge -> deploy -> smoke -> human browser check.
+
+The existing `wip/portfolio-ui-draft` predates this rule and already contains
+multiple drafted frontend areas. It is a one-time transition package closed at
+**Phase 5**, after Phase 2.2, Phase 3, and Phase 4.2 are separately accepted and
+the complete merge gate is green. After deployment, a human browser verification
+is required before Phase 4.3 or Phase 6 begins from a fresh branch.
+
+The next acceptance checkpoint is **Phase 2.2 — accessible left drawer**.
+
+## CI baseline blocker discovered — September 25, 2026
+
+After centralizing the test architecture, branch CI exposed a pre-existing
+frontend build break: `src/components/Projects.tsx` imports
+`../data/projects`, but `src/data/projects.ts` is absent from the current WIP
+branch and earlier checked repository checkpoints.
+
+Observed on GitHub Actions:
+- backend unit/integration job: passed;
+- npm install and ESLint: passed;
+- frontend typecheck/build: failed on missing `src/data/projects.ts`;
+- smoke could not run because the production build failed;
+- full browser regression is intentionally reserved for PR/main by the new policy.
+
+Do not invent project records merely to make CI green. Reconstruct the typed
+project source from reviewed repository/public project facts, add its unit/content
+coverage, then rerun the full Phase 2.2 prerequisite gate. No merge/deploy is
+allowed while this blocker remains.
+
 ## Pending acceptance
 
 - Rebuild and rerun the complete expanded browser suite on this exact checkpoint.

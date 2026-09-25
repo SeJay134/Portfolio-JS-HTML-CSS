@@ -1,5 +1,5 @@
 import { it, expect, vi } from "vitest";
-import { requestAnswer } from "./api";
+import { requestAnswer } from "../../../src/lib/api";
 it("rejects HTTP errors and does not treat them as empty successful answers", async () => {
   vi.stubGlobal(
     "fetch",

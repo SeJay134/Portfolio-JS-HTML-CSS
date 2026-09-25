@@ -94,31 +94,43 @@ content. No resume is linked until a reviewed resume file exists.
 
 ## Tests
 
+All automated tests, fixtures, and acceptance scenarios are centralized under
+`tests/`. See `tests/README.md`; contracts are in `docs/CONTRACTS.md`.
+
 ```bash
 npm run typecheck
 npm run lint
-npm test
+npm run test:unit
+python -m pytest -q tests/unit/backend tests/integration/backend
 npm run build
 npx playwright install --with-deps chromium firefox webkit
+npm run test:smoke
 npm run test:e2e
-pip install -r requirements-dev.txt
-python -m pytest -q
+npm run test:regression
 ```
 
-Browser tests cover desktop Chromium/Firefox/WebKit and an emulated iPhone,
-including drawer focus, themes, contact, chat errors/retries, responsive overflow,
-and automated axe checks. Emulation is not a physical-device certification.
-API tests inject a fake model; they do not download or execute Ollama.
+`npm run test:browser` runs smoke, E2E, and regression browser suites. Future
+scenarios live under `tests/future/`; manual release checks under
+`tests/scenarios/`.
 
-Optional real-index tests require `faiss-cpu` and NumPy. Live RAG evaluation:
+Live RAG evaluation uses `tests/fixtures/rag_cases.json`:
 
 ```bash
 python scripts/evaluate_chat.py --base-url http://127.0.0.1:5002 --output /tmp/rag-evaluation.json
 ```
 
-The runner waits between questions to respect the default rate limit and records
-latency/answers for manual factual review. It does not automatically certify
-accuracy. Inspect the evidence record IDs and expected behaviors in the dataset.
+It records latency/answers for manual factual review and does not automatically
+certify accuracy.
+
+## Development and release workflow
+
+Use a short-lived branch from the latest verified `main`: one roadmap subphase,
+one defect fix, or one tightly coupled contract change. Pass required tests/build
+before merge. Then deploy `main`, run smoke checks, manually verify the affected
+journey, and record it in `docs/VALIDATION.md` before starting the next slice.
+
+The existing `wip/portfolio-ui-draft` is a one-time transition exception. Phase 5
+is its merge gate after Phases 2.2, 3, and 4.2 are accepted.
 
 ## Deployment and rollback
 
@@ -141,7 +153,11 @@ hosting layer; do not blindly trust forwarded headers from public clients.
 Readiness verifies an index and installed model, not successful inference on every
 request. Cold embedding initialization can take longer than warm inference.
 
-Deploy a preview and run smoke checks before merging to the production branch.
-The earlier site is preserved in git at `bcc8afbc1c4e2ecbe4bacde8084beeba981bc172`.
-Roll back by restoring the prior deployment; keep API compatibility during a
-frontend transition. This implementation intentionally does not publish production.
+Run build/preview smoke checks before merging. After a green gate, merge to
+`main`, deploy that exact revision, run post-deploy smoke checks, and perform a
+human browser verification. The release is not closed until the result is recorded
+in `docs/VALIDATION.md`.
+
+The earlier site is preserved at
+`bcc8afbc1c4e2ecbe4bacde8084beeba981bc172`. Keep the previous deployment
+available for rollback and preserve API compatibility during transitions.
