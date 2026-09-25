@@ -33,3 +33,15 @@ Nothing on this draft branch is a production release.
 - Passed: TypeScript production build, targeted ESLint, and whitespace checks.
 - This accepts the email-draft flow, not an automated email-delivery service.
 - Other UI subphases remain pending; the production site has not been changed.
+
+## Phase 2.1 accepted — September 25, 2026
+
+- Light, dark, and system preferences persist and follow operating-system changes.
+- Invalid saved preferences fall back to system; blocked storage does not prevent switching.
+- Theme changes synchronize across tabs; hydration preserves the initial saved theme.
+- Browser theme color tracks the active palette; no-JavaScript pages follow system colors.
+- Form boundaries exceed 3:1 contrast against their adjacent surfaces in both palettes.
+- Passed: 12 desktop/mobile Chromium theme checks, including axe WCAG A/AA scans.
+- Passed: ESLint, TypeScript production build, and whitespace checks.
+- Reviewed desktop dark and mobile light screenshots with visible validation errors.
+- Firefox/WebKit and final release checks remain pending under Phase 7.1.

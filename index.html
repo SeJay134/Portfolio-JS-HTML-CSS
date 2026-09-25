@@ -4,25 +4,68 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sergei Patrushev — Software, Data & AI</title>
-    <meta name="description" content="Explore Sergei Patrushev's software development portfolio: web applications, Python dashboards, data projects, and a retrieval-grounded AI assistant." />
+    <meta
+      name="description"
+      content="Explore Sergei Patrushev's software development portfolio: web applications, Python dashboards, data projects, and a retrieval-grounded AI assistant."
+    />
     <meta name="theme-color" content="#142330" />
     <link rel="canonical" href="https://sergei-luna.vercel.app/" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Sergei Patrushev — Software, Data & AI" />
-    <meta property="og:description" content="Thoughtful interfaces. Meaningful data. Practical AI. Explore my selected projects." />
+    <meta
+      property="og:title"
+      content="Sergei Patrushev — Software, Data & AI"
+    />
+    <meta
+      property="og:description"
+      content="Thoughtful interfaces. Meaningful data. Practical AI. Explore my selected projects."
+    />
     <meta property="og:url" content="https://sergei-luna.vercel.app/" />
-    <meta property="og:image" content="https://sergei-luna.vercel.app/images/social-card.png" />
+    <meta
+      property="og:image"
+      content="https://sergei-luna.vercel.app/images/social-card.png"
+    />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <script>
-      try { const t = localStorage.getItem('portfolio-theme'); document.documentElement.dataset.theme = t === 'dark' || t === 'light' ? t : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; } catch {}
+      (() => {
+        let saved = "system";
+        try {
+          saved = localStorage.getItem("portfolio-theme") || "system";
+        } catch {}
+        const theme =
+          saved === "light" || saved === "dark"
+            ? saved
+            : matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]').content =
+          theme === "dark" ? "#0c141d" : "#f8f9fb";
+      })();
     </script>
   </head>
   <body>
     <div id="root"></div>
-    <noscript><style>.contact-form,.menu-button,.header-actions select,.filters,.chat-launcher,.effects-toggle{display:none!important}</style><p>The portfolio content is available below. Interactive filters and the AI assistant require JavaScript. Contact: <a href="mailto:patrushev.s.job@gmail.com">patrushev.s.job@gmail.com</a>.</p></noscript>
+    <noscript
+      ><style>
+        .contact-form,
+        .menu-button,
+        .header-actions select,
+        .filters,
+        .chat-launcher,
+        .effects-toggle {
+          display: none !important;
+        }
+      </style>
+      <p>
+        The portfolio content is available below. Interactive filters and the AI
+        assistant require JavaScript. Contact:
+        <a href="mailto:patrushev.s.job@gmail.com">patrushev.s.job@gmail.com</a
+        >.
+      </p></noscript
+    >
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

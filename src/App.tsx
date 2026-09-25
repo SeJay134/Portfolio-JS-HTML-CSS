@@ -13,6 +13,7 @@ import { Contact } from "./components/Contact";
 import { Icon } from "./components/Icon";
 import { WidgetBoundary } from "./components/WidgetBoundary";
 import { readPreference, savePreference } from "./lib/preferences";
+import { useTheme } from "./hooks/useTheme";
 const Chat = lazy(() => import("./components/Chat"));
 const Constellation = lazy(() => import("./components/Constellation"));
 const skills = [
@@ -39,15 +40,14 @@ export default function App() {
   const [menu, setMenu] = useState(false),
     [chat, setChat] = useState(false),
     [chatLoaded, setChatLoaded] = useState(false);
-  const [theme, setTheme] = useState("system"),
-    [effects, setEffects] = useState(false),
+  const { theme, selectTheme } = useTheme();
+  const [effects, setEffects] = useState(false),
     [reduced, setReduced] = useState(true);
   const [active, setActive] = useState("Home");
   const menuButton = useRef<HTMLButtonElement>(null),
     chatButton = useRef<HTMLButtonElement>(null);
   const disableEffects = useCallback(() => setEffects(false), []);
   useEffect(() => {
-    setTheme(readPreference("portfolio-theme", "system"));
     const mq = matchMedia("(prefers-reduced-motion: reduce)");
     const sync = () => setReduced(mq.matches);
     sync();
@@ -56,16 +56,6 @@ export default function App() {
     setEffects(readPreference("portfolio-effects", "off") === "on");
     return () => mq.removeEventListener("change", sync);
   }, []);
-  useEffect(() => {
-    const mq = matchMedia("(prefers-color-scheme: dark)");
-    const apply = () => {
-      document.documentElement.dataset.theme =
-        theme === "system" ? (mq.matches ? "dark" : "light") : theme;
-    };
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, [theme]);
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -139,8 +129,7 @@ export default function App() {
               id="theme"
               value={theme}
               onChange={(e) => {
-                setTheme(e.target.value);
-                savePreference("portfolio-theme", e.target.value);
+                selectTheme(e.target.value);
               }}
             >
               <option value="system">System</option>
