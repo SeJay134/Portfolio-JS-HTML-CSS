@@ -133,6 +133,7 @@ export default function App() {
   }, [menu, chat]);
   const closeMenu = useCallback(() => {
     setMenu(false);
+    requestAnimationFrame(() => menuButton.current?.focus());
   }, []);
   const closeChat = useCallback(() => {
     setChat(false);

@@ -92,6 +92,7 @@ test("backdrop closes the drawer, resize keeps it usable, and menu owns the moda
   await page.mouse.click(Math.min(page.viewportSize()!.width - 2, box.x + box.width + 12), 120);
   await expect(dialog).not.toBeVisible();
   await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+  await expect(menu).toBeFocused();
 
   await page.getByRole("button", { name: "Open portfolio assistant" }).click();
   await expect(page.getByLabel("Your question")).toHaveValue("Keep this draft");
