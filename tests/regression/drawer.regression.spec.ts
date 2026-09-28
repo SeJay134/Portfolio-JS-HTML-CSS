@@ -54,6 +54,7 @@ test("section selection closes the drawer, preserves the anchor, focuses the sec
     dialog.getByRole("link", { name: /Projects/ }),
   ).toHaveAttribute("aria-current", "location");
   await page.keyboard.press("Escape");
+  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
 
   await page.locator("#Connect").evaluate((element) => {
     element.scrollIntoView({ block: "start", behavior: "instant" });
