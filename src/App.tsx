@@ -143,7 +143,7 @@ export default function App() {
   const prepareMenuOpen = useCallback(() => {
     const focused = document.activeElement;
     const focusedSection = sections.find(([id]) => focused?.id === id)?.[0];
-    setActive(focusedSection ?? getViewportSection());
+    if (focusedSection) setActive(focusedSection);
     menuOpenRef.current = true;
   }, []);
   const closeMenu = useCallback((reason: "dismiss" | "navigate") => {
