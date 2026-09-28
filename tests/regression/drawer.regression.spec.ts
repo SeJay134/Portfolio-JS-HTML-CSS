@@ -55,17 +55,20 @@ test("section selection closes the drawer, preserves the anchor, focuses the sec
   ).toHaveAttribute("aria-current", "location");
   await page.keyboard.press("Escape");
 
-  await page.locator("#Connect").scrollIntoViewIfNeeded();
+  await page.locator("#Connect").evaluate((element) => {
+    element.scrollIntoView({ block: "start", behavior: "instant" });
+  });
   await expect
-    .poll(async () => {
-      await menu.click();
-      const current = await dialog
-        .locator('a[aria-current="location"]')
-        .getAttribute("href");
-      await page.keyboard.press("Escape");
-      return current;
-    })
+    .poll(() =>
+      dialog.locator('a[aria-current="location"]').getAttribute("href"),
+    )
     .toBe("#Connect");
+
+  await menu.click();
+  await expect(
+    dialog.locator('a[aria-current="location"]'),
+  ).toHaveAttribute("href", "#Connect");
+  await page.keyboard.press("Escape");
 });
 
 test("backdrop closes the drawer, resize keeps it usable, and menu owns the modal layer", async ({
