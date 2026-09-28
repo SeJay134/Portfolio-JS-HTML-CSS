@@ -55,9 +55,13 @@ test("section selection closes the drawer, preserves the anchor, focuses the sec
   ).toHaveAttribute("aria-current", "location");
   await page.keyboard.press("Escape");
   await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+  await expect(menu).toBeFocused();
 
-  await page.locator("#Connect").evaluate((element) => {
-    element.scrollIntoView({ block: "start", behavior: "instant" });
+  await page.evaluate(() => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "instant",
+    });
   });
   await expect
     .poll(() =>
