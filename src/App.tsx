@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Drawer, sections } from "./components/Drawer";
+import { Drawer, sections, type SectionId } from "./components/Drawer";
 import { Projects } from "./components/Projects";
 import { Contact } from "./components/Contact";
 import { Icon } from "./components/Icon";
@@ -16,6 +16,48 @@ import { readPreference, savePreference } from "./lib/preferences";
 import { useTheme } from "./hooks/useTheme";
 const Chat = lazy(() => import("./components/Chat"));
 const Constellation = lazy(() => import("./components/Constellation"));
+
+function getViewportSection(): SectionId {
+  const headerBottom =
+    document
+      .querySelector<HTMLElement>(".site-header")
+      ?.getBoundingClientRect().bottom ?? 0;
+  const marker = headerBottom + 32;
+  let current: SectionId = sections[0][0];
+  let nearestBelow: { id: SectionId; top: number } | undefined;
+
+  for (const [id] of sections) {
+    const section = document.getElementById(id);
+    if (!section) continue;
+    const rect = section.getBoundingClientRect();
+
+    if (rect.top <= marker && rect.bottom > marker) {
+      current = id;
+      nearestBelow = undefined;
+      break;
+    }
+
+    if (
+      rect.top > marker &&
+      rect.top < window.innerHeight &&
+      (!nearestBelow || rect.top < nearestBelow.top)
+    ) {
+      nearestBelow = { id, top: rect.top };
+    }
+
+    if (rect.top <= marker) current = id;
+  }
+
+  if (nearestBelow) current = nearestBelow.id;
+
+  const atDocumentEnd =
+    Math.ceil(window.scrollY + window.innerHeight) >=
+    document.documentElement.scrollHeight - 2;
+  if (atDocumentEnd) current = sections[sections.length - 1][0];
+
+  return current;
+}
+
 const skills = [
   {
     number: "01",
@@ -66,45 +108,7 @@ export default function App() {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         if (menuOpenRef.current) return;
-        const headerBottom =
-          document
-            .querySelector<HTMLElement>(".site-header")
-            ?.getBoundingClientRect().bottom ?? 0;
-        const marker = headerBottom + 32;
-        let current: (typeof sections)[number][0] = sections[0][0];
-        let nearestBelow:
-          | { id: (typeof sections)[number][0]; top: number }
-          | undefined;
-
-        for (const [id] of sections) {
-          const section = document.getElementById(id);
-          if (!section) continue;
-          const rect = section.getBoundingClientRect();
-
-          if (rect.top <= marker && rect.bottom > marker) {
-            current = id;
-            nearestBelow = undefined;
-            break;
-          }
-
-          if (
-            rect.top > marker &&
-            rect.top < window.innerHeight &&
-            (!nearestBelow || rect.top < nearestBelow.top)
-          ) {
-            nearestBelow = { id, top: rect.top };
-          }
-
-          if (rect.top <= marker) current = id;
-        }
-
-        if (nearestBelow) current = nearestBelow.id;
-
-        const atDocumentEnd =
-          Math.ceil(window.scrollY + window.innerHeight) >=
-          document.documentElement.scrollHeight - 2;
-        if (atDocumentEnd) current = sections[sections.length - 1][0];
-
+        const current = getViewportSection();
         setActive((previous) => (previous === current ? previous : current));
       });
     };
@@ -136,6 +140,12 @@ export default function App() {
       document.body.style.overflow = previous;
     };
   }, [menu, chat]);
+  const prepareMenuOpen = useCallback(() => {
+    const focused = document.activeElement;
+    const focusedSection = sections.find(([id]) => focused?.id === id)?.[0];
+    setActive(focusedSection ?? getViewportSection());
+    menuOpenRef.current = true;
+  }, []);
   const closeMenu = useCallback((reason: "dismiss" | "navigate") => {
     menuOpenRef.current = false;
     setMenu(false);
@@ -191,11 +201,9 @@ export default function App() {
               className="menu-button"
               aria-expanded={menu}
               aria-controls="navigation-drawer"
-              onPointerDown={() => {
-                menuOpenRef.current = true;
-              }}
+              onPointerDown={prepareMenuOpen}
               onClick={() => {
-                menuOpenRef.current = true;
+                if (!menuOpenRef.current) prepareMenuOpen();
                 setChat(false);
                 setMenu(true);
               }}
