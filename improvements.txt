@@ -180,6 +180,9 @@ Tests and acceptance:
 Categories: UI, navigation, responsive design, accessibility. P1.
 Estimate: 2-4 days.
 Dependency: Phase 0; complete P0 fixes before public release.
+Status: Phase 2.1 design tokens/themes and Phase 2.2 accessible left drawer
+accepted on September 28, 2026. Remaining broad responsive/manual device checks
+stay in Phases 3 and 7.
 
 Design:
 [ ] Introduce CSS tokens for background, surface, text, muted text, border, accent,
@@ -195,35 +198,43 @@ Design:
     gap, and minmax(0,1fr). Check intermediate widths continuously.
 
 Drawer specification: the user's primary priority.
-[ ] Use a native top-left button with a minimum 44x44px target, aria-expanded,
-    and aria-controls. The hamburger icon changes to a close icon.
-[ ] Desktop width: 280-320px; mobile: min(86vw, 320px). Use 100dvh, internal
+[x] Use a native top-left Menu button with a minimum 44px touch target,
+    aria-expanded, and aria-controls. Keep a dedicated visible Close control
+    inside the drawer rather than changing the sticky trigger while the modal
+    overlay owns the screen.
+[x] Desktop width: 280-320px; mobile: min(86vw, 320px). Use 100dvh, internal
     scrolling, and safe-area padding. Keep the internal Close button visible.
-[ ] Top: mini portrait/name. Navigation: Home, Projects, Skills, Experience,
-    About, Contact. Bottom: Theme, Resume if available, GitHub/LinkedIn.
-[ ] Open with click/touch/Enter/Space. Close with Close, Escape, backdrop, or
-    section selection. Opening must not depend on hover.
-[ ] Animate translateX(-100%) to 0 and backdrop opacity over 200-260ms.
-    Avoid width/left/layout animation. Respect prefers-reduced-motion.
-[ ] Option A is a modal dialog containing normal nav links, not role=menu.
-    On open, move focus inside, contain Tab, make background content inert,
-    and lock background scrolling. On dismiss, restore scroll and trigger focus.
-    After section selection, close and focus that section's heading.
-[ ] Closed navigation must be unavailable to Tab and screen readers; translate
-    alone is insufficient. Coordinate hidden/inert with transition completion.
-[ ] Highlight the active section using IntersectionObserver and aria-current.
-    Preserve href anchors, header-aware scroll-margin-top, and Back/Forward.
-[ ] Use a single overlay owner: opening modal navigation minimizes/closes chat
-    while preserving its draft. Avoid competing focus traps.
-[ ] Provide System/Light/Dark theme selection, persistence, and a correct first frame.
+[x] Accepted composition: SP wordmark and Close at the top; Home, Projects,
+    Skills, Experience, About, Contact navigation; GitHub/LinkedIn at the bottom.
+    Theme remains in the persistent header. Resume stays omitted until a reviewed
+    resume file exists.
+[x] Open with click/touch/Enter/Space. Close with Close, Escape, backdrop, or
+    section selection. Opening does not depend on hover.
+[x] Animate the inner panel with translateX over approximately 240ms and use a
+    full-screen backdrop. Avoid layout-width animation and respect
+    prefers-reduced-motion.
+[x] Use a native modal dialog containing normal nav links, not role=menu. Contain
+    Tab, make background content inert, lock background scrolling, restore trigger
+    focus on dismiss, and transfer focus to the selected section on navigation.
+[x] Closed navigation is unavailable to keyboard/accessibility navigation because
+    the native dialog is closed rather than merely translated off-screen.
+[x] Highlight the active section with a viewport scroll-spy and
+    aria-current="location". Preserve href anchors, header-aware scroll margins,
+    Back/Forward compatibility, and explicit section focus after drawer navigation.
+[x] Use a single overlay owner: opening modal navigation closes chat while
+    preserving its draft. Avoid competing focus traps.
+[x] System/Light/Dark selection, persistence, cross-tab/system synchronization,
+    and correct first-frame behavior were accepted under Phase 2.1.
 
 Tests and acceptance:
-  Playwright: all open/close methods, rapid clicks, resizing while open, anchors,
-  scroll restoration, and no stuck scroll lock.
-  Keyboard and VoiceOver: accessible names, Tab order, Escape, and focus return.
-  Hidden links cannot receive focus. Combine automated axe with manual checks.
-  320-1440px, landscape, 200% zoom: no lost content or horizontal scrolling.
-  Reduced motion: fully functional without movement. Both themes remain readable.
+  Accepted Phase 2.2 branch gate: close/Escape/backdrop/section navigation,
+  focus containment and return, section focus, active aria-current state, anchor
+  preservation, scroll lock, 390x844 resize while open, single modal ownership,
+  reduced motion, and automated axe WCAG A/AA checks.
+  GitHub Actions run 36416335520 passed frontend, backend, smoke, and 10/10
+  Chromium branch regression checks at f4f5ed496a2561b3c70333360a781436cd25c6a6.
+  Full Firefox/WebKit, VoiceOver, 200% zoom, landscape, and real-device checks are
+  retained for Phase 7 rather than being implied by Phase 2.2 acceptance.
 
 7. PHASE 3: CONTENT, PROJECT CARDS, AND CONTACT FORM
 Categories: UI, content, data, SEO. P1. Estimate: 2-4 days.
