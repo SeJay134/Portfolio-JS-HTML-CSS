@@ -25,30 +25,19 @@ multiple drafted frontend areas. It is a one-time transition package closed at
 the complete merge gate is green. After deployment, a human browser verification
 is required before Phase 4.3 or Phase 6 begins from a fresh branch.
 
-The next acceptance checkpoint is **Phase 2.2 — accessible left drawer**.
+The next acceptance checkpoint is **Phase 3 — hero, curated projects, and
+responsive layout**.
 
-## CI baseline blocker discovered — September 25, 2026
+## Baseline project-data blocker resolved — September 28, 2026
 
-After centralizing the test architecture, branch CI exposed a pre-existing
-frontend build break: `src/components/Projects.tsx` imports
-`../data/projects`, but `src/data/projects.ts` is absent from the current WIP
-branch and earlier checked repository checkpoints.
-
-Observed on GitHub Actions:
-- backend unit/integration job: passed;
-- npm install and ESLint: passed;
-- frontend typecheck/build: failed on missing `src/data/projects.ts`;
-- smoke could not run because the production build failed;
-- full browser regression is intentionally reserved for PR/main by the new policy.
-
-Do not invent project records merely to make CI green. Reconstruct the typed
-project source from reviewed repository/public project facts, add its unit/content
-coverage, then rerun the full Phase 2.2 prerequisite gate. No merge/deploy is
-allowed while this blocker remains.
+The missing typed project source was reconstructed from reviewed project facts and
+is now covered by content/unit tests. Frontend typecheck/build and smoke checks are
+green again. The earlier blocker no longer prevents staged frontend acceptance.
 
 ## Pending acceptance
 
-- Rebuild and rerun the complete expanded browser suite on this exact checkpoint.
+- Full Chromium/Firefox/WebKit browser regression remains reserved for PR/main and
+  later cross-browser acceptance; the branch-level Chromium regression is green.
 - Finish the interrupted font optimization; no local font binaries were saved.
 - Firefox/WebKit: local environment launch/dependency limitations prevented acceptance.
 - Live Ollama/RAG evaluation, production API URL, real phones, and deployment.
@@ -77,3 +66,32 @@ allowed while this blocker remains.
 - Passed: ESLint, TypeScript production build, and whitespace checks.
 - Reviewed desktop dark and mobile light screenshots with visible validation errors.
 - Firefox/WebKit and final release checks remain pending under Phase 7.1.
+
+
+## Phase 2.2 accepted — September 28, 2026
+
+- The left navigation is a native modal dialog with a full-screen overlay and an
+  inner touch-friendly drawer panel.
+- Escape, the close button, backdrop interaction, and section selection close the
+  drawer through explicit dismiss/navigation paths.
+- Keyboard focus is trapped inside the open modal. Dismissal restores focus to the
+  Menu trigger without scrolling the page; section navigation transfers focus to
+  the selected section.
+- Section navigation preserves stable anchors and synchronizes
+  `aria-current="location"` with explicit navigation and normal page scrolling.
+- The active-section scroll spy is frozen while the modal is opening/open so modal
+  focus behavior cannot overwrite the current page section.
+- Body scroll is locked while the drawer is open and released before navigation.
+- The drawer remains usable after a 390x844 resize and respects safe-area/dynamic
+  viewport sizing.
+- Opening the drawer closes the chat modal while preserving the visitor's chat
+  draft, maintaining one modal owner at a time.
+- Reduced-motion mode disables the drawer animation, and automated axe WCAG A/AA
+  checks report no violations in the drawer scenario.
+- Accepted implementation checkpoint:
+  `f4f5ed496a2561b3c70333360a781436cd25c6a6`.
+- GitHub Actions run `36416335520`: frontend passed, backend passed, smoke passed,
+  and branch Chromium regression passed **10/10**. The PR/main multi-browser job
+  was intentionally skipped by branch policy.
+- This accepts Phase 2.2 only. The WIP branch is not ready to merge or deploy until
+  Phase 3, Phase 4.2, Phase 5, and Merge Gate A are completed.

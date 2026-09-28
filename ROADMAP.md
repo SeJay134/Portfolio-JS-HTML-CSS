@@ -9,19 +9,15 @@
 - [x] Phase 1.3 — Backend regression tests: 27 passed
 - [x] Phase 1.4 — Safe contact flow acceptance
 - [x] Phase 2.1 — Design tokens and themes acceptance
+- [x] Phase 2.2 — Accessible left drawer acceptance
 - [x] Phase 4.1 — Grounded service and atomic index infrastructure
 
 ## Current transitional frontend package
 
-**Baseline blocker discovered by CI:** `src/components/Projects.tsx` imports
-`src/data/projects.ts`, but that file is not present in the current or earlier
-repository checkpoints. Production build/typecheck is therefore red. Resolve this
-from reviewed project data before Phase 2.2 can receive final browser acceptance.
-This is a baseline repair, not new Phase 2.2 feature scope.
+The earlier project-data baseline blocker is resolved: the reviewed typed project
+source and its content tests are present, and the Phase 2.2 branch gate is green.
 
-
-- [ ] Phase 2.2 — Accessible left drawer acceptance (NEXT)
-- [ ] Phase 3 — Hero, curated projects, and responsive layout acceptance
+- [ ] Phase 3 — Hero, curated projects, and responsive layout acceptance (NEXT)
 - [ ] Phase 4.2 — Chat UI acceptance
 - [ ] Phase 5 — Frontend architecture and tooling acceptance
 - [ ] Merge Gate A — full tests -> merge main -> deploy -> smoke -> human browser verification
