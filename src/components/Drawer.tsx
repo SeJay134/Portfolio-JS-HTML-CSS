@@ -58,7 +58,10 @@ export function Drawer({
         url.hash = id;
         window.history.pushState(null, "", url);
       }
-      target.scrollIntoView({ block: "start", behavior: "auto" });
+      // Global CSS uses smooth scrolling. Drawer navigation is intentionally
+      // instant so section focus and aria-current update deterministically
+      // after the modal closes instead of racing intermediate scroll events.
+      target.scrollIntoView({ block: "start", behavior: "instant" });
       onNavigate(id);
       requestAnimationFrame(() => target.focus({ preventScroll: true }));
     }, 0);

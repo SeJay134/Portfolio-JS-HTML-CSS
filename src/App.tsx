@@ -44,10 +44,6 @@ export default function App() {
   const [effects, setEffects] = useState(false),
     [reduced, setReduced] = useState(true);
   const [active, setActive] = useState<(typeof sections)[number][0]>("Home");
-  const navigationLock = useRef<{
-    id: (typeof sections)[number][0];
-    scrollY: number;
-  } | null>(null);
   const menuButton = useRef<HTMLButtonElement>(null),
     chatButton = useRef<HTMLButtonElement>(null);
   const disableEffects = useCallback(() => setEffects(false), []);
@@ -65,17 +61,6 @@ export default function App() {
     const syncActiveSection = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        const locked = navigationLock.current;
-        if (locked) {
-          if (Math.abs(window.scrollY - locked.scrollY) <= 8) {
-            setActive((previous) =>
-              previous === locked.id ? previous : locked.id,
-            );
-            return;
-          }
-          navigationLock.current = null;
-        }
-
         const headerBottom =
           document
             .querySelector<HTMLElement>(".site-header")
@@ -152,7 +137,6 @@ export default function App() {
   }, []);
   const navigateFromMenu = useCallback(
     (id: (typeof sections)[number][0]) => {
-      navigationLock.current = { id, scrollY: window.scrollY };
       setActive(id);
     },
     [],
