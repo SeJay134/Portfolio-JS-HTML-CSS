@@ -65,7 +65,9 @@ test("section selection closes the drawer, preserves the anchor, focuses the sec
   });
   await expect
     .poll(() =>
-      dialog.locator('a[aria-current="location"]').getAttribute("href"),
+      page
+        .locator('#navigation-drawer a[aria-current="location"]')
+        .getAttribute("href"),
     )
     .toBe("#Connect");
 
