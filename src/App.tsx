@@ -44,6 +44,9 @@ export default function App() {
   const [effects, setEffects] = useState(false),
     [reduced, setReduced] = useState(true);
   const [active, setActive] = useState<(typeof sections)[number][0]>("Home");
+  const pendingMenuNavigation = useRef<
+    (typeof sections)[number][0] | null
+  >(null);
   const menuButton = useRef<HTMLButtonElement>(null),
     chatButton = useRef<HTMLButtonElement>(null);
   const disableEffects = useCallback(() => setEffects(false), []);
@@ -141,10 +144,33 @@ export default function App() {
   }, []);
   const navigateFromMenu = useCallback(
     (id: (typeof sections)[number][0]) => {
+      pendingMenuNavigation.current = id;
       setActive(id);
     },
     [],
   );
+  useEffect(() => {
+    if (menu) return;
+    const id = pendingMenuNavigation.current;
+    if (!id) return;
+    pendingMenuNavigation.current = null;
+
+    const frame = requestAnimationFrame(() => {
+      const target = document.getElementById(id);
+      if (!target) return;
+
+      const hash = `#${id}`;
+      if (window.location.hash !== hash) {
+        const url = new URL(window.location.href);
+        url.hash = id;
+        window.history.pushState(null, "", url);
+      }
+      target.scrollIntoView({ block: "start", behavior: "instant" });
+      setActive(id);
+      target.focus({ preventScroll: true });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [menu]);
   const closeChat = useCallback(() => {
     setChat(false);
     requestAnimationFrame(() => chatButton.current?.focus());

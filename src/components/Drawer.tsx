@@ -26,7 +26,6 @@ export function Drawer({
   active: SectionId;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
-  const pendingSectionFocus = useRef<SectionId | null>(null);
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
@@ -39,31 +38,8 @@ export function Drawer({
     event: React.MouseEvent<HTMLAnchorElement>,
   ) {
     event.preventDefault();
-    pendingSectionFocus.current = id;
+    onNavigate(id);
     onClose("navigate");
-  }
-
-  function handleDialogClose() {
-    const id = pendingSectionFocus.current;
-    pendingSectionFocus.current = null;
-    if (!id) return;
-
-    window.setTimeout(() => {
-      const target = document.getElementById(id);
-      if (!target) return;
-      const hash = `#${id}`;
-      if (window.location.hash !== hash) {
-        const url = new URL(window.location.href);
-        url.hash = id;
-        window.history.pushState(null, "", url);
-      }
-      // Global CSS uses smooth scrolling. Drawer navigation is intentionally
-      // instant so section focus and aria-current update deterministically
-      // after the modal closes instead of racing intermediate scroll events.
-      target.scrollIntoView({ block: "start", behavior: "instant" });
-      onNavigate(id);
-      requestAnimationFrame(() => target.focus({ preventScroll: true }));
-    }, 0);
   }
   return (
     <dialog
@@ -76,14 +52,15 @@ export function Drawer({
         event.preventDefault();
         onClose("dismiss");
       }}
-      onClose={handleDialogClose}
-      onClick={(e) => {
-        if (e.target === ref.current) {
-          const rect = ref.current.getBoundingClientRect();
-          if (e.clientX > rect.right || e.clientY > rect.bottom) {
-            onClose("dismiss");
-          }
-        }
+      onPointerDown={(event) => {
+        if (event.target !== ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        const outside =
+          event.clientX < rect.left ||
+          event.clientX > rect.right ||
+          event.clientY < rect.top ||
+          event.clientY > rect.bottom;
+        if (outside) onClose("dismiss");
       }}
     >
       <div className="drawer-top">
