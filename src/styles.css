@@ -819,27 +819,36 @@ details p {
 /* Native dialogs provide modal focus containment and inert background content. */
 .drawer {
   position: fixed;
-  inset: 0 auto 0 0;
+  inset: 0;
   margin: 0;
-  width: min(86vw, 320px);
+  width: 100vw;
   max-width: none;
   height: 100dvh;
   max-height: none;
   border: 0;
-  border-right: 1px solid var(--line);
-  background: var(--surface);
+  padding: 0;
+  background: #08142080;
   color: var(--text);
-  padding: 24px 26px calc(24px + env(safe-area-inset-bottom));
-  box-shadow: var(--shadow);
+  overflow: hidden;
+  backdrop-filter: blur(3px);
 }
 .drawer[open] {
   display: flex;
-  flex-direction: column;
-  animation: drawer-in 0.24s ease-out;
 }
 .drawer::backdrop {
-  background: #08142080;
-  backdrop-filter: blur(3px);
+  background: transparent;
+}
+.drawer-panel {
+  width: min(86vw, 320px);
+  height: 100%;
+  border-right: 1px solid var(--line);
+  background: var(--surface);
+  padding: 24px 26px calc(24px + env(safe-area-inset-bottom));
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  animation: drawer-in 0.24s ease-out;
 }
 @keyframes drawer-in {
   from {

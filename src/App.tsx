@@ -47,6 +47,7 @@ export default function App() {
   const pendingMenuNavigation = useRef<
     (typeof sections)[number][0] | null
   >(null);
+  const menuOpenRef = useRef(false);
   const menuButton = useRef<HTMLButtonElement>(null),
     chatButton = useRef<HTMLButtonElement>(null);
   const disableEffects = useCallback(() => setEffects(false), []);
@@ -64,6 +65,7 @@ export default function App() {
     const syncActiveSection = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
+        if (menuOpenRef.current) return;
         const headerBottom =
           document
             .querySelector<HTMLElement>(".site-header")
@@ -135,6 +137,7 @@ export default function App() {
     };
   }, [menu, chat]);
   const closeMenu = useCallback((reason: "dismiss" | "navigate") => {
+    menuOpenRef.current = false;
     setMenu(false);
     if (reason === "dismiss") {
       requestAnimationFrame(() =>
@@ -188,7 +191,11 @@ export default function App() {
               className="menu-button"
               aria-expanded={menu}
               aria-controls="navigation-drawer"
+              onPointerDown={() => {
+                menuOpenRef.current = true;
+              }}
               onClick={() => {
+                menuOpenRef.current = true;
                 setChat(false);
                 setMenu(true);
               }}

@@ -53,17 +53,11 @@ export function Drawer({
         onClose("dismiss");
       }}
       onPointerDown={(event) => {
-        if (event.target !== ref.current) return;
-        const rect = ref.current.getBoundingClientRect();
-        const outside =
-          event.clientX < rect.left ||
-          event.clientX > rect.right ||
-          event.clientY < rect.top ||
-          event.clientY > rect.bottom;
-        if (outside) onClose("dismiss");
+        if (event.target === event.currentTarget) onClose("dismiss");
       }}
     >
-      <div className="drawer-top">
+      <div className="drawer-panel">
+        <div className="drawer-top">
         <a href="#Home" className="wordmark" onClick={(event) => navigate("Home", event)}>
           SP<span>.</span>
         </a>
@@ -95,18 +89,19 @@ export function Drawer({
           ))}
         </ol>
       </nav>
-      <div className="drawer-bottom">
-        <p>Software. Data. Possibilities.</p>
-        <a href="https://github.com/SeJay134" target="_blank" rel="noreferrer">
-          GitHub ↗
-        </a>
-        <a
-          href="https://www.linkedin.com/in/sergei_patrushev"
-          target="_blank"
-          rel="noreferrer"
-        >
-          LinkedIn ↗
-        </a>
+        <div className="drawer-bottom">
+          <p>Software. Data. Possibilities.</p>
+          <a href="https://github.com/SeJay134" target="_blank" rel="noreferrer">
+            GitHub ↗
+          </a>
+          <a
+            href="https://www.linkedin.com/in/sergei_patrushev"
+            target="_blank"
+            rel="noreferrer"
+          >
+            LinkedIn ↗
+          </a>
+        </div>
       </div>
     </dialog>
   );

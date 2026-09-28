@@ -111,5 +111,8 @@ test("drawer passes automated accessibility checks and reduced motion removes it
     (await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze())
       .violations,
   ).toEqual([]);
-  await expect(dialog).toHaveCSS("animation-name", "none");
+  await expect(dialog.locator(".drawer-panel")).toHaveCSS(
+    "animation-name",
+    "none",
+  );
 });
