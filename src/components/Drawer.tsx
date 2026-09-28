@@ -21,7 +21,7 @@ export function Drawer({
   active,
 }: {
   open: boolean;
-  onClose: () => void;
+  onClose: (reason: "dismiss" | "navigate") => void;
   onNavigate: (id: SectionId) => void;
   active: SectionId;
 }) {
@@ -40,11 +40,10 @@ export function Drawer({
   ) {
     event.preventDefault();
     pendingSectionFocus.current = id;
-    onClose();
+    onClose("navigate");
   }
 
   function handleDialogClose() {
-    onClose();
     const id = pendingSectionFocus.current;
     pendingSectionFocus.current = null;
     if (!id) return;
@@ -73,12 +72,17 @@ export function Drawer({
       onKeyDown={containModalFocus}
       className="drawer"
       aria-labelledby="navigation-title"
-      onCancel={onClose}
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose("dismiss");
+      }}
       onClose={handleDialogClose}
       onClick={(e) => {
         if (e.target === ref.current) {
           const rect = ref.current.getBoundingClientRect();
-          if (e.clientX > rect.right || e.clientY > rect.bottom) onClose();
+          if (e.clientX > rect.right || e.clientY > rect.bottom) {
+            onClose("dismiss");
+          }
         }
       }}
     >
@@ -89,7 +93,7 @@ export function Drawer({
         <button
           className="icon-button"
           aria-label="Close menu"
-          onClick={onClose}
+          onClick={() => onClose("dismiss")}
         >
           <Icon name="close" />
         </button>

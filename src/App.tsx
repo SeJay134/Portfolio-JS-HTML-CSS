@@ -131,9 +131,13 @@ export default function App() {
       document.body.style.overflow = previous;
     };
   }, [menu, chat]);
-  const closeMenu = useCallback(() => {
+  const closeMenu = useCallback((reason: "dismiss" | "navigate") => {
     setMenu(false);
-    requestAnimationFrame(() => menuButton.current?.focus());
+    if (reason === "dismiss") {
+      requestAnimationFrame(() =>
+        menuButton.current?.focus({ preventScroll: true }),
+      );
+    }
   }, []);
   const navigateFromMenu = useCallback(
     (id: (typeof sections)[number][0]) => {

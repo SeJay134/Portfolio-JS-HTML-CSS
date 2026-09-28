@@ -49,6 +49,7 @@ test("section selection closes the drawer, preserves the anchor, focuses the sec
   await expect(page.locator("#Projects")).toBeFocused();
 
   await menu.click();
+  await expect(page.locator("#Projects")).toBeInViewport();
   await expect(
     dialog.getByRole("link", { name: /Projects/ }),
   ).toHaveAttribute("aria-current", "location");
