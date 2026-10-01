@@ -489,7 +489,9 @@ svg {
   box-shadow: var(--shadow);
 }
 .project-art {
+  width: 100%;
   aspect-ratio: 16/10;
+  min-height: 240px;
   position: relative;
   display: flex;
   align-items: center;
@@ -1191,7 +1193,7 @@ details p {
     padding-top: 56px;
   }
   .hero h1 {
-    font-size: clamp(3rem, 10.4vw, 4.5rem);
+    font-size: clamp(2.5rem, 10.4vw, 4.5rem);
   }
   .hero-description {
     font-size: 0.9rem;

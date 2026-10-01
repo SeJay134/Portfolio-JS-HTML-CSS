@@ -53,24 +53,6 @@ test("chat handles server errors, retry, safe text, and clearing", async ({
   await expect(page.locator(".message")).toHaveCount(0);
 });
 
-test("no horizontal overflow at target widths and reduced motion keeps effects off", async ({
-  page,
-}) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
-  for (const width of [320, 360, 390, 768, 1024, 1440]) {
-    await page.setViewportSize({ width, height: 900 });
-    const overflow = await page.evaluate(
-      () => document.documentElement.scrollWidth > innerWidth,
-    );
-    expect(overflow, `overflow at ${width}px`).toBe(false);
-  }
-  await expect(
-    page.getByRole("button", { name: "Motion reduced" }),
-  ).toBeDisabled();
-  await expect(page.locator("canvas")).toHaveCount(0);
-});
-
 test("light, dark, and chat have no automated WCAG AA violations", async ({
   page,
 }) => {

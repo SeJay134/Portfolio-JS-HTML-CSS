@@ -105,3 +105,14 @@ multiple categories. Future scenarios are not CI-green placeholders.
 post-deploy smoke, and human browser verification pass. Portfolio content/contact
 must remain usable when AI is unavailable. Keep a rollback target. Production
 secrets never enter frontend source or `VITE_*` values.
+
+## 10. Responsive content contract
+
+At 320/360/390/768/1024/1440 CSS pixels, light and dark layouts preserve section
+order, readable Hero actions, project details, loaded local images, and usable
+contact controls. Neither the document nor checked content containers overflow
+horizontally; project illustrations must fit inside their visible preview area.
+This also holds when the external font service is unavailable. Reduced motion
+keeps optional canvas effects disabled. Automated axe scans cover main content
+at 320 and 1440 pixels in both themes; real devices and broader cross-browser
+acceptance remain Phase 7 work.

@@ -118,3 +118,26 @@ green again. The earlier blocker no longer prevents staged frontend acceptance.
   was intentionally skipped by branch policy.
 - This accepts Phase 2.2 only. The WIP branch is not ready to merge or deploy until
   Phase 3, Phase 4.2, Phase 5, and Merge Gate A are completed.
+
+## Phase 3.2 verification — October 1, 2026
+
+- Reviewed the existing section sequence, four curated project records, local
+  preview assets, heading structure and canonical/OG metadata. Biography, skill
+  and employment copy remains aligned with the existing reviewed knowledge
+  source; this is not a new owner confirmation of employment dates.
+- Reduced the mobile Hero heading minimum from 48px to 40px to retain readable
+  phrases at 320px. Reserved a 240px minimum preview height and explicit 100%
+  width: the new test first exposed AI illustration clipping at 320px, then
+  confirmed the correction without expanding the card beyond its container.
+- Replaced the earlier single E2E overflow check with 12 regression cases:
+  six widths x two themes, including font-service failure, local image loading,
+  expanded details, section order, internal overflow and reduced motion.
+- Local Chromium 153: all 27 regression/smoke checks passed (25 regression + 2
+  smoke). All 13 frontend unit tests, ESLint and TypeScript/production build passed.
+- Automated axe scans of main content passed at 320 and 1440 pixels in both
+  themes. Reviewed local mobile/desktop light/dark screenshots; no production or
+  real-device verification is claimed. Screenshots use system fallback fonts.
+- Branch CI now retains the regression report and four full-page screenshots
+  on successful runs as well as failures, for review of this implementation.
+- CI verification is pending. Phase 3.2 and aggregate Phase 3 remain unaccepted
+  until that gate passes. Phase 4.2, 5, Merge Gate A and Phase 7 remain separate.
