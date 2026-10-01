@@ -29,15 +29,22 @@ test("keyboard filters preserve the URL and support reload, back, and forward", 
   await expect(page.locator("#Projects [role=status]")).toHaveText("1 projects shown");
   await expect(page.locator(".project-card")).toHaveCount(1);
   await expect(page).toHaveURL(/\?ref=portfolio&category=AI#Projects$/);
-  await page.keyboard.press("Enter");
   await page.reload();
   await expect(ai).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByRole("heading", { name: "Portfolio & AI assistant" })).toBeVisible();
-  await page.goBack();
+
+  const all = filters.getByRole("button", { name: /^All/ });
+  await all.click();
   await expect(page).toHaveURL(/\?ref=portfolio#Projects$/);
   await expect(page.locator(".project-card")).toHaveCount(4);
-  await page.goForward();
+
+  await page.goBack();
+  await expect(page).toHaveURL(/\?ref=portfolio&category=AI#Projects$/);
   await expect(ai).toHaveAttribute("aria-pressed", "true");
+
+  await page.goForward();
+  await expect(page).toHaveURL(/\?ref=portfolio#Projects$/);
+  await expect(all).toHaveAttribute("aria-pressed", "true");
   await filters.getByRole("button", { name: /^Data/ }).click();
   await expect(page.locator(".project-card")).toHaveCount(2);
   await filters.getByRole("button", { name: /^Web/ }).click();

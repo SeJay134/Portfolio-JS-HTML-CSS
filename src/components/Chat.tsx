@@ -12,9 +12,11 @@ interface Message {
 export default function Chat({
   open,
   onClose,
+  onOpenMenu,
 }: {
   open: boolean;
   onClose: () => void;
+  onOpenMenu: () => void;
 }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [draft, setDraft] = useState("");
@@ -139,7 +141,16 @@ export default function Chat({
           <p>{status}</p>
         </div>
         <button
+          className="icon-button chat-menu-button"
+          type="button"
+          onClick={onOpenMenu}
+          aria-label="Menu"
+        >
+          <Icon name="menu" />
+        </button>
+        <button
           className="icon-button"
+          type="button"
           onClick={onClose}
           aria-label="Close chat"
         >

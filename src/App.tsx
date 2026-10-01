@@ -146,6 +146,13 @@ export default function App() {
     if (focusedSection) setActive(focusedSection);
     menuOpenRef.current = true;
   }, []);
+  const openMenuFromChat = useCallback(() => {
+    setChat(false);
+    requestAnimationFrame(() => {
+      if (!menuOpenRef.current) prepareMenuOpen();
+      setMenu(true);
+    });
+  }, [prepareMenuOpen]);
   const closeMenu = useCallback((reason: "dismiss" | "navigate") => {
     menuOpenRef.current = false;
     setMenu(false);
@@ -201,6 +208,7 @@ export default function App() {
               className="menu-button"
               aria-expanded={menu}
               aria-controls="navigation-drawer"
+              aria-label={chat ? "Main menu (assistant open)" : undefined}
               onPointerDown={prepareMenuOpen}
               onClick={() => {
                 if (!menuOpenRef.current) prepareMenuOpen();
@@ -478,7 +486,11 @@ export default function App() {
               </div>
             }
           >
-            <Chat open={chat} onClose={closeChat} />
+            <Chat
+              open={chat}
+              onClose={closeChat}
+              onOpenMenu={openMenuFromChat}
+            />
           </Suspense>
         </WidgetBoundary>
       )}
