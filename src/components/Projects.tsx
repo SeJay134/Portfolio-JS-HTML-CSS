@@ -18,6 +18,7 @@ export function Projects() {
     return () => window.removeEventListener("popstate", sync);
   }, []);
   function select(category: Category) {
+    if (category === filter) return;
     setFilter(category);
     const url = new URL(location.href);
     if (category === "All") url.searchParams.delete("category");

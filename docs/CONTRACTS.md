@@ -85,6 +85,13 @@ and versioned RAG knowledge. Core cards do not depend on GitHub API availability
 Missing optional fields fail safely. Do not invent impact metrics, employers,
 dates, skills, or proficiency levels.
 
+Project filters support `All`, `Web`, `Data`, and `AI`. The `category` query
+parameter restores the selection on reload and browser Back/Forward; unknown
+values show all projects. Selecting All removes only `category`, preserving other
+query parameters and the section hash. Selecting the active filter is a no-op
+and must not add a browser-history entry. Filters and project details work with
+the keyboard, including when AI/GitHub APIs or preview images are unavailable.
+
 ## 8. Test-suite contract
 
 All tests/scenarios live under `tests/`: `unit/`, `integration/`, `e2e/`,

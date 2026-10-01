@@ -43,6 +43,24 @@ green again. The earlier blocker no longer prevents staged frontend acceptance.
 - Live Ollama/RAG evaluation, production API URL, real phones, and deployment.
 - Review one roadmap subphase at a time before marking it complete.
 
+## Phase 3.1 verification — October 1, 2026
+
+- Baseline `ffc1323395b7e4137c8441d29b5728511dd7f6d2` has successful GitHub
+  Actions run `36416650491`; Phase 2.2 remains accepted.
+- Fixed repeated selection of the active project category adding duplicate
+  browser-history entries; added a component regression test.
+- Moved the existing API-offline project scenario into the project regression
+  suite and expanded it to cover Hero links, keyboard filters, URL preservation,
+  reload, Back/Forward, invalid categories, failed preview images, and details.
+- Browser verification is pending CI. Local Chromium installation failed because
+  the downloaded archive was invalid; no local browser pass is claimed.
+- Local ESLint, 13 frontend unit tests, TypeScript/production build and prerender
+  passed. Automatic approval review blocked the GitHub push pending explicit
+  user confirmation; this checkpoint is local and no new CI result is claimed.
+- Phase 3.2 still requires the six-width responsive and visual review, including
+  light/dark composition and content verification. Phase 3 is not accepted yet.
+- No merge, production deployment, or later roadmap phase is included in this slice.
+
 ## Phase 1.4 accepted — September 25, 2026
 
 - Whitespace-only input shows associated validation errors and focuses the field.

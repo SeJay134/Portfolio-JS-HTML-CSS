@@ -7,19 +7,6 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
-test("projects remain available offline from the API and filtering works", async ({
-  page,
-}) => {
-  await page.route("**/api/**", (route) => route.abort());
-  await page.goto("/#Projects");
-  await expect(page.locator(".project-card")).toHaveCount(4);
-  await page.getByRole("button", { name: /^AI/ }).click();
-  await expect(page.locator(".project-card")).toHaveCount(1);
-  await expect(
-    page.getByRole("heading", { name: "Portfolio & AI assistant" }),
-  ).toBeVisible();
-});
-
 test("contact prepares a draft and does not publish or send a message", async ({
   page,
 }) => {
