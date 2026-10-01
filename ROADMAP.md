@@ -18,7 +18,7 @@ The earlier project-data baseline blocker is resolved: the reviewed typed projec
 source and its content tests are present, and the Phase 2.2 branch gate is green.
 
 - [ ] Phase 3 — Hero, curated projects, and responsive layout acceptance
-  - [ ] Phase 3.1 — Hero links and project filter/navigation contracts (CI verification)
+  - [x] Phase 3.1 — Hero links and project filter/navigation contracts
   - [ ] Phase 3.2 — Responsive composition, content review, and visual acceptance (NEXT)
 - [ ] Phase 4.2 — Chat UI acceptance
 - [ ] Phase 5 — Frontend architecture and tooling acceptance

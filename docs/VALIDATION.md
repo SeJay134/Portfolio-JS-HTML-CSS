@@ -43,7 +43,7 @@ green again. The earlier blocker no longer prevents staged frontend acceptance.
 - Live Ollama/RAG evaluation, production API URL, real phones, and deployment.
 - Review one roadmap subphase at a time before marking it complete.
 
-## Phase 3.1 verification — October 1, 2026
+## Phase 3.1 accepted — October 1, 2026
 
 - Baseline `ffc1323395b7e4137c8441d29b5728511dd7f6d2` has successful GitHub
   Actions run `36416650491`; Phase 2.2 remains accepted.
@@ -52,11 +52,16 @@ green again. The earlier blocker no longer prevents staged frontend acceptance.
 - Moved the existing API-offline project scenario into the project regression
   suite and expanded it to cover Hero links, keyboard filters, URL preservation,
   reload, Back/Forward, invalid categories, failed preview images, and details.
-- Browser verification is pending CI. Local Chromium installation failed because
-  the downloaded archive was invalid; no local browser pass is claimed.
-- Local ESLint, 13 frontend unit tests, TypeScript/production build and prerender
-  passed. Automatic approval review blocked the GitHub push pending explicit
-  user confirmation; this checkpoint is local and no new CI result is claimed.
+- Accepted implementation checkpoint: `e8e927056728e74f3eb68c2a14cccf6bd4e114fa`.
+- GitHub Actions run `36916672099`: frontend, backend, smoke, and branch-regression
+  all passed. Evidence: 13 frontend unit tests, 27 backend tests, and 13 Chromium
+  regression tests (including all three project scenarios); lint, typecheck,
+  production build and prerender passed. The PR/main multi-browser job was
+  intentionally skipped by branch policy.
+- Local Chromium installation failed because the downloaded archive was invalid;
+  browser acceptance above is based on GitHub Actions, not a local browser run.
+- The user authorized GitHub publication on October 1; the verified implementation
+  is now in `wip/portfolio-ui-draft`.
 - Phase 3.2 still requires the six-width responsive and visual review, including
   light/dark composition and content verification. Phase 3 is not accepted yet.
 - No merge, production deployment, or later roadmap phase is included in this slice.
