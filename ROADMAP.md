@@ -52,10 +52,14 @@ source and its content tests are present, and the Phase 2.2 branch gate is green
       name/email/message limits are explicit; invalid submission focuses the first
       invalid field; draft/copy states expose progress/success/error feedback;
       shortened mobile viewport remains usable; visitor data is not posted or published.
-  - [ ] Phase 3.8 — Legacy anchors and scroll/zoom behavior acceptance
-    - Verify direct legacy hashes (including compatibility aliases for removed
-      surfaces), sticky-header offsets, native Back/Forward behavior, and that
-      field focus does not trigger global scroll/zoom resets.
+  - [x] Phase 3.8 — Legacy anchors and scroll/zoom behavior acceptance
+    - Accepted at `50d815ed2e23994342f3167a639d3c1afa30c80a`
+    - Full PR browser regression: https://github.com/SeJay134/Portfolio-JS-HTML-CSS-AI/actions/runs/37048314608
+    - Legacy section hashes remain directly accessible below the sticky header;
+      removed #messages is preserved as a Contact compatibility alias without
+      restoring a public message list; Back/Forward hash navigation is synced
+      across desktop and mobile WebKit; focusing fields does not apply global
+      scroll-to-top, zoom, or overflow-x hacks.
 - [ ] Phase 4.2 — Chat UI acceptance
 - [ ] Phase 5 — Frontend architecture and tooling acceptance
 - [ ] Merge Gate A — full tests -> merge main -> deploy -> smoke -> human browser verification
