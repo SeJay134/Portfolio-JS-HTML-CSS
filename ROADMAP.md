@@ -52,6 +52,9 @@ source and its content tests are present, and the Phase 2.2 branch gate is green
       name/email/message limits are explicit; invalid submission focuses the first
       invalid field; draft/copy states expose progress/success/error feedback;
       shortened mobile viewport remains usable; visitor data is not posted or published.
+  - [ ] Phase 3.8 — Legacy anchors and scroll/zoom behavior acceptance
+    - Verify direct legacy hashes, sticky-header offsets, native Back/Forward
+      behavior, and that field focus does not trigger global scroll/zoom resets.
 - [ ] Phase 4.2 — Chat UI acceptance
 - [ ] Phase 5 — Frontend architecture and tooling acceptance
 - [ ] Merge Gate A — full tests -> merge main -> deploy -> smoke -> human browser verification

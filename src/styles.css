@@ -825,6 +825,7 @@ details p {
 .legacy-anchor {
   position: absolute;
   top: 0;
+  scroll-margin-top: calc(var(--header) + 24px);
 }
 .site-footer {
   max-width: 1184px;
