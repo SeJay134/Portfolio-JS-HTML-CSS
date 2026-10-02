@@ -44,10 +44,14 @@ source and its content tests are present, and the Phase 2.2 branch gate is green
     - The compact experience timeline remains intact; each skill group links to
       a relevant filtered case-study view; no proficiency percentages are used;
       Connect and the legacy Leave a Message anchor resolve to one Contact surface.
-  - [ ] Phase 3.7 — Contact form accessibility and state acceptance
-    - Verify visible labels and helper/error associations, reasonable field limits,
-      invalid-field focus, focus-visible behavior, draft/copy state feedback,
-      mobile keyboard resilience, and no visitor-data publication.
+  - [x] Phase 3.7 — Contact form accessibility and state acceptance
+    - Accepted at `1e8a4743f6856503685f2ae5942212021e2cc690`
+    - Push CI: https://github.com/SeJay134/Portfolio-JS-HTML-CSS-AI/actions/runs/37022967622
+    - Full PR browser regression: https://github.com/SeJay134/Portfolio-JS-HTML-CSS-AI/actions/runs/37022975721
+    - Visible labels and helper/error associations cover all required fields;
+      name/email/message limits are explicit; invalid submission focuses the first
+      invalid field; draft/copy states expose progress/success/error feedback;
+      shortened mobile viewport remains usable; visitor data is not posted or published.
 - [ ] Phase 4.2 — Chat UI acceptance
 - [ ] Phase 5 — Frontend architecture and tooling acceptance
 - [ ] Merge Gate A — full tests -> merge main -> deploy -> smoke -> human browser verification
