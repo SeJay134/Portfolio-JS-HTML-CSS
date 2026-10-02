@@ -518,11 +518,13 @@ svg {
   box-shadow: 0 12px 24px #0002;
 }
 .image-fallback {
-  display: none;
+  width: 100%;
+  max-width: 100%;
   text-align: center;
 }
-.project-art img[hidden] + .image-fallback {
-  display: flex;
+.image-fallback strong {
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 .art-category {
   position: absolute;
