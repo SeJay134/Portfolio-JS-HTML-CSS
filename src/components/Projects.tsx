@@ -1,8 +1,33 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { projects, type Category } from "../data/projects";
+import { projects, type Category, type Project } from "../data/projects";
 import { Icon } from "./Icon";
 const categories: Category[] = ["All", "Web", "Data", "AI"];
+
+function ProjectImage({ project }: { project: Project }) {
+  const [failed, setFailed] = useState(false);
+
+  if (!project.image || failed) {
+    return (
+      <div className="code-art image-fallback" aria-hidden="true">
+        <span className="code-muted">Preview unavailable</span>
+        <strong>{project.title}</strong>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={project.image}
+      alt={project.imageAlt ?? `${project.title} preview`}
+      loading="lazy"
+      decoding="async"
+      width="800"
+      height="500"
+      onError={() => setFailed(true)}
+    />
+  );
+}
 
 export function Projects() {
   const [filter, setFilter] = useState<Category>("All");
@@ -67,23 +92,7 @@ export function Projects() {
             <article className="project-card" key={project.id}>
               <div className={`project-art art-${project.id}`}>
                 {project.image ? (
-                  <>
-                    <img
-                      src={project.image}
-                      alt={project.imageAlt ?? `${project.title} preview`}
-                      loading="lazy"
-                      decoding="async"
-                      width="800"
-                      height="500"
-                      onError={(e) => {
-                        e.currentTarget.hidden = true;
-                      }}
-                    />
-                    <div className="code-art image-fallback" aria-hidden="true">
-                      <span className="code-muted">Preview unavailable</span>
-                      <strong>{project.title}</strong>
-                    </div>
-                  </>
+                  <ProjectImage project={project} />
                 ) : (
                   <div className="code-art" aria-hidden="true">
                     {project.id === "portfolio" ? (
