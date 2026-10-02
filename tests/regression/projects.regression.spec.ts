@@ -61,7 +61,7 @@ test("unknown categories and failed preview images keep cards and details usable
   await expect(page.locator(".project-card")).toHaveCount(4);
   const card = page.locator(".project-card").first();
   await card.scrollIntoViewIfNeeded();
-  await expect(card.locator("img")).toBeHidden();
+  await expect(card.locator("img")).toHaveCount(0);
   await expect(card.locator(".image-fallback")).toBeVisible();
   await expect(card.locator(".image-fallback")).toContainText(
     "Preview unavailable",
@@ -92,5 +92,8 @@ test("project image previews reserve space and expose accessible loading metadat
     "alt",
     "Chocolate sales dashboard with filters and sales visualizations.",
   );
-  await expect(preview.locator("xpath=..")).toHaveCSS("aspect-ratio", "8 / 5");
+  await expect(preview.locator("xpath=..")).toHaveCSS(
+    "aspect-ratio",
+    "16 / 10",
+  );
 });
