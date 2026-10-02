@@ -25,8 +25,11 @@ source and its content tests are present, and the Phase 2.2 branch gate is green
   - [x] Phase 3.3 — Live GitHub project metrics deferred for this release
     - Curated local project data remains the source of truth.
     - Stars/updatedAt can be revisited later if they add useful visitor context.
-  - [ ] Phase 3.4 — Project preview asset acceptance
-    - Verify controlled 16:10 previews, local WebP assets, lazy loading,
+  - [x] Phase 3.4 — Project preview asset acceptance
+    - Accepted at `b3104242a24524ba195af49869a760ae533b9d73`
+    - Push CI: https://github.com/SeJay134/Portfolio-JS-HTML-CSS-AI/actions/runs/37002056738
+    - Full PR browser regression: https://github.com/SeJay134/Portfolio-JS-HTML-CSS-AI/actions/runs/37002059708
+    - Controlled 16:10 previews use local WebP assets, lazy loading,
       meaningful alt text, and a graceful fallback when an image cannot load.
 - [ ] Phase 4.2 — Chat UI acceptance
 - [ ] Phase 5 — Frontend architecture and tooling acceptance
