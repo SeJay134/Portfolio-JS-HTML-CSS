@@ -7,6 +7,7 @@ export type Project = {
   summary: string;
   tags: readonly string[];
   image?: string;
+  imageAlt?: string;
   demo?: string;
   repository: string;
   detail: string;
@@ -21,6 +22,8 @@ export const projects: readonly Project[] = [
       "Interactive Streamlit dashboard for analyzing chocolate sales by country, product, and salesperson.",
     tags: ["Python", "Streamlit", "Pandas", "Plotly"],
     image: "/images/chocolate.webp",
+    imageAlt:
+      "Chocolate sales dashboard with filters and sales visualizations.",
     demo: "https://sergei-chocolate-sales-dashboard.streamlit.app/",
     repository: "https://github.com/SeJay134/Chocolate-Sales-Dashboard-Python",
     detail:
@@ -34,6 +37,8 @@ export const projects: readonly Project[] = [
       "Streamlit dashboard for browsing GDP data for countries around the world over time.",
     tags: ["Python", "Streamlit", "Pandas"],
     image: "/images/gdp.webp",
+    imageAlt:
+      "GDP dashboard with country and year controls and time-series visualizations.",
     demo: "https://gdp-dashboard-99adkaf6mof.streamlit.app/",
     repository: "https://github.com/SeJay134/GDP-Dashboard-Python",
     detail:

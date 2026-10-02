@@ -62,6 +62,10 @@ test("unknown categories and failed preview images keep cards and details usable
   const card = page.locator(".project-card").first();
   await card.scrollIntoViewIfNeeded();
   await expect(card.locator("img")).toBeHidden();
+  await expect(card.locator(".image-fallback")).toBeVisible();
+  await expect(card.locator(".image-fallback")).toContainText(
+    "Preview unavailable",
+  );
   const summary = card.locator("summary");
   await summary.focus();
   await page.keyboard.press("Enter");
@@ -69,4 +73,24 @@ test("unknown categories and failed preview images keep cards and details usable
   await expect(card.locator("details p")).toBeVisible();
   await expect(card.getByRole("link", { name: "Source code" })).toHaveAttribute("href", "https://github.com/SeJay134/Chocolate-Sales-Dashboard-Python");
   await expect(card.getByRole("link", { name: "Live demo" })).toHaveAttribute("href", "https://sergei-chocolate-sales-dashboard.streamlit.app/");
+});
+
+
+test("project image previews reserve space and expose accessible loading metadata", async ({ page }) => {
+  await page.goto("/#Projects");
+  const preview = page
+    .getByRole("article")
+    .filter({ has: page.getByRole("heading", { name: "Chocolate sales dashboard" }) })
+    .locator("img");
+
+  await expect(preview).toHaveAttribute("src", "/images/chocolate.webp");
+  await expect(preview).toHaveAttribute("loading", "lazy");
+  await expect(preview).toHaveAttribute("decoding", "async");
+  await expect(preview).toHaveAttribute("width", "800");
+  await expect(preview).toHaveAttribute("height", "500");
+  await expect(preview).toHaveAttribute(
+    "alt",
+    "Chocolate sales dashboard with filters and sales visualizations.",
+  );
+  await expect(preview.locator("xpath=..")).toHaveCSS("aspect-ratio", "8 / 5");
 });

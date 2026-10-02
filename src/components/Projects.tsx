@@ -69,14 +69,19 @@ export function Projects() {
                 {project.image ? (
                   <img
                     src={project.image}
-                    alt={`${project.title} interface`}
+                    alt={project.imageAlt ?? `${project.title} preview`}
                     loading="lazy"
+                    decoding="async"
                     width="800"
                     height="500"
                     onError={(e) => {
                       e.currentTarget.hidden = true;
                     }}
                   />
+                  <div className="code-art image-fallback" aria-hidden="true">
+                    <span className="code-muted">Preview unavailable</span>
+                    <strong>{project.title}</strong>
+                  </div>
                 ) : (
                   <div className="code-art" aria-hidden="true">
                     {project.id === "portfolio" ? (

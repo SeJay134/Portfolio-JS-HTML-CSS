@@ -19,7 +19,15 @@ source and its content tests are present, and the Phase 2.2 branch gate is green
 
 - [ ] Phase 3 — Hero, curated projects, and responsive layout acceptance
   - [x] Phase 3.1 — Hero links and project filter/navigation contracts
-  - [ ] Phase 3.2 — Responsive composition, content review, and visual acceptance (CI verification)
+  - [x] Phase 3.2 — Responsive composition, content review, and visual acceptance
+    - Accepted at `77ade3e65e11343e4ca39745c4d1cd133c65da71`
+    - CI: https://github.com/SeJay134/Portfolio-JS-HTML-CSS-AI/actions/runs/36924237503
+  - [x] Phase 3.3 — Live GitHub project metrics deferred for this release
+    - Curated local project data remains the source of truth.
+    - Stars/updatedAt can be revisited later if they add useful visitor context.
+  - [ ] Phase 3.4 — Project preview asset acceptance
+    - Verify controlled 16:10 previews, local WebP assets, lazy loading,
+      meaningful alt text, and a graceful fallback when an image cannot load.
 - [ ] Phase 4.2 — Chat UI acceptance
 - [ ] Phase 5 — Frontend architecture and tooling acceptance
 - [ ] Merge Gate A — full tests -> merge main -> deploy -> smoke -> human browser verification

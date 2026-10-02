@@ -517,6 +517,13 @@ svg {
   border-radius: 5px;
   box-shadow: 0 12px 24px #0002;
 }
+.image-fallback {
+  display: none;
+  text-align: center;
+}
+.project-art img[hidden] + .image-fallback {
+  display: flex;
+}
 .art-category {
   position: absolute;
   top: 16px;

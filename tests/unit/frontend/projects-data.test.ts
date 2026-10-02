@@ -31,6 +31,14 @@ describe("reviewed project data contract", () => {
     }
   });
 
+  it("keeps preview assets local, optimized, and meaningfully described", () => {
+    for (const project of projects) {
+      if (!project.image) continue;
+      expect(project.image).toMatch(/^\/images\/[^/]+\.webp$/);
+      expect(project.imageAlt?.trim().length).toBeGreaterThan(20);
+    }
+  });
+
   it("uses only supported categories and absolute HTTPS external URLs", () => {
     for (const project of projects) {
       expect(["Web", "Data", "AI"]).toContain(project.category);
