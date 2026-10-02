@@ -14,14 +14,15 @@ test("legacy section hashes remain directly accessible below the sticky header",
     "#Projects",
     "#Connect",
     "#leave_message",
+    "#messages",
   ]) {
     await page.goto(`/${hash}`);
     await expect(page).toHaveURL(new RegExp(`${hash}$`));
 
-    const target =
-      hash === "#leave_message" ? page.locator("#leave_message") : page.locator(hash);
-    const section =
-      hash === "#leave_message" ? page.locator("#Connect") : page.locator(hash);
+    const isContactAlias =
+      hash === "#leave_message" || hash === "#messages";
+    const target = page.locator(hash);
+    const section = isContactAlias ? page.locator("#Connect") : target;
 
     await expect(section).toBeInViewport();
     const positions = await target.evaluate((element) => {
@@ -86,4 +87,15 @@ test("focusing contact fields does not reset scroll or apply imperative zoom hac
     bodyOverflowX: "",
     rootOverflowX: "",
   });
+});
+
+
+test("legacy messages hash is a compatibility alias, not a public message list", async ({
+  page,
+}) => {
+  await page.goto("/#messages");
+  await expect(page.locator("#messages")).toHaveClass(/legacy-anchor/);
+  await expect(page.locator("#Connect")).toBeInViewport();
+  await expect(page.locator("#Connect .contact-form")).toHaveCount(1);
+  await expect(page.locator("#Connect").getByText(/public messages/i)).toHaveCount(0);
 });

@@ -111,7 +111,7 @@ test("skills link to filtered case studies while experience and contact stay con
   await expect(page.locator("#Experience .timeline article")).toHaveCount(3);
   await expect(page.locator("#Connect .contact-form")).toHaveCount(1);
   await expect(page.locator("#leave_message")).toHaveCount(1);
-  await expect(page.locator("#messages")).toHaveCount(0);
+  await expect(page.locator("#messages")).toHaveClass(/legacy-anchor/);
 
   const dataCaseStudies = page.getByRole("link", {
     name: "See Data case studies",
