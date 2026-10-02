@@ -126,3 +126,68 @@ test("drawer passes automated accessibility checks and reduced motion removes it
     "none",
   );
 });
+
+
+test("legacy hashes resolve to Contact without restoring the public messages list", async ({
+  page,
+}) => {
+  for (const hash of ["#leave_message", "#messages"]) {
+    await page.goto(`/${hash}`);
+    await expect(page).toHaveURL(new RegExp(`${hash}$`));
+    await expect(page.locator("#Connect")).toBeInViewport();
+    await expect(page.locator(`${hash}`)).toHaveCount(1);
+  }
+
+  await expect(page.locator("#messages")).toHaveClass(/legacy-anchor/);
+  await expect(page.locator("#Connect .contact-form")).toHaveCount(1);
+  await expect(page.locator("#Connect").getByText(/public messages/i)).toHaveCount(0);
+});
+
+test("direct hashes respect the sticky header and native history navigation", async ({
+  page,
+}) => {
+  await page.goto("/#Projects");
+  const headerHeight = await page.locator(".site-header").evaluate(
+    (element) => element.getBoundingClientRect().height,
+  );
+  const projectTop = await page.locator("#Projects").evaluate(
+    (element) => element.getBoundingClientRect().top,
+  );
+  expect(projectTop).toBeGreaterThanOrEqual(headerHeight - 1);
+
+  await page.getByRole("link", { name: "Get in touch", exact: true }).click();
+  await expect(page).toHaveURL(/#Connect$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/#Projects$/);
+  await expect(page.locator("#Projects")).toBeInViewport();
+  await page.goForward();
+  await expect(page).toHaveURL(/#Connect$/);
+  await expect(page.locator("#Connect")).toBeInViewport();
+});
+
+test("focusing contact fields does not reset scroll position or apply page zoom hacks", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 700 });
+  await page.goto("/#Connect");
+  const message = page.getByLabel("What would you like to talk about?");
+  await message.scrollIntoViewIfNeeded();
+  const before = await page.evaluate(() => window.scrollY);
+
+  await message.focus();
+  await page.waitForTimeout(50);
+  const after = await page.evaluate(() => window.scrollY);
+
+  expect(before).toBeGreaterThan(0);
+  expect(after).toBeGreaterThan(0);
+  expect(Math.abs(after - before)).toBeLessThan(250);
+  await expect(page.locator("html")).toHaveCSS("zoom", "1");
+  await expect(page.locator("body")).toHaveCSS("zoom", "1");
+  expect(
+    await page.evaluate(
+      () =>
+        !document.documentElement.getAttribute("style")?.includes("zoom") &&
+        !document.body.getAttribute("style")?.includes("zoom"),
+    ),
+  ).toBe(true);
+});

@@ -24,6 +24,7 @@ export function Contact() {
   return (
     <section id="Connect" tabIndex={-1} className="section contact-section">
       <span id="leave_message" className="legacy-anchor" />
+      <span id="messages" className="legacy-anchor" />
       <div>
         <p className="eyebrow">05 / Let's connect</p>
         <h2>
