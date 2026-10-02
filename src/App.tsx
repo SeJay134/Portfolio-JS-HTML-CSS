@@ -133,6 +133,27 @@ export default function App() {
     };
   }, []);
   useEffect(() => {
+    let frame = 0;
+    const syncHashTarget = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const id = decodeURIComponent(window.location.hash.slice(1));
+        if (!id) return;
+        document.getElementById(id)?.scrollIntoView({
+          block: "start",
+          behavior: "instant",
+        });
+      });
+    };
+
+    window.addEventListener("popstate", syncHashTarget);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("popstate", syncHashTarget);
+    };
+  }, []);
+
+  useEffect(() => {
     const mq = matchMedia("(max-width: 600px)");
     const previous = document.body.style.overflow;
     const sync = () => {
