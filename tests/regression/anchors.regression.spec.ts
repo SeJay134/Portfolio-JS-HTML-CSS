@@ -43,7 +43,9 @@ test("native anchor navigation keeps Back and Forward history intact", async ({
   await page.goto("/#Projects");
   await expect(page.locator("#Projects")).toBeInViewport();
 
-  await page.locator("a.header-contact").click();
+  await page
+    .getByRole("link", { name: "Get in touch", exact: true })
+    .click();
   await expect(page).toHaveURL(/#Connect$/);
   await expect(page.locator("#Connect")).toBeInViewport();
 

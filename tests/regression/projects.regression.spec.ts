@@ -55,14 +55,20 @@ test("keyboard filters preserve the URL and support reload, back, and forward", 
 });
 
 test("unknown categories and failed preview images keep cards and details usable", async ({ page }) => {
-  await page.route("**/images/chocolate.webp", (route) => route.abort());
+  await page.route("**/images/chocolate.webp", (route) =>
+    route.fulfill({
+      status: 404,
+      contentType: "text/plain",
+      body: "Missing preview",
+    }),
+  );
   await page.goto("/?category=unknown#Projects");
   await expect(page.getByRole("button", { name: /^All/ })).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator(".project-card")).toHaveCount(4);
   const card = page.locator(".project-card").first();
   await card.scrollIntoViewIfNeeded();
-  await expect(card.locator("img")).toHaveCount(0);
   await expect(card.locator(".image-fallback")).toBeVisible();
+  await expect(card.locator("img")).toHaveCount(0);
   await expect(card.locator(".image-fallback")).toContainText(
     "Preview unavailable",
   );
