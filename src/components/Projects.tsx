@@ -1,6 +1,11 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { projects, type Category, type Project } from "../data/projects";
+import {
+  filterProjects,
+  projects,
+  type Category,
+  type Project,
+} from "../data/projects";
 import { Icon } from "./Icon";
 const categories: Category[] = ["All", "Web", "Data", "AI"];
 
@@ -31,6 +36,7 @@ function ProjectImage({ project }: { project: Project }) {
 
 export function Projects() {
   const [filter, setFilter] = useState<Category>("All");
+  const visibleProjects = filterProjects(projects, filter);
   useEffect(() => {
     function sync() {
       const value = new URLSearchParams(location.search).get(
@@ -79,16 +85,12 @@ export function Projects() {
         ))}
       </div>
       <p className="sr-only" role="status">
-        {
-          projects.filter((p) => filter === "All" || p.category === filter)
-            .length
-        }{" "}
-        projects shown
+        {visibleProjects.length
+          ? `${visibleProjects.length} projects shown`
+          : `No ${filter} projects are available right now.`}
       </p>
       <div className="project-grid">
-        {projects
-          .filter((p) => filter === "All" || p.category === filter)
-          .map((project) => (
+        {visibleProjects.map((project) => (
             <article className="project-card" key={project.id}>
               <div className={`project-art art-${project.id}`}>
                 {project.image ? (
@@ -145,6 +147,11 @@ export function Projects() {
               </div>
             </article>
           ))}
+        {!visibleProjects.length && (
+          <p className="projects-empty">
+            No {filter} projects are available right now. Try another filter.
+          </p>
+        )}
       </div>
       <a
         className="text-link all-projects"

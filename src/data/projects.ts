@@ -69,3 +69,13 @@ export const projects: readonly Project[] = [
       "The assistant accepts independent questions, retrieves portfolio evidence with FAISS and all-MiniLM-L6-v2 embeddings, and generates grounded answers with qwen2.5:7b while the portfolio remains usable if the AI backend is offline.",
   },
 ];
+
+
+export function filterProjects(
+  source: readonly Project[],
+  category: Category,
+): readonly Project[] {
+  return category === "All"
+    ? source
+    : source.filter((project) => project.category === category);
+}

@@ -31,6 +31,9 @@ source and its content tests are present, and the Phase 2.2 branch gate is green
     - Full PR browser regression: https://github.com/SeJay134/Portfolio-JS-HTML-CSS-AI/actions/runs/37002059708
     - Controlled 16:10 previews use local WebP assets, lazy loading,
       meaningful alt text, and a graceful fallback when an image cannot load.
+  - [ ] Phase 3.5 — Project filter and URL-state acceptance
+    - Verify keyboard filtering, URL persistence, Back/Forward and reload behavior,
+      category counts, and a graceful empty state.
 - [ ] Phase 4.2 — Chat UI acceptance
 - [ ] Phase 5 — Frontend architecture and tooling acceptance
 - [ ] Merge Gate A — full tests -> merge main -> deploy -> smoke -> human browser verification

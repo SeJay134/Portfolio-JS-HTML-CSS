@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import knowledge from "../../../content/knowledge.json";
-import { projects } from "../../../src/data/projects";
+import {
+  filterProjects,
+  projects,
+} from "../../../src/data/projects";
 
 const projectKnowledge = new Map(
   knowledge
@@ -37,6 +40,14 @@ describe("reviewed project data contract", () => {
       expect(project.image).toMatch(/^\/images\/[^/]+\.webp$/);
       expect(project.imageAlt?.trim().length).toBeGreaterThan(20);
     }
+  });
+
+  it("filters local project data and keeps an explicit empty-state contract", () => {
+    expect(filterProjects(projects, "AI").map((project) => project.id)).toEqual([
+      "portfolio",
+    ]);
+    expect(filterProjects(projects, "All")).toHaveLength(4);
+    expect(filterProjects([], "Data")).toEqual([]);
   });
 
   it("uses only supported categories and absolute HTTPS external URLs", () => {
