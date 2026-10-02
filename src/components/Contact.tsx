@@ -8,7 +8,11 @@ export function Contact() {
   const [copyState, setCopyState] = useState<
     "idle" | "copying" | "copied" | "failed"
   >("idle");
-  const [errors, setErrors] = useState<{ name?: string; message?: string }>({});
+  const [errors, setErrors] = useState<{
+    name?: string;
+    email?: string;
+    message?: string;
+  }>({});
   const draftVersion = useRef(0);
   const manualCopy = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
@@ -54,6 +58,7 @@ export function Contact() {
       </div>
       <form
         className="contact-form"
+        noValidate
         onChange={(event) => {
           draftVersion.current++;
           setDraft(null);
@@ -72,15 +77,19 @@ export function Contact() {
           const name = String(form.get("name")).trim(),
             email = String(form.get("email")).trim(),
             message = String(form.get("message")).trim();
+          const emailField = e.currentTarget.elements.namedItem(
+            "email",
+          ) as HTMLInputElement;
+          const emailValid = Boolean(email) && emailField.checkValidity();
           const nextErrors = {
             name: name ? undefined : "Enter your name, not just spaces.",
+            email: emailValid ? undefined : "Enter a valid email address.",
             message: message ? undefined : "Enter a message, not just spaces.",
           };
           setErrors(nextErrors);
-          if (!name || !message) {
-            const field = e.currentTarget.elements.namedItem(
-              !name ? "name" : "message",
-            );
+          if (!name || !emailValid || !message) {
+            const fieldName = !name ? "name" : !emailValid ? "email" : "message";
+            const field = e.currentTarget.elements.namedItem(fieldName);
             (field as HTMLInputElement | HTMLTextAreaElement)?.focus();
             return;
           }
@@ -96,7 +105,11 @@ export function Contact() {
         <label htmlFor="contact-name">Your name</label>
         <input
           aria-invalid={Boolean(errors.name)}
-          aria-describedby={errors.name ? "contact-name-error" : undefined}
+          aria-describedby={
+            errors.name
+              ? "contact-name-help contact-name-error"
+              : "contact-name-help"
+          }
           id="contact-name"
           name="name"
           autoComplete="name"
@@ -104,6 +117,9 @@ export function Contact() {
           maxLength={80}
           placeholder="Alex Taylor"
         />
+        <p id="contact-name-help" className="field-help">
+          Up to 80 characters.
+        </p>
         {errors.name && (
           <p id="contact-name-error" role="alert">
             {errors.name}
@@ -111,6 +127,12 @@ export function Contact() {
         )}
         <label htmlFor="contact-email">Email</label>
         <input
+          aria-invalid={Boolean(errors.email)}
+          aria-describedby={
+            errors.email
+              ? "contact-email-help contact-email-error"
+              : "contact-email-help"
+          }
           id="contact-email"
           name="email"
           type="email"
@@ -119,13 +141,23 @@ export function Contact() {
           maxLength={254}
           placeholder="alex@example.com"
         />
+        <p id="contact-email-help" className="field-help">
+          Used only in the email draft. This website does not store it.
+        </p>
+        {errors.email && (
+          <p id="contact-email-error" role="alert">
+            {errors.email}
+          </p>
+        )}
         <label htmlFor="contact-message">
           What would you like to talk about?
         </label>
         <textarea
           aria-invalid={Boolean(errors.message)}
           aria-describedby={
-            errors.message ? "contact-message-error" : undefined
+            errors.message
+              ? "contact-message-help contact-message-error"
+              : "contact-message-help"
           }
           id="contact-message"
           name="message"
@@ -134,6 +166,9 @@ export function Contact() {
           rows={4}
           placeholder="A project, an opportunity, or just a hello…"
         />
+        <p id="contact-message-help" className="field-help">
+          Up to 2,000 characters. Nothing is sent until you use your email app.
+        </p>
         {errors.message && (
           <p id="contact-message-error" role="alert">
             {errors.message}
@@ -146,7 +181,11 @@ export function Contact() {
           Prepare email <Icon name="arrow" />
         </button>
         {draft && (
-          <div className="draft-result" role="status">
+          <div
+            className="draft-result"
+            role="status"
+            aria-busy={copyState === "copying"}
+          >
             <p>
               Your draft is ready. Open your email app to review and send it.
             </p>

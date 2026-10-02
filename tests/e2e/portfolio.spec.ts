@@ -150,6 +150,11 @@ test("contact validates input, invalidates stale drafts, and never posts visitor
   await expect(page.getByRole("link", { name: /Open email app/ })).toHaveCount(
     0,
   );
+  await expect(email).toHaveAttribute("aria-invalid", "true");
+  await expect(email).toBeFocused();
+  await expect(page.getByRole("alert")).toContainText(
+    "Enter a valid email address.",
+  );
   await email.fill("alex@example.com");
   await name.fill("   ");
   await message.fill("   ");
@@ -172,4 +177,24 @@ test("contact validates input, invalidates stale drafts, and never posts visitor
   ).toHaveAttribute("href", /An%20updated%20inquiry/);
   expect(submissions).toEqual([]);
   expect(new URL(page.url()).search).toBe("");
+});
+
+
+test("contact fields remain usable when a mobile viewport is shortened for the software keyboard", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/#Connect");
+
+  const message = page.getByLabel("What would you like to talk about?");
+  await message.focus();
+  await page.setViewportSize({ width: 390, height: 520 });
+  await message.scrollIntoViewIfNeeded();
+
+  await expect(message).toBeFocused();
+  await expect(message).toBeInViewport();
+  await expect(page.getByRole("button", { name: "Prepare email" })).toBeVisible();
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+  ).toBe(true);
 });

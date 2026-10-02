@@ -791,9 +791,20 @@ details p {
   color: var(--muted);
   opacity: 1;
 }
+.field-help,
 .form-note {
   font-size: 0.65rem;
   color: var(--muted);
+}
+.field-help {
+  margin: -7px 0 10px;
+}
+.contact-form [role="alert"] {
+  font-size: 0.7rem;
+  color: var(--text);
+  margin: -5px 0 10px;
+}
+.form-note {
   margin-bottom: 8px;
 }
 .contact-form > .button {

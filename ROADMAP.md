@@ -44,6 +44,10 @@ source and its content tests are present, and the Phase 2.2 branch gate is green
     - The compact experience timeline remains intact; each skill group links to
       a relevant filtered case-study view; no proficiency percentages are used;
       Connect and the legacy Leave a Message anchor resolve to one Contact surface.
+  - [ ] Phase 3.7 — Contact form accessibility and state acceptance
+    - Verify visible labels and helper/error associations, reasonable field limits,
+      invalid-field focus, focus-visible behavior, draft/copy state feedback,
+      mobile keyboard resilience, and no visitor-data publication.
 - [ ] Phase 4.2 — Chat UI acceptance
 - [ ] Phase 5 — Frontend architecture and tooling acceptance
 - [ ] Merge Gate A — full tests -> merge main -> deploy -> smoke -> human browser verification

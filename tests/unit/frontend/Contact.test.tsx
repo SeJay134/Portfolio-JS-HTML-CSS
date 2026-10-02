@@ -103,3 +103,33 @@ it("ignores a late clipboard result after the visitor edits the draft", async ()
     screen.queryByRole("button", { name: "Copied" }),
   ).not.toBeInTheDocument();
 });
+
+
+it("exposes helper text, limits, and an associated email validation error", async () => {
+  const user = userEvent.setup();
+  render(<Contact />);
+
+  const name = screen.getByLabelText("Your name");
+  const email = screen.getByLabelText("Email");
+  const message = screen.getByLabelText("What would you like to talk about?");
+
+  expect(name).toHaveAttribute("maxlength", "80");
+  expect(email).toHaveAttribute("maxlength", "254");
+  expect(message).toHaveAttribute("maxlength", "2000");
+  expect(email).toHaveAttribute("aria-describedby", "contact-email-help");
+
+  await user.type(name, "Alex");
+  await user.type(email, "not-an-email");
+  await user.type(message, "Hello");
+  await user.click(screen.getByRole("button", { name: "Prepare email" }));
+
+  expect(email).toHaveFocus();
+  expect(email).toHaveAttribute("aria-invalid", "true");
+  expect(email).toHaveAttribute(
+    "aria-describedby",
+    "contact-email-help contact-email-error",
+  );
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "Enter a valid email address.",
+  );
+});
