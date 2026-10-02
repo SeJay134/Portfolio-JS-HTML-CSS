@@ -97,3 +97,28 @@ test("project image previews reserve space and expose accessible loading metadat
     "16 / 10",
   );
 });
+
+
+test("skills link to filtered case studies while experience and contact stay consolidated", async ({ page }) => {
+  await page.goto("/#Skills");
+
+  await expect(page.locator("#Experience .timeline article")).toHaveCount(3);
+  await expect(page.locator("#Connect .contact-form")).toHaveCount(1);
+  await expect(page.locator("#leave_message")).toHaveCount(1);
+  await expect(page.locator("#messages")).toHaveCount(0);
+
+  const dataCaseStudies = page.getByRole("link", {
+    name: "See Data case studies",
+  });
+  await expect(dataCaseStudies).toHaveAttribute(
+    "href",
+    "?category=Data#Projects",
+  );
+  await dataCaseStudies.click();
+
+  await expect(page).toHaveURL(/\?category=Data#Projects$/);
+  await expect(
+    page.getByRole("button", { name: /^Data/ }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".project-card")).toHaveCount(2);
+});

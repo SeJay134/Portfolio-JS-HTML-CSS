@@ -37,6 +37,9 @@ source and its content tests are present, and the Phase 2.2 branch gate is green
     - Full PR browser regression: https://github.com/SeJay134/Portfolio-JS-HTML-CSS-AI/actions/runs/37014444124
     - Keyboard filters persist category state in the URL, survive reload,
       support Back/Forward, expose counts, and have an explicit empty-state contract.
+  - [ ] Phase 3.6 — Experience, skills-to-case-studies, and consolidated Contact acceptance
+    - Verify the compact experience timeline, direct skill-to-project examples,
+      no invented proficiency percentages, and a single Contact surface.
 - [ ] Phase 4.2 — Chat UI acceptance
 - [ ] Phase 5 — Frontend architecture and tooling acceptance
 - [ ] Merge Gate A — full tests -> merge main -> deploy -> smoke -> human browser verification

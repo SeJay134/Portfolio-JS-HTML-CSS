@@ -64,18 +64,24 @@ const skills = [
     name: "Web development",
     text: "Interfaces that connect people and information.",
     items: ["JavaScript", "HTML & CSS", "APIs", "Git"],
+    exampleHref: "?category=Web#Projects",
+    exampleLabel: "Web",
   },
   {
     number: "02",
     name: "Python & data",
     text: "From raw datasets to useful insights.",
     items: ["Python", "SQL", "Pandas", "NumPy", "ETL", "Azure"],
+    exampleHref: "?category=Data#Projects",
+    exampleLabel: "Data",
   },
   {
     number: "03",
     name: "Applied AI",
     text: "Exploring what intelligent software can do.",
     items: ["Machine learning", "scikit-learn", "LLMs", "RAG", "AI agents"],
+    exampleHref: "?category=AI#Projects",
+    exampleLabel: "AI",
   },
 ];
 export default function App() {
@@ -364,6 +370,9 @@ export default function App() {
                     <li key={i}>{i}</li>
                   ))}
                 </ul>
+                <a className="text-link skill-project-link" href={s.exampleHref}>
+                  See {s.exampleLabel} case studies <Icon name="arrow" size={14} />
+                </a>
               </article>
             ))}
           </div>

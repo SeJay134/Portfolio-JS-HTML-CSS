@@ -662,6 +662,9 @@ details p {
 .skill-card .tags {
   margin-top: 24px;
 }
+.skill-project-link {
+  margin-top: 4px;
+}
 .experience-section {
   display: grid;
   grid-template-columns: 1fr 1.3fr;
@@ -1275,7 +1278,8 @@ details p {
     margin: 0;
   }
   .skill-card p,
-  .skill-card .tags {
+  .skill-card .tags,
+  .skill-card .skill-project-link {
     grid-column: 2;
     max-width: none;
     margin: 0;
